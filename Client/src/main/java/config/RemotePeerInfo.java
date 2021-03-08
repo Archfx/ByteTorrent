@@ -7,10 +7,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RemotePeerInfo {
-	private int peerId;
-	private String peerAddress;
-	private int peerPort;
-	private boolean hasFile;
+	public int id;
+	public String address;
+	public int port;
+	public boolean hasFile;
 	private AtomicInteger bytesDownloadedFrom = new AtomicInteger(0);
 	private BitSet receivedParts = new BitSet();
 	private AtomicBoolean interested = new AtomicBoolean(false);
@@ -20,9 +20,9 @@ public class RemotePeerInfo {
     }
 
     public RemotePeerInfo(int id, String a, int p, boolean f) {
-        this.peerId = peerId;
-        this.peerAddress = a;
-        this.peerPort = p;
+        this.id = id;
+        this.address = a;
+        this.port = p;
         this.hasFile = f;
     }
 }
