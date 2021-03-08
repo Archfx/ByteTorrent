@@ -1,7 +1,10 @@
 import java.io.ObjectOutputStream;
 
 public class Peer implements Runnable{
-
+    @Override
+    public void run() {
+        
+    }
     String hostIP = "";
     private Thread t = null;
 
