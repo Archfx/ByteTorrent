@@ -1,7 +1,5 @@
 package peer;
 
-import peer.Peer;
-
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
@@ -234,6 +232,10 @@ public class PeerStateManager extends Thread {
 
     public List<Peer> isInterested (List<Peer> neighbors){
         return null;
+    }
+
+    public void sendMessage(){
+
     }
 }
 
