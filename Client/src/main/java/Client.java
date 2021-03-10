@@ -11,6 +11,8 @@ public class Client {
 	String message;                //message send to the server
 	String MESSAGE;                //capitalized message read from the server
 
+	boolean choked;   //chocked unchocked variable
+
 	public void Client() {}
 
 	void run()
@@ -82,6 +84,20 @@ public class Client {
 		client.run();
 	}
 
+	public void choke()
+	{
+		choked = true;
+	}
+
+	public void unchoke()
+	{
+		choked = false;
+	}
+
+	public boolean isChoked()
+	{
+		return choked;
+	}
 
 
 }

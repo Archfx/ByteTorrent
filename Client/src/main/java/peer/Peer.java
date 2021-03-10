@@ -20,4 +20,25 @@ public class Peer {
 		this.hasFile = f;
 	}
 
+	public Client getClientID(PeerDirection direction) {
+		switch (direction){
+			case Downloader:
+				return myClient;
+			case Uploader:
+				return peerCleint;
+		}
+	}
+
+	public void choke(PeerDirection direction, boolean choke){
+
+		Client C = getClientID(direction);
+
+		if (choke) C.choke();
+		else C.unchoke();
+
+		if (direction == PeerDirection.uploader){
+			if (choke) C.sendMessage(new ChokeMsg());
+			else C.sendMessage(new UnchokeMsg());
+		}
+
 }
