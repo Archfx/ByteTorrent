@@ -1,6 +1,7 @@
-// Store Peer state
+package peer;
 import java.net.Socket;
 
+// Store Peer state
 public class Peer {
 	public int id;
 	public String address;
@@ -9,7 +10,7 @@ public class Peer {
 	public byte[] bitField;
 	public boolean unChoked;
 	public long dlSpeed;
-	public ConnectionHandle cHandle;
+//	public ConnectionHandle cHandle;
 	public Socket socket;
 	public boolean up;
 
@@ -20,14 +21,14 @@ public class Peer {
 		this.hasFile = f;
 	}
 
-	public Client getClientID(PeerDirection direction) {
-		switch (direction){
-			case Downloader:
-				return myClient;
-			case Uploader:
-				return peerCleint;
-		}
-	}
+//	public Client getClientID(PeerDirection direction) {
+//		switch (direction){
+//			case Downloader:
+//				return myClient;
+//			case Uploader:
+//				return peerCleint;
+//		}
+//	}
 
 //	L :candidate peers to unchoke
 //	p : peer who conducts unchoking
@@ -36,13 +37,13 @@ public class Peer {
 //	m : peak traffic demand
 //	c : current traffic vector
 
-	public Peer [] choke(Peer [] L, Peer p, int k, int d, int m, int c){
-
-    	if (L.length<=k){
-    		return L;
-		}
-
-	}
+//	public Peer [] choke(Peer [] L, Peer p, int k, int d, int m, int c){
+//
+//    	if (L.length<=k){
+//    		return L;
+//		}
+//
+//	}
 
 
 

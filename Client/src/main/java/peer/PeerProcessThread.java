@@ -1,3 +1,8 @@
+package peer;
+
+import config.CommonConfig;
+import peer.Peer;
+
 public class PeerProcessThread extends Peer implements Runnable {
     private final CommonConfig cConfig;
     public PeerProcessThread(int id, String address, int port, boolean hasFile, CommonConfig cConfig) {
