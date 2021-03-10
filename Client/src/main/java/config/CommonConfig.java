@@ -1,30 +1,94 @@
+package config;
+
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.Reader;
+import java.io.IOException;
+import java.util.HashMap;
 
 public class CommonConfig {
-    public static final String FILE_NAME = "Common.cfg";
+    private static CommonConfig commonConfig = null;
+    private static int NumberOfPreferredNeighbors;
+    private static int UnchokingInterval;
+    private static int OptimisticUnchokingInterval;
+    private static String FileName ;
+    private static int FileSize ;
+    private static int PieceSize;
 
-	private static int NumberOfdPreferredNeighbors = 3;
-    private static int UnchokingInterval = 5;
-	private static int OptimisticUnchokingInterval = 10;
-	private static String FileName = "thefile";
-	private static int FileSize = 2167705;
-	private static int PieceSize = 16384;
+    private HashMap<String, String> info_list = new HashMap<>();
+    private static final String FILE_NAME ="Common.cfg";
 
-    public CommonConfig() {
+    private CommonConfig()
+    {
         try {
-            BufferedReader in = new BufferedReader(new FileReader(FILE_NAME));
-            for (String line; (line = in.readLine()) != null;) {
-                String[] config = line.split(" ");
-                String name = config[0];
-                String value = config[1];
-
-                // TODO: Hasini read config gile
+            BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME));
+            String readLine = "";
+            while ((readLine = reader.readLine()) != null) {
+                String config[] = readLine.split(" ");
+                info_list.put(config[0], config[1]);
             }
+            reader.close();
+            NumberOfPreferredNeighbors = Integer.parseInt(info_list.get("NumberOfPreferredNeighbors"));
+            UnchokingInterval = Integer.parseInt(info_list.get("UnchokingInterval"));
+            OptimisticUnchokingInterval = Integer.parseInt(info_list.get("OptimisticUnchokingInterval"));
+            FileName = info_list.get("FileName");
+            FileSize = Integer.parseInt(info_list.get("FileSize"));
+            PieceSize = Integer.parseInt(info_list.get("PieceSize"));
+        } catch (FileNotFoundException e) {
+            System.out.println("ERROR: Cannot find Common.cfg file");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        catch (Exception e) {
+    }
 
+    public static CommonConfig getInstance()
+    {
+        if (commonConfig == null)
+            commonConfig = new CommonConfig();
+
+        return commonConfig;
+    }
+
+    public static int getNumberOfdPreferredNeighbors() {
+        return NumberOfPreferredNeighbors;
+    }
+
+    public static int getUnchokingInterval() {
+        return UnchokingInterval;
+    }
+
+    public static int getOptimisticUnchokingInterval() {
+        return OptimisticUnchokingInterval;
+    }
+
+    public static String getFileName() {
+        return FileName;
+    }
+
+    public static int getFileSize() {
+        return FileSize;
+    }
+
+    public static int getPieceSize() {
+        return PieceSize;
+    }
+
+    public static void main(String[] args) throws Exception {
+        CommonConfig config = CommonConfig.getInstance();
+        System.out.println("Reading Common config\n");
+        System.out.println("NumberOfPreferredNeighbors : " + config.getNumberOfdPreferredNeighbors());
+        System.out.println("UnchokingInterval : " + config.getUnchokingInterval());
+        System.out.println("OptimisticUnchokingInterval : " + config.getOptimisticUnchokingInterval());
+        System.out.println("FileName : " + config.getFileName());
+        System.out.println("FileSize : " + config.getFileSize());
+        System.out.println("PieceSize : " + config.getPieceSize());
+        System.out.println("\nAdding Peers to the System\n");
+        PeerInfoConfig remotePeerInfo = PeerInfoConfig.getInstance();
+        for (RemotePeerInfo peer : remotePeerInfo.getPeerInfoList()) {
+            System.out.println("Id : "+peer.getId()+", Address : "+peer.getAddress()+", Port : "+peer.getPort()+
+                    ", HasFile : "+peer.isHasFile());
         }
-    } 
+
+    }
+
 }
