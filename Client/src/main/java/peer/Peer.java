@@ -13,11 +13,10 @@ public class Peer {
 	public boolean hasFile;
 	public byte[] bitField;
 	public boolean choked = true;
-	public float[] dlSpeed;
 //	public ConnectionHandle cHandle;
 	public Socket socket;
 	public boolean up;
-	public PeerStateManager psM;
+
 
 
 	public Peer(int id, String a, int p, boolean f) {
