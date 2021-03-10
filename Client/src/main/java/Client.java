@@ -84,6 +84,8 @@ public class Client {
 		client.run();
 	}
 
+
+	// choke related
 	public void choke()
 	{
 		choked = true;

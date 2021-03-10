@@ -29,16 +29,22 @@ public class Peer {
 		}
 	}
 
-	public void choke(PeerDirection direction, boolean choke){
+//	L :candidate peers to unchoke
+//	p : peer who conducts unchoking
+//	k : number of unchoked peers
+//	d : number of unchoked downloaders
+//	m : peak traffic demand
+//	c : current traffic vector
 
-		Client C = getClientID(direction);
+	public Peer [] choke(Peer [] L, Peer p, int k, int d, int m, int c){
 
-		if (choke) C.choke();
-		else C.unchoke();
-
-		if (direction == PeerDirection.uploader){
-			if (choke) C.sendMessage(new ChokeMsg());
-			else C.sendMessage(new UnchokeMsg());
+    	if (L.length<=k){
+    		return L;
 		}
+
+	}
+
+
+
 
 }
