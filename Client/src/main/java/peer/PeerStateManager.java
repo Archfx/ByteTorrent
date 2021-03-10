@@ -1,3 +1,7 @@
+package peer;
+
+import peer.Peer;
+
 import java.net.ServerSocket;
 import java.util.*;
 
