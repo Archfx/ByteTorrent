@@ -3,27 +3,37 @@ package peer;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class PeerStateManager extends Thread {
+//    private static ScheduledExecutorService scheduler;
     private ServerSocket ssocket;
     private Peer hostPeer;
     private HashMap<Integer, Peer> peers;
 
-    private static ArrayList<Peer> interestedPeers = new ArrayList<Peer>();
-	private static ArrayList<Peer> kNeighborPeers;
+    private static ArrayList<Peer> kNeighborPeers;
+    private static ArrayList<Boolean> interestedPeers;
+    private static ArrayList<Peer> unChoked;
 
-    public Object lockMyNeighbors;
-    public int[] neighbors;
-    public boolean[] isInterested;
-    public float[] dlSpeed;
-    public boolean isMyFile;
-    public boolean dlFinished;
-    public int unchokeInterval;
+    private static ArrayList<Float> dlSpeed;
+    private static ArrayList<Integer> allPeerID;
+    private static ArrayList<Socket> peerSockets;
 
-    public boolean chokeThreadRunning ;
+    private Object lockMyNeighbors;
 
-    public int[] allPeerID;
-    public Socket[] allPeerSockets;
+    private boolean isMyFile;
+    private boolean dlFinished;
+    private int unchokeInterval;
+    private int unchokeOptInterval;
+
+    private boolean chokeThreadRunning ;
+
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+//    public int[] allPeerID;
+//    public Socket[] peerSockets;
 
     public PeerStateManager(ServerSocket ssocket, Peer hostPeer, HashMap<Integer, Peer> peers) {
 		this.ssocket = ssocket;
@@ -32,13 +42,13 @@ public class PeerStateManager extends Thread {
 	}
 
     //	get IDs of connected peers soreted in speed
-    int[] getPeerId(float[] speeds) {
+    int[] getPeerId(ArrayList<Float> speeds) {
 
-        float[] sortedNeighbors = speeds.clone();
+        float[] sortedNeighbors = (float[]) speeds.clone();
         Arrays.sort(sortedNeighbors);
-        int[] indices = new int[speeds.length];
-        for (int i = 0; i < speeds.length; i++) {
-            indices[i] = Arrays.binarySearch(sortedNeighbors, speeds[i]);
+        int[] indices = new int[speeds.size()];
+        for (int i = 0; i < speeds.size(); i++) {
+            indices[i] = Arrays.binarySearch(sortedNeighbors, speeds.get(i));
         }
         return indices;
     }
@@ -73,7 +83,7 @@ public class PeerStateManager extends Thread {
                     int nP = 0; // numbers of peers selected
                     for (int i = 0; i < num_peer && nP < k; i++) {
                         ind = peers.get(i); //index of the peer to be selected, selected randomly.
-                        if (isInterested[ind] && allPeerSockets[ind] != null) {
+                        if (interestedPeers.get(ind) && peerSockets.get(ind) != null) {
                             unchokeList.add(neighbors.get(ind));
                             nP++;
                         }
@@ -86,7 +96,7 @@ public class PeerStateManager extends Thread {
                     int nP = 0; // numbers of peers selected
                     for (int i = 0; i < num_peer && nP < k; i++) {
                         ind = dlSpeedOrdered[i];
-                        if (isInterested[ind] && allPeerID[ind] != hostPeer.id) {
+                        if (interestedPeers.get(ind) && allPeerID.get(ind) != hostPeer.id) {
                             unchokeList.add(neighbors.get(ind));
                             nP++;
                         }
@@ -125,7 +135,7 @@ public class PeerStateManager extends Thread {
                 int nP = 0; // numbers of peers  to be selected selected
                 for (int i = 0; i < num_peer && nP < 1; i++) {
                     ind = peers.get(i); //index of the peer to be selected, selected randomly.
-                    if (isInterested[ind] && allPeerSockets[ind] != null) {
+                    if (interestedPeers.get(ind) && peerSockets.get(ind) != null) {
                         optUnchokeList.add(neighbors.get(ind));
                         nP++;
                     }
@@ -158,6 +168,11 @@ public class PeerStateManager extends Thread {
 
     public void sendMessage(){
 
+    }
+
+    public void main(String[] args) {
+        scheduler.scheduleAtFixedRate((Runnable) choke( kNeighborPeers,4), 0, unchokeInterval, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate((Runnable) chokeOpt( kNeighborPeers,4), 0, unchokeOptInterval, TimeUnit.SECONDS);
     }
 }
 
