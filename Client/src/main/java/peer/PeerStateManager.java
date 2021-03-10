@@ -47,7 +47,7 @@ public class PeerStateManager extends Thread {
 //    p = unchoking interval
 //    m = optimally unchoke interval
 
-    public List<Peer> choke (List<Peer> neighbors, int k, int p ,int m){
+    public List<Peer> choke (List<Peer> neighbors, int k){
 
         List<Peer> unchokeList = new ArrayList<Peer>();
         List<Integer> peers = new ArrayList<Integer>();
@@ -74,7 +74,8 @@ public class PeerStateManager extends Thread {
                     for (int i = 0; i < num_peer && nP < k; i++) {
                         ind = peers.get(i); //index of the peer to be selected, selected randomly.
                         if (isInterested[ind] && allPeerSockets[ind] != null) {
-                            unchokeList.add(neighbors.get(nP++));
+                            unchokeList.add(neighbors.get(ind));
+                            nP++;
                         }
                     }
 
@@ -86,7 +87,8 @@ public class PeerStateManager extends Thread {
                     for (int i = 0; i < num_peer && nP < k; i++) {
                         ind = dlSpeedOrdered[i];
                         if (isInterested[ind] && allPeerID[ind] != hostPeer.id) {
-                            unchokeList.add(neighbors.get(nP++));
+                            unchokeList.add(neighbors.get(ind));
+                            nP++;
                         }
                         }
                     }
@@ -96,6 +98,45 @@ public class PeerStateManager extends Thread {
             }
 
         return unchokeList;
+    }
+
+    public List<Peer> chokeOpt (List<Peer> neighbors, int k){
+
+        List<Peer> optUnchokeList = new ArrayList<Peer>();
+        List<Integer> peers = new ArrayList<Integer>();
+
+        int num_peer = neighbors.size();
+        int ind = -1;
+        for (int i = 0; i < num_peer; i++) {
+            peers.add(i);
+        }
+        while (chokeThreadRunning) {
+            synchronized (lockMyNeighbors) { //lock the object
+
+                if (neighbors == null) {
+                    continue;
+                }
+
+//                int[] copy = (int[]) peers.clone();
+//                Arrays.sort(copy);
+                // Randomly selecting neighbors when download of file completed.
+//				shuffle the list
+                Collections.shuffle(peers);
+                int nP = 0; // numbers of peers  to be selected selected
+                for (int i = 0; i < num_peer && nP < 1; i++) {
+                    ind = peers.get(i); //index of the peer to be selected, selected randomly.
+                    if (isInterested[ind] && allPeerSockets[ind] != null) {
+                        optUnchokeList.add(neighbors.get(ind));
+                        nP++;
+                    }
+                }
+
+
+            }
+
+        }
+
+        return optUnchokeList;
     }
 
 
