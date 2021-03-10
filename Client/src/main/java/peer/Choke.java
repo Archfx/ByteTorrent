@@ -11,13 +11,13 @@ class Choke implements Runnable {
     private Thread t = null;
 
     //	get IDs of connected peers
-    int[] getPeerId(float[] peerID) {
-        int l = peerID.length;
-        float[] sortedPeerID = peerID.clone();
+    int[] getPeerId(float[] peers) {
+        int l = peers.length;
+        float[] sortedPeerID = peers.clone();
         Arrays.sort(sortedPeerID);
         int[] indices = new int[l];
         for (int index = 0; index < l; index++) {
-            indices[index] = Arrays.binarySearch(sortedPeerID, peerID[index]);
+            indices[index] = Arrays.binarySearch(sortedPeerID, peers[index]);
         }
         return indices;
     }
@@ -50,7 +50,7 @@ class Choke implements Runnable {
                         if (P.psM.isInterested[ind] && P.psM.allPeerSockets[ind] != null) {
                             P.psM.neighbors[cnt++] = P.psM.allPeerID[ind];
                             //send unchoke message to previously choked peer.
-                            if (Arrays.binarySearch(cn, P.allPeerID[ind]) < 0) {  ///not int the previous neighbor list.
+                            if (Arrays.binarySearch(cn, P.psM.allPeerID[ind]) < 0) {  ///not int the previous neighbor list.
 //								Message msg = new Message();
 //								msg.length = 0; //no payload.
 //								msg.type = 1; //unchoke.
@@ -111,6 +111,79 @@ class Choke implements Runnable {
     }
 
     public void start(Peer p) { // starting the thread
+        P = p;
+        if (t == null) {
+            t = new Thread(this, "choke thread for peer : " + P.id);
+            t.start();
+        }
+    }
+}
+
+class ChokeOptimistic implements Runnable {
+//	this class implements optimistic unchoke mechanism
+
+    Peer P; //the peer reference.
+    private Thread t = null;
+
+    //	get IDs of connected peers
+    int[] getPeerId(float[] peers) {
+        int l = peers.length;
+        float[] sortedPeerID = peers.clone();
+        Arrays.sort(sortedPeerID);
+        int[] indices = new int[l];
+        for (int index = 0; index < l; index++) {
+            indices[index] = Arrays.binarySearch(sortedPeerID, peers[index]);
+        }
+        return indices;
+    }
+
+    @Override
+    public void run() {
+        // multithreading interface
+        List<Integer> list = new ArrayList<Integer>();
+        int num_peer = P.psM.allPeerID.length;
+        int ind = -1;
+        while (P.choked) {
+            synchronized (P.psM.lockMyNeighbors) {
+                for (int i = 0; i < num_peer; i++) {
+                    list.add(i);
+                }
+
+                java.util.Collections.shuffle(list);
+                int[] cn = P.psM.neighbors.clone();
+                Arrays.sort(cn);
+                for (int i = 0; i < num_peer; i++) {
+                    int ind2 = list.get(i);
+                    if (P.psM.isInterested[ind2] && Arrays.binarySearch(cn, P.psM.allPeerID[ind2]) < 0 && P.psM.allPeerID[ind2] != P.id && P.psM.allPeerSockets[ind2] != null) {
+                        ind = ind2;
+                        P.psM.neighbors[P.psM.neighbors.length - 1] = P.psM.allPeerID[ind];
+                        break;
+                    }
+                }
+            }
+            //unchoke message.
+//            Message msg = new Message();
+//            msg.length = 0; //no payload.
+//            msg.type = 1; //unchoke.
+//            msg.payload = null; //no payload.
+
+//            if (ind >= 0) //there is someone interested in my data.
+//            {
+//                P.send(P.peer_id[ind], msg);
+//                P.print("OptChoke unchoked peer with id " + P.peer_id[ind]);
+//                P.log("Peer ["+P.id+"] has the optimistically-unchoked neighbor ["+P.peer_id[ind]+"].");
+//            }
+//            ind = -1;
+
+            try {
+                Thread.sleep(1000 * P.psM.unchokeInterval);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+
+    public void start(Peer p) {// starting the thread
         P = p;
         if (t == null) {
             t = new Thread(this, "choke thread for peer : " + P.id);

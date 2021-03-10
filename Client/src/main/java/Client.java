@@ -85,21 +85,5 @@ public class Client {
 	}
 
 
-	// choke related
-	public void choke()
-	{
-		choked = true;
-	}
-
-	public void unchoke()
-	{
-		choked = false;
-	}
-
-	public boolean isChoked()
-	{
-		return choked;
-	}
-
 
 }
