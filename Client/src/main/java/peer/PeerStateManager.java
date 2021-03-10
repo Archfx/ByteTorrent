@@ -30,5 +30,29 @@ public class PeerStateManager extends Thread {
 		this.peers = peers;
 		this.hostPeer = hostPeer;
 	}
+
+    public List<Peer> choke (List<Peer> neighbors){
+        return null;
+    }
+
+    public List<Peer> unchoke (List<Peer> neighbors){
+        return null;
+    }
+
+    public List<Peer> requestPiece (List<Peer> neighbors){
+        return null;
+    }
+
+    public List<Peer> handshake (List<Peer> neighbors){
+        return null;
+    }
+
+    public List<Peer> bitField (List<Peer> neighbors){
+        return null;
+    }
+
+    public List<Peer> isInterested (List<Peer> neighbors){
+        return null;
+    }
 }
 
