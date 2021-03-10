@@ -22,10 +22,27 @@ public class PeerProcessThread extends Peer implements Runnable {
     }
 
     public void startServer() {
+        (new Thread() {
+	    @Override
+	        public void run() {
+		    while (!sSocket.isClosed()) {
+			try { startConnection();}
+                        catch (Exception e) {}
+		    }
+		}
+	}).start();
 
     }
     public void startBroadcast() {
         // TODO: This should send handshake message to neighboring peers and check bitfields
+        for (Peer p : peers.values()) {
+            Socket s = new Socket(p.getAddress(), p.getPort());
+	    ObjectOutputStream o = new ObjectOutputStream(s.getOutputStream()); o.flush();
+            o.writeObject(new Handshake(id));
+            o.flush();
+            o.reset();
+            // TODO: Set socket and peer
+        }
     }
 
     public void startConnection() {
