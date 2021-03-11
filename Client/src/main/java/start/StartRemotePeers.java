@@ -10,6 +10,8 @@
 import java.io.*;
 import java.util.*;
 
+import config.RemotePeerInfo;
+
 /*
  * The StartRemotePeers class begins remote peer processes. 
  * It reads configuration file PeerInfo.cfg and starts remote peer processes.
@@ -36,7 +38,7 @@ public class StartRemotePeers {
 			     //}
 		         //System.out.println("tokens end ----");
 			    
-			     peerInfoVector.addElement(new RemotePeerInfo(tokens[0], tokens[1], tokens[2]));
+			    //  peerInfoVector.addElement(new RemotePeerInfo(tokens[0], tokens[1], tokens[2]));
 			
 			}
 			
@@ -63,11 +65,11 @@ public class StartRemotePeers {
 			for (int i = 0; i < myStart.peerInfoVector.size(); i++) {
 				RemotePeerInfo pInfo = (RemotePeerInfo) myStart.peerInfoVector.elementAt(i);
 				
-				System.out.println("Start remote peer " + pInfo.peerId +  " at " + pInfo.peerAddress );
+				System.out.println("Start remote peer " + pInfo.getId() +  " at " + pInfo.getAddress() );
 				
 				// *********************** IMPORTANT *************************** //
 				// If your program is JAVA, use this line.
-				Runtime.getRuntime().exec("ssh " + pInfo.peerAddress + " cd " + path + "; java peerProcess " + pInfo.peerId);
+				Runtime.getRuntime().exec("ssh " + pInfo.getAddress() + " cd " + path + "; java peerProcess " + pInfo.getId());
 				
 				// If your program is C/C++, use this line instead of the above line. 
 				//Runtime.getRuntime().exec("ssh " + pInfo.peerAddress + " cd " + path + "; ./peerProcess " + pInfo.peerId);
