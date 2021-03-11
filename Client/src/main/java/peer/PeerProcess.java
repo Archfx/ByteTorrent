@@ -10,8 +10,7 @@ import java.util.ArrayList;
 public class PeerProcess {
     public static void main(String[] args) {
 
-        LoggerUtil.initialize();
-        LoggerUtil.getLogger().info(" Process Thread Started");
+        LoggerUtil.LogInfoMessage("Process Thread Started");
 
         // System.out.println(port);
         
@@ -39,7 +38,5 @@ public class PeerProcess {
                 remotePeers.add(peer);
             }
         }
-
-        
     }
 }

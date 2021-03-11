@@ -13,6 +13,12 @@ import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
 public class LoggerUtil {
 
+    private static LoggerUtil loggerUtil = new LoggerUtil();
+
+    private LoggerUtil(){
+        initialize();
+    }
+
     public static void initialize(){
         ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
 
@@ -30,7 +36,11 @@ public class LoggerUtil {
         Configurator.initialize(builder.build());
     }
 
-    public static Logger getLogger(){
-        return LogManager.getLogger();
+    public static void LogInfoMessage(String message){
+        LogManager.getLogger().info(message);
+    }
+
+    public static void LogErrorMessage(String message){
+        LogManager.getLogger().info(message);
     }
 }
