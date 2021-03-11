@@ -3,11 +3,16 @@ package peer;
 import config.CommonConfig;
 import config.PeerInfoConfig;
 import config.RemotePeerInfo;
+import util.LoggerUtil;
 
 import java.util.ArrayList;
 
 public class PeerProcess {
     public static void main(String[] args) {
+
+        LoggerUtil.initialize();
+        LoggerUtil.getLogger().info(" Process Thread Started");
+
         // System.out.println(port);
         
         final int id = Integer.parseInt(args[0]);
