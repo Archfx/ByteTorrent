@@ -44,6 +44,7 @@ public class PeerProcessThread extends Peer implements Runnable {
 
     }
     public void startBroadcast() {
+        try {
         // TODO: This should send handshake message to neighboring peers and check bitfields
         for (Peer p : peers.values()) {
             Socket s = new Socket(p.address, p.port);
@@ -53,6 +54,8 @@ public class PeerProcessThread extends Peer implements Runnable {
             o.reset();
             // TODO: Set socket and peer
         }
+        }
+        catch (Exception e) {}
     }
 
     public void startConnection() {
