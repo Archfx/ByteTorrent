@@ -1,5 +1,7 @@
 package peer;
 
+import peer.message.Message;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
@@ -166,7 +168,7 @@ public class PeerStateManager extends Thread {
         return null;
     }
 
-    public void sendMessage(){
+    private void sendMessage(Message message, Peer peer){
 
     }
 
