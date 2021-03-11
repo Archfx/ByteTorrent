@@ -2,9 +2,12 @@ package peer;
 
 import config.CommonConfig;
 import peer.Peer;
+import java.util.HashMap;
 
 public class PeerProcessThread extends Peer implements Runnable {
     private final CommonConfig cConfig;
+    private static HashMap<Integer, Peer> peers = new HashMap<Integer, Peer>();
+
     public PeerProcessThread(int id, String address, int port, boolean hasFile, CommonConfig cConfig) {
         super(id, address, port, hasFile);
         this.cConfig = cConfig;
