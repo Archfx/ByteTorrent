@@ -13,7 +13,7 @@ public class PeerStateManger extends Peer{
 
     public PeerStateManger(Peer thisPeer, List<Peer> kNeighborPeers) {
         super(thisPeer);
-        kNeighborPeers = kNeighborPeers;
+        this.kNeighborPeers = kNeighborPeers;
         init();
 
     }
