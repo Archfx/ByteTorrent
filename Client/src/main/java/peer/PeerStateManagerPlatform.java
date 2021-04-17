@@ -1,7 +1,5 @@
 package peer;
 
-import config.RemotePeerInfo;
-
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,7 +23,7 @@ public class PeerStateManagerPlatform {
         kNeighborPeers.forEach(neighborPeer-> {
             executorService.submit(() -> {
                 System.out.println(" Starting thread for peer :" + neighborPeer.getId());
-                PeerStateManger2 peerStateManager = new PeerStateManger2(neighborPeer, kNeighborPeers);
+                PeerStateManger peerStateManager = new PeerStateManger(neighborPeer, kNeighborPeers);
                 peerStateManager.start();
             });
         });

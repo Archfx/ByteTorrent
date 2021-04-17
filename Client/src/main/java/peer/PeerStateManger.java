@@ -2,12 +2,13 @@ package peer;
 
 import java.util.List;
 
-public class PeerStateManger2 extends Peer{
+public class PeerStateManger extends Peer{
 
     private List<Peer> kNeighborPeers;
     private ChokeManager chokeManager;
+    private InterestNotInterestManager interestNotInterestManager;
 
-    public PeerStateManger2(Peer thisPeer, List<Peer> kNeighborPeers) {
+    public PeerStateManger(Peer thisPeer, List<Peer> kNeighborPeers) {
         super(thisPeer);
         kNeighborPeers = kNeighborPeers;
         init();
@@ -21,5 +22,6 @@ public class PeerStateManger2 extends Peer{
     public void start(){
         //TODO -: initializing connection and continue all the steps
         chokeManager.choke();
+        interestNotInterestManager.isInterested();
     }
 }

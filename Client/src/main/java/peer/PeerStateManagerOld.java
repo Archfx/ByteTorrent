@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Deprecated
-public class PeerStateManager {
+public class PeerStateManagerOld {
 ////    private static ScheduledExecutorService scheduler;
 //    private ServerSocket ssocket;
 //    private Peer hostPeer;
