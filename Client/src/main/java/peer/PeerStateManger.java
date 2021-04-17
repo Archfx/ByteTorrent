@@ -23,6 +23,6 @@ public class PeerStateManger extends Peer {
 
     public void start(){
         //TODO -: initializing connection and continue all the steps
-        chokeManager.choke();
+//        chokeManager.choke();
     }
 }
