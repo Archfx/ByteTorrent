@@ -46,32 +46,18 @@ public class PeerStateManager {
 		this.hostPeer = hostPeer;
 	}
 
-    //	get IDs of connected peers sorted in speed
-    // int[] getPeerId(ArrayList<Float> speeds) {
 
-    //     float[] sortedNeighbors = (float[]) speeds.clone();
-    //     Arrays.sort(sortedNeighbors);
-    //     int[] indices = new int[speeds.size()];
-    //     for (int i = 0; i < speeds.size(); i++) {
-    //         indices[i] = Arrays.binarySearch(sortedNeighbors, speeds.get(i));
-    //     }
-    //     return indices;
-    // }
 
-//    k = prefered number of peers to unchoke
-//    p = unchoking interval
-//    m = optimally unchoke interval
+    //    k = prefered number of peers to unchoke
+    //    p = unchoking interval
+    //    m = optimally unchoke interval
 
     public List<Peer> choke (List<Peer> kNeighborPeers, int k){
 
         List<Peer> unchokeList = new ArrayList<Peer>();
-        // List<Integer> peers = new ArrayList<Integer>();
 
         int num_peer = kNeighborPeers.size();
-        // int ind = -1;
-        // for (int i = 0; i < num_peer; i++) {
-        //     peers.add(i);
-        // }
+
 
         while (chokeThreadRunning) {
             synchronized (lockMyNeighbors) { //lock the object
@@ -86,7 +72,6 @@ public class PeerStateManager {
                     Collections.shuffle(kNeighborPeers);
                     int nP = 0; // numbers of peers selected
                     for (int i = 0; i < num_peer && nP < k; i++) {
-                        // ind = peers.get(i); //index of the peer to be selected, selected randomly.
                         if ((kNeighborPeers.get(i)).getInterestedPeers() && (kNeighborPeers.get(i)).getPeerSockets() != null) {
                             unchokeList.add(kNeighborPeers.get(i));
                             nP++;
@@ -95,12 +80,10 @@ public class PeerStateManager {
 
                 } else {
                     //selecting based on the download speeds when file download is not complete.
-                    // ArrayList<Float> dlSpeedOrdered = (ArrayList<Float>) kNeighborPeers.stream().map(Peer::getDlSpeed);
                     kNeighborPeers.sort(Comparator.comparing(Peer::getDlSpeed));
                     // selecting the peers
                     float nP = 0; // numbers of peers selected
                     for (int i = 0; i < num_peer && nP < k; i++) {
-                        // ind = kNeighborPeers.get(i);
                         if ((kNeighborPeers.get(i)).getInterestedPeers() && (kNeighborPeers.get(i)).getAllPeerID() != null) { //change this after merge
                             unchokeList.add(kNeighborPeers.get(i));
                             nP++;
@@ -120,13 +103,9 @@ public class PeerStateManager {
     public List<Peer> chokeOpt (List<Peer> kNeighborPeers, int k){
 
         List<Peer> optUnchokeList = new ArrayList<Peer>();
-        // List<Integer> peers = new ArrayList<Integer>();
 
         int num_peer = kNeighborPeers.size();
-        // int ind = -1;
-        // for (int i = 0; i < num_peer; i++) {
-        //     peers.add(i);
-        // }
+
         while (chokeThreadRunning) {
             synchronized (lockMyNeighbors) { //lock the object
 
@@ -134,14 +113,10 @@ public class PeerStateManager {
                     continue;
                 }
 
-//                int[] copy = (int[]) peers.clone();
-//                Arrays.sort(copy);
-                // Randomly selecting neighbors when download of file completed.
 //				shuffle the list
                 Collections.shuffle(kNeighborPeers);
                 int nP = 0; // numbers of peers  to be selected selected
                 for (int i = 0; i < num_peer && nP < 1; i++) {
-                    // ind = peers.get(i); //index of the peer to be selected, selected randomly.
                     if ((kNeighborPeers.get(i)).getInterestedPeers() && (kNeighborPeers.get(i)).getPeerSockets() != null) {
                         optUnchokeList.add(kNeighborPeers.get(i));
                         nP++;
