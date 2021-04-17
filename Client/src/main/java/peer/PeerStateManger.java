@@ -2,6 +2,9 @@ package peer;
 
 import java.util.List;
 
+/**
+ * Peer is the peer related to this specific state manager
+ */
 public class PeerStateManger extends Peer{
 
     private List<Peer> kNeighborPeers;
@@ -17,6 +20,7 @@ public class PeerStateManger extends Peer{
 
     private void init() {
         chokeManager = new ChokeManager();
+        interestNotInterestManager = new InterestNotInterestManager( kNeighborPeers, (Peer)this);
     }
 
     public void start(){

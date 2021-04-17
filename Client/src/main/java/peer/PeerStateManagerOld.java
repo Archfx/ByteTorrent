@@ -10,9 +10,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-
-@Deprecated
-public class PeerStateManagerOld {
+//
+//@Deprecated
+//public class PeerStateManagerOld {
 ////    private static ScheduledExecutorService scheduler;
 //    private ServerSocket ssocket;
 //    private Peer hostPeer;
@@ -182,5 +182,5 @@ public class PeerStateManagerOld {
 //        // scheduler.scheduleAtFixedRate((Runnable) chokeOpt( kNeighborPeers,4), 0, unchokeOptInterval, TimeUnit.SECONDS);
 //
 //    }
-}
+//}
 
