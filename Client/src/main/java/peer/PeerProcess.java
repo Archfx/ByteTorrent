@@ -14,8 +14,11 @@ public class PeerProcess {
         PeerStateManagerPlatform peerStateManagerPlatform;
         // System.out.println(port);
 
+        
         // Get the peer id from arguments
-        final int id = Integer.parseInt(args[0]);
+        // final int id = Integer.parseInt(args[0]);
+        final int id = Integer.parseInt("1001");
+
 
         // Read Configurations from config files
         CommonConfig commonConfig = CommonConfig.getInstance();
@@ -26,6 +29,8 @@ public class PeerProcess {
 
         // Assign existing remote peers
         ArrayList<Peer> remotePeers = new ArrayList<Peer>();
+
+        ChokeManager chokeM = new ChokeManager();
 
         for (Peer peer : peerInfo.getPeerInfoList()) {
             if (id == peer.getId()) {
@@ -38,7 +43,11 @@ public class PeerProcess {
         }
 
         peerStateManagerPlatform = new PeerStateManagerPlatform(my_node, remotePeers);
+        System.out.println(" Starting choke "+ chokeM.choke(remotePeers));
         peerStateManagerPlatform.init();
+        
+
+        
 
     }
 }

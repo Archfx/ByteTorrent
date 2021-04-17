@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.sound.midi.Soundbank;
+
 public class ChokeManager {
 
     private boolean chokeThreadRunning ;
@@ -24,6 +26,7 @@ public class ChokeManager {
 
         int num_peer = kNeighborPeers.size();
 
+        System.out.println(" Starting choke ");
 
         while (chokeThreadRunning) {
             synchronized (lockMyNeighbors) { //lock the object
