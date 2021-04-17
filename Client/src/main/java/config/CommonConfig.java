@@ -75,22 +75,22 @@ public class CommonConfig {
         return PieceSize;
     }
 
-    public static void main(String[] args) throws Exception {
-        CommonConfig config = CommonConfig.getInstance();
-        System.out.println("Reading Common config\n");
-        System.out.println("NumberOfPreferredNeighbors : " + config.getNumberOfdPreferredNeighbors());
-        System.out.println("UnchokingInterval : " + config.getUnchokingInterval());
-        System.out.println("OptimisticUnchokingInterval : " + config.getOptimisticUnchokingInterval());
-        System.out.println("FileName : " + config.getFileName());
-        System.out.println("FileSize : " + config.getFileSize());
-        System.out.println("PieceSize : " + config.getPieceSize());
-        System.out.println("\nAdding Peers to the System\n");
-        PeerInfoConfig remotePeerInfo = PeerInfoConfig.getInstance();
-        for (Peer peer : remotePeerInfo.getPeerInfoList()) {
-            System.out.println("Id : "+peer.getId()+", Address : "+peer.getAddress()+", Port : "+peer.getPort()+
-                    ", HasFile : "+peer.isHasFile());
-        }
-
-    }
+//    public static void main(String[] args) throws Exception {
+//        CommonConfig config = CommonConfig.getInstance();
+//        System.out.println("Reading Common config\n");
+//        System.out.println("NumberOfPreferredNeighbors : " + config.getNumberOfdPreferredNeighbors());
+//        System.out.println("UnchokingInterval : " + config.getUnchokingInterval());
+//        System.out.println("OptimisticUnchokingInterval : " + config.getOptimisticUnchokingInterval());
+//        System.out.println("FileName : " + config.getFileName());
+//        System.out.println("FileSize : " + config.getFileSize());
+//        System.out.println("PieceSize : " + config.getPieceSize());
+//        System.out.println("\nAdding Peers to the System\n");
+//        PeerInfoConfig remotePeerInfo = PeerInfoConfig.getInstance();
+//        for (Peer peer : remotePeerInfo.getPeerInfoList()) {
+//            System.out.println("Id : "+peer.getId()+", Address : "+peer.getAddress()+", Port : "+peer.getPort()+
+//                    ", HasFile : "+peer.isHasFile());
+//        }
+//
+//    }
 
 }
