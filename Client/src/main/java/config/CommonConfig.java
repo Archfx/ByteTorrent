@@ -1,5 +1,7 @@
 package config;
 
+import peer.Peer;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -84,7 +86,7 @@ public class CommonConfig {
         System.out.println("PieceSize : " + config.getPieceSize());
         System.out.println("\nAdding Peers to the System\n");
         PeerInfoConfig remotePeerInfo = PeerInfoConfig.getInstance();
-        for (RemotePeerInfo peer : remotePeerInfo.getPeerInfoList()) {
+        for (Peer peer : remotePeerInfo.getPeerInfoList()) {
             System.out.println("Id : "+peer.getId()+", Address : "+peer.getAddress()+", Port : "+peer.getPort()+
                     ", HasFile : "+peer.isHasFile());
         }

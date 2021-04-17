@@ -11,32 +11,34 @@ public class PeerProcess {
     public static void main(String[] args) {
 
         LoggerUtil.LogInfoMessage("Process Thread Started");
-
+        PeerStateManagerPlatform peerStateManagerPlatform;
         // System.out.println(port);
-        
+
+        // Get the peer id from arguments
         final int id = Integer.parseInt(args[0]);
-        String address = "127.0.0.1";
-        int port = 6008;
-        boolean hasFile = false;
 
-
-        // This will read the config files (need to be in the correct directories at some point)
+        // Read Configurations from config files
         CommonConfig commonConfig = CommonConfig.getInstance();
         PeerInfoConfig peerInfo = PeerInfoConfig.getInstance();
 
-        // We need to figure out existing remote peers
-        ArrayList<RemotePeerInfo> remotePeers = new ArrayList<RemotePeerInfo>();
+        // Get my peer information
+        Peer my_node = null;
 
-        for (RemotePeerInfo peer : peerInfo.getPeerInfoList()) {
+        // Assign existing remote peers
+        ArrayList<Peer> remotePeers = new ArrayList<Peer>();
+
+        for (Peer peer : peerInfo.getPeerInfoList()) {
             if (id == peer.getId()) {
-                address = peer.getAddress();
-                port = peer.getPort();
-                hasFile = peer.isHasFile();
+                my_node = peer;
             }
             else {
                 // Add all other peers
                 remotePeers.add(peer);
             }
         }
+
+        peerStateManagerPlatform = new PeerStateManagerPlatform(my_node, remotePeers);
+        peerStateManagerPlatform.init();
+
     }
 }
