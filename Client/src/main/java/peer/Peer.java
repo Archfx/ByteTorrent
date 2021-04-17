@@ -21,6 +21,8 @@ public class Peer {
     private Integer allPeerID; //For choke unchoke
     private Socket peerSockets; //For choke unchoke
 
+	private boolean doneDonwloading;
+
 	private static Boolean interestedPeer; //For choke unchoke
     private static Peer unChoked; //For choke unchoke
 
@@ -31,6 +33,14 @@ public class Peer {
 		this.address = address;
 		this.port = port;
 		this.hasFile = hasFile;
+	}
+
+	public boolean isDoneDonwloading() {
+		return doneDonwloading;
+	}
+
+	public void setDoneDonwloading(boolean doneDonwloading) {
+		this.doneDonwloading = doneDonwloading;
 	}
 
 	public Peer(Peer peer) {
