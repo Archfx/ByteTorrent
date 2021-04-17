@@ -15,7 +15,7 @@ public class PeerStateManagerPlatform {
     public PeerStateManagerPlatform(Peer peer_node, ArrayList<Peer> remotePeers) {
         my_node = peer_node;
         executorService = Executors.newFixedThreadPool(remotePeers.size());
-		//TODO  -: convert remote peers and initialize kNeighborPeers list
+		this.kNeighborPeers = remotePeers;
 	}
 
 
