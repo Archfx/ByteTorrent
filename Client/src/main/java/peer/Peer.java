@@ -7,15 +7,15 @@ import java.util.List;
 
 // Store Peer state
 public class Peer {
-	public int id;
-	public String address;
-	public int port;
-	public boolean hasFile;
-	public byte[] bitField;
-	public boolean choked = true;
+	private int id;
+	private String address;
+	private int port;
+	private boolean hasFile;
+	private byte[] bitField;
+	private boolean choked = true;
 //	public ConnectionHandle cHandle;
-	public Socket socket;
-	public boolean up;
+	private Socket socket;
+	private boolean up;
 
 	private Float dlSpeed; //For choke unchoke
     private Integer allPeerID; //For choke unchoke
@@ -94,9 +94,77 @@ public class Peer {
 	}
 
 
+	public int getId() {
+		return id;
+	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
 
+	public String getAddress() {
+		return address;
+	}
 
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	public boolean isHasFile() {
+		return hasFile;
+	}
+
+	public void setHasFile(boolean hasFile) {
+		this.hasFile = hasFile;
+	}
+
+	public byte[] getBitField() {
+		return bitField;
+	}
+
+	public void setBitField(byte[] bitField) {
+		this.bitField = bitField;
+	}
+
+	public boolean isChoked() {
+		return choked;
+	}
+
+	public void setChoked(boolean choked) {
+		this.choked = choked;
+	}
+
+	public Socket getSocket() {
+		return socket;
+	}
+
+	public void setSocket(Socket socket) {
+		this.socket = socket;
+	}
+
+	public boolean isUp() {
+		return up;
+	}
+
+	public void setUp(boolean up) {
+		this.up = up;
+	}
+
+	public static Boolean getInterestedPeer() {
+		return interestedPeer;
+	}
+
+	public static void setInterestedPeer(Boolean interestedPeer) {
+		Peer.interestedPeer = interestedPeer;
+	}
 }
 
 
