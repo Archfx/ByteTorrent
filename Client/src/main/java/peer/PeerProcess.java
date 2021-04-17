@@ -11,7 +11,7 @@ public class PeerProcess {
     public static void main(String[] args) {
 
         LoggerUtil.LogInfoMessage("Process Thread Started");
-
+        PeerStateManagerPlatform peerStateManagerPlatform;
         // System.out.println(port);
         
         final int id = Integer.parseInt(args[0]);
@@ -38,5 +38,9 @@ public class PeerProcess {
                 remotePeers.add(peer);
             }
         }
+
+        peerStateManagerPlatform = new PeerStateManagerPlatform(remotePeers);
+        peerStateManagerPlatform.init();
+
     }
 }
