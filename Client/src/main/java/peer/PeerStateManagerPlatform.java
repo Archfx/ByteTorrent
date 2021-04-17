@@ -12,7 +12,10 @@ public class PeerStateManagerPlatform {
 
     private ExecutorService executorService ;
 
-    public PeerStateManagerPlatform(ArrayList<RemotePeerInfo> remotePeers) {
+    public static Peer my_node;
+
+    public PeerStateManagerPlatform(Peer my_node, ArrayList<Peer> remotePeers) {
+        my_node = my_node;
         executorService = Executors.newFixedThreadPool(remotePeers.size());
 		//TODO  -: convert remote peers and initialize kNeighborPeers list
 	}
@@ -21,7 +24,7 @@ public class PeerStateManagerPlatform {
     public void init() {
         kNeighborPeers.forEach(neighborPeer-> {
             executorService.submit(() -> {
-                System.out.println(" Starting thread for peer :" + neighborPeer.id);
+                System.out.println(" Starting thread for peer :" + neighborPeer.getId());
                 PeerStateManger2 peerStateManager = new PeerStateManger2(neighborPeer, kNeighborPeers);
                 peerStateManager.start();
             });

@@ -1,12 +1,14 @@
 package config;
 
+import peer.Peer;
+
 import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
 public class PeerInfoConfig {
     public static final String FILE_NAME = "PeerInfo.cfg";
-    private ArrayList<RemotePeerInfo> peerInfoList = new ArrayList<RemotePeerInfo>();
+    private ArrayList<Peer> peerInfoList = new ArrayList<>();
     private static PeerInfoConfig peerInfoConfig = null;
 
 
@@ -23,7 +25,7 @@ public class PeerInfoConfig {
                 if ("1".equals(config[3])) {
                     hasFile = true;
                 }
-                peerInfoList.add(new RemotePeerInfo(id, address, port, hasFile));
+                peerInfoList.add(new Peer(id, address, port, hasFile));
 
             }
             reader.close();
@@ -52,7 +54,7 @@ public class PeerInfoConfig {
         return peerInfoConfig;
     }
 
-    public ArrayList<RemotePeerInfo> getPeerInfoList() {
+    public ArrayList<Peer> getPeerInfoList() {
         return peerInfoList;
     }
 }
