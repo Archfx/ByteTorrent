@@ -7,8 +7,8 @@ public class PeerStateManger2 extends Peer{
     private List<Peer> kNeighborPeers;
     private ChokeManager chokeManager;
 
-    public PeerStateManger2(Peer peer, List<Peer> kNeighborPeers) {
-        super(peer);
+    public PeerStateManger2(Peer thisPeer, List<Peer> kNeighborPeers) {
+        super(thisPeer);
         kNeighborPeers = kNeighborPeers;
         init();
 

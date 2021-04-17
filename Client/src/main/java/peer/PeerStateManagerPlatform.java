@@ -21,7 +21,7 @@ public class PeerStateManagerPlatform {
     public void init() {
         kNeighborPeers.forEach(neighborPeer-> {
             executorService.submit(() -> {
-                System.out.println(" Starting thread for peer :" + neighborPeer.id);
+                System.out.println(" Starting thread for peer :" + neighborPeer.getId());
                 PeerStateManger2 peerStateManager = new PeerStateManger2(neighborPeer, kNeighborPeers);
                 peerStateManager.start();
             });
