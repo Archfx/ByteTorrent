@@ -26,13 +26,19 @@ public class Peer {
 
 
 
-	public Peer(int id, String a, int p, boolean f) {
+	public Peer(int id, String address, int port, boolean hasFile) {
 		this.id = id;
-		this.address = a;
-		this.port = p;
-		this.hasFile = f;
+		this.address = address;
+		this.port = port;
+		this.hasFile = hasFile;
 	}
 
+	public Peer(Peer peer) {
+		this.id = peer.getId();
+		this.address = peer.getAddress();
+		this.port = peer.getPort();
+		this.hasFile = peer.isHasFile();
+	}
 
 
 	public static Peer getUnChoked() {

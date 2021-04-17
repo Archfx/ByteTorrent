@@ -8,7 +8,7 @@ public class PeerStateManger2 extends Peer{
     private ChokeManager chokeManager;
 
     public PeerStateManger2(Peer peer, List<Peer> kNeighborPeers) {
-        super(peer.id, peer.address, peer.port, peer.hasFile);
+        super(peer);
         kNeighborPeers = kNeighborPeers;
         init();
 
