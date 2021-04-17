@@ -1,5 +1,7 @@
 package peer;
 
+import config.CommonConfig;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,7 +20,7 @@ public class ChokeManager {
     //    p = unchoking interval
     //    m = optimally unchoke interval
 
-    public List<Peer> choke (List<Peer> kNeighborPeers, int k){
+    public List<Peer> choke (List<Peer> kNeighborPeers){
 
         List<Peer> unchokeList = new ArrayList<Peer>();
 
@@ -37,7 +39,7 @@ public class ChokeManager {
 //					shuffle the list
                     Collections.shuffle(kNeighborPeers);
                     int nP = 0; // numbers of peers selected
-                    for (int i = 0; i < num_peer && nP < k; i++) {
+                    for (int i = 0; i < num_peer && nP < CommonConfig.getNumberOfdPreferredNeighbors(); i++) {
                         if ((kNeighborPeers.get(i)).getInterestedPeers() && (kNeighborPeers.get(i)).getPeerSockets() != null) {
                             unchokeList.add(kNeighborPeers.get(i));
                             nP++;
@@ -49,7 +51,7 @@ public class ChokeManager {
                     kNeighborPeers.sort(Comparator.comparing(Peer::getDlSpeed));
                     // selecting the peers
                     float nP = 0; // numbers of peers selected
-                    for (int i = 0; i < num_peer && nP < k; i++) {
+                    for (int i = 0; i < num_peer && nP < CommonConfig.getNumberOfdPreferredNeighbors(); i++) {
                         if ((kNeighborPeers.get(i)).getInterestedPeers() && (kNeighborPeers.get(i)).getAllPeerID() != null) { 
                             unchokeList.add(kNeighborPeers.get(i));
                             nP++;
@@ -66,7 +68,7 @@ public class ChokeManager {
 
 
 
-    public List<Peer> chokeOpt (List<Peer> kNeighborPeers, int k){
+    public List<Peer> chokeOpt (List<Peer> kNeighborPeers){
 
         List<Peer> optUnchokeList = new ArrayList<Peer>();
 
