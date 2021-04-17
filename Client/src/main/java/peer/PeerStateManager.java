@@ -9,7 +9,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class PeerStateManager extends Thread {
+@Deprecated
+public class PeerStateManager {
 //    private static ScheduledExecutorService scheduler;
     private ServerSocket ssocket;
     private Peer hostPeer;

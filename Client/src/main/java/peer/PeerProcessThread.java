@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 
 import h.Handshake;
 
+@Deprecated
 public class PeerProcessThread extends Peer implements Runnable {
     private final CommonConfig cConfig;
     private static HashMap<Integer, Peer> peers = new HashMap<Integer, Peer>();
