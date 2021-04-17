@@ -48,6 +48,8 @@ public class PeerProcess {
         
 
         
+//        peerStateManagerPlatform = new PeerStateManagerPlatform(my_node, remotePeers);
+//        peerStateManagerPlatform.init();
 
     }
 }
