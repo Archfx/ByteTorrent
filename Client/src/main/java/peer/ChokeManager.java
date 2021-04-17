@@ -8,7 +8,7 @@ public class ChokeManager {
     private boolean chokeThreadRunning ;
     private Object lockMyNeighbors;
 
-    peer munode = PeerStateManagerPlatform.my_node;
+    Peer munode = PeerStateManagerPlatform.my_node;
     // TODO -: choking unckoking logic goes here
 
     //    k = prefered number of peers to unchoke
