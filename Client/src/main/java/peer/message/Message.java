@@ -39,14 +39,4 @@ public class Message {
         this.payload = payload;
     }
 
-    @Override
-    public String toString() {
-        return Arrays.toString(intToByteArray(messageLength, 4)) + Arrays.toString(intToByteArray(messageType.id, 1)) + Arrays.toString(payload);
-    }
-
-    private static byte[] intToByteArray(int intVal, int numberOfBytes){
-        ByteBuffer b = ByteBuffer.allocate(numberOfBytes);
-        b.putInt(intVal);
-        return b.array();
-    }
 }
