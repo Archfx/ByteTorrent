@@ -95,12 +95,13 @@ public class PeerStateManager extends Thread {
 
                 } else {
                     //selecting based on the download speeds when file download is not complete.
-                    int[] dlSpeedOrdered = kNeighborPeers.stream().map(Peer::getDlSpeed).collect(Collectors.toList());
+                    ArrayList<Float> dlSpeedOrdered = (ArrayList<Float>) kNeighborPeers.stream().map(Peer::getDlSpeed);
+                    Collections.sort(dlSpeedOrdered, new NameComparator());
                     // selecting the peers
-                    int nP = 0; // numbers of peers selected
+                    float nP = 0; // numbers of peers selected
                     for (int i = 0; i < num_peer && nP < k; i++) {
-                        ind = dlSpeedOrdered[i];
-                        if (interestedPeers.get(ind) && allPeerID.get(ind) != hostPeer.id) {
+                        ind = dlSpeedOrdered.get(i);
+                        if ((kNeighborPeers.get(ind)).getInterestedPeers() && (kNeighborPeers.get(ind)).getAllPeerID() != hostPeer.id) {
                             unchokeList.add(neighbors.get(ind));
                             nP++;
                         }
