@@ -1,19 +1,19 @@
-package peer;
-
-import peer.message.Message;
-
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
+//package peer;
+//
+//import peer.message.Message;
+//
+//import java.net.ServerSocket;
+//import java.net.Socket;
+//import java.util.*;
+//import java.util.concurrent.Executors;
+//import java.util.concurrent.ScheduledExecutorService;
+//import java.util.concurrent.TimeUnit;
+//import java.util.function.Consumer;
+//import java.util.stream.Collectors;
 //
 //@Deprecated
 //public class PeerStateManagerOld {
-////    private static ScheduledExecutorService scheduler;
+//    private static ScheduledExecutorService scheduler;
 //    private ServerSocket ssocket;
 //    private Peer hostPeer;
 //    private HashMap<Integer, Peer> peers;
@@ -37,14 +37,14 @@ import java.util.stream.Collectors;
 //
 //    // private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 //
-////    public int[] allPeerID;
-////    public Socket[] peerSockets;
+//    public int[] allPeerID;
+//    public Socket[] peerSockets;
 //
 //    public PeerStateManager(ServerSocket ssocket, Peer hostPeer, HashMap<Integer, Peer> peers) {
-//		this.ssocket = ssocket;
-//		this.peers = peers;
-//		this.hostPeer = hostPeer;
-//	}
+//        this.ssocket = ssocket;
+//        this.peers = peers;
+//        this.hostPeer = hostPeer;
+//    }
 //
 //    //	get IDs of connected peers sorted in speed
 //    int[] getPeerId(ArrayList<Float> speeds) {
@@ -58,9 +58,9 @@ import java.util.stream.Collectors;
 //        return indices;
 //    }
 //
-////    k = prefered number of peers to unchoke
-////    p = unchoking interval
-////    m = optimally unchoke interval
+//    k = prefered number of peers to unchoke
+//    p = unchoking interval
+//    m = optimally unchoke interval
 //
 //    public List<Peer> choke (List<Peer> neighbors, int k){
 //
@@ -79,11 +79,11 @@ import java.util.stream.Collectors;
 //                    continue;
 //                }
 //
-////                int[] copy = (int[]) peers.clone();
-////                Arrays.sort(copy);
-//				// Randomly selecting neighbors when download of file completed.
+//                int[] copy = (int[]) peers.clone();
+//                Arrays.sort(copy);
+//                // Randomly selecting neighbors when download of file completed.
 //                if (isMyFile || dlFinished) {
-////					shuffle the list
+//                    shuffle the list
 //                    Collections.shuffle(peers);
 //                    int nP = 0; // numbers of peers selected
 //                    for (int i = 0; i < num_peer && nP < k; i++) {
@@ -105,12 +105,12 @@ import java.util.stream.Collectors;
 //                            unchokeList.add(neighbors.get(ind));
 //                            nP++;
 //                        }
-//                        }
 //                    }
-//
 //                }
 //
 //            }
+//
+//        }
 //
 //        return unchokeList;
 //    }
@@ -134,10 +134,10 @@ import java.util.stream.Collectors;
 //                    continue;
 //                }
 //
-////                int[] copy = (int[]) peers.clone();
-////                Arrays.sort(copy);
+//                int[] copy = (int[]) peers.clone();
+//                Arrays.sort(copy);
 //                // Randomly selecting neighbors when download of file completed.
-////				shuffle the list
+//                shuffle the list
 //                Collections.shuffle(peers);
 //                int nP = 0; // numbers of peers  to be selected selected
 //                for (int i = 0; i < num_peer && nP < 1; i++) {
@@ -183,4 +183,4 @@ import java.util.stream.Collectors;
 //
 //    }
 //}
-
+//
