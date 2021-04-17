@@ -8,6 +8,8 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class PeerStateManager extends Thread {
 //    private static ScheduledExecutorService scheduler;
@@ -16,12 +18,12 @@ public class PeerStateManager extends Thread {
     private HashMap<Integer, Peer> peers;
 
     private static ArrayList<Peer> kNeighborPeers;
-    private static ArrayList<Boolean> interestedPeers;
-    private static ArrayList<Peer> unChoked;
+    // private static ArrayList<Boolean> interestedPeers;
+    // private static ArrayList<Peer> unChoked;
 
-    private static ArrayList<Float> dlSpeed;
-    private static ArrayList<Integer> allPeerID;
-    private static ArrayList<Socket> peerSockets;
+    // private static ArrayList<Float> dlSpeed;
+    // private static ArrayList<Integer> allPeerID;
+    // private static ArrayList<Socket> peerSockets;
 
     private Object lockMyNeighbors;
 
@@ -32,7 +34,7 @@ public class PeerStateManager extends Thread {
 
     private boolean chokeThreadRunning ;
 
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    // private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
 //    public int[] allPeerID;
 //    public Socket[] peerSockets;
@@ -43,7 +45,7 @@ public class PeerStateManager extends Thread {
 		this.hostPeer = hostPeer;
 	}
 
-    //	get IDs of connected peers soreted in speed
+    //	get IDs of connected peers sorted in speed
     int[] getPeerId(ArrayList<Float> speeds) {
 
         float[] sortedNeighbors = (float[]) speeds.clone();
@@ -85,7 +87,7 @@ public class PeerStateManager extends Thread {
                     int nP = 0; // numbers of peers selected
                     for (int i = 0; i < num_peer && nP < k; i++) {
                         ind = peers.get(i); //index of the peer to be selected, selected randomly.
-                        if (interestedPeers.get(ind) && peerSockets.get(ind) != null) {
+                        if ((kNeighborPeers.get(ind)).getInterestedPeers() && (kNeighborPeers.get(ind)).getPeerSockets() != null) {
                             unchokeList.add(neighbors.get(ind));
                             nP++;
                         }
@@ -93,7 +95,7 @@ public class PeerStateManager extends Thread {
 
                 } else {
                     //selecting based on the download speeds when file download is not complete.
-                    int[] dlSpeedOrdered = getPeerId(dlSpeed);
+                    int[] dlSpeedOrdered = kNeighborPeers.stream().map(Peer::getDlSpeed).collect(Collectors.toList());
                     // selecting the peers
                     int nP = 0; // numbers of peers selected
                     for (int i = 0; i < num_peer && nP < k; i++) {
@@ -111,6 +113,8 @@ public class PeerStateManager extends Thread {
 
         return unchokeList;
     }
+
+
 
     public List<Peer> chokeOpt (List<Peer> neighbors, int k){
 
@@ -173,8 +177,9 @@ public class PeerStateManager extends Thread {
     }
 
     public void main(String[] args) {
-        scheduler.scheduleAtFixedRate((Runnable) choke( kNeighborPeers,4), 0, unchokeInterval, TimeUnit.SECONDS);
-        scheduler.scheduleAtFixedRate((Runnable) chokeOpt( kNeighborPeers,4), 0, unchokeOptInterval, TimeUnit.SECONDS);
+        // scheduler.scheduleAtFixedRate((Runnable) choke( kNeighborPeers,4), 0, unchokeInterval, TimeUnit.SECONDS);
+        // scheduler.scheduleAtFixedRate((Runnable) chokeOpt( kNeighborPeers,4), 0, unchokeOptInterval, TimeUnit.SECONDS);
+
     }
 }
 
