@@ -35,4 +35,6 @@ public class Message {
     public void setPayload(byte[] payload) {
         this.payload = payload;
     }
+
+
 }
