@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ChokeManager {
 
-    private boolean chokeThreadRunning = true ;
+    private static boolean chokeThreadRunning = true ;
     // private Object lockMyNeighbors;
 
 //    Peer myNode = PeerManagerPlatform.my_node;
@@ -24,7 +24,7 @@ public class ChokeManager {
     //    m = optimally unchoke interval
 
     // public List<Peer> choke (List<Peer> allPeers){
-    public void choke (List<Peer> allPeers){
+    public static void choke (List<Peer> allPeers){
 
         List<Peer> unchokeList = new ArrayList<Peer>();
 
@@ -79,7 +79,7 @@ public class ChokeManager {
 
 
     // public List<Peer> chokeOpt (List<Peer> allPeers){
-    public void chokeOpt (List<Peer> allPeers){
+    public static void chokeOpt (List<Peer> allPeers){
 
 
         // List<Peer> optUnchokeList = new ArrayList<Peer>();

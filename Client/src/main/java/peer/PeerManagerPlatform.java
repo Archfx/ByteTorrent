@@ -9,16 +9,24 @@ import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 
 public class PeerManagerPlatform extends Peer {
+    private ScheduledExecutorService scheduledExecutorService;
+
     private final CommonConfig cConfig;
     private Map<Integer, Peer> peers;
     private ServerSocket socket;
 
     public PeerManagerPlatform(Peer mySelf, Map<Integer, Peer> remotePeers, CommonConfig cConfig) {
         super(mySelf.getPeerId(), mySelf.getAddress(), mySelf.getPort(), mySelf.isHasFile());
+        this.scheduledExecutorService = Executors.newScheduledThreadPool(2);
         this.cConfig = cConfig;
         this.peers = remotePeers;
     }
@@ -36,6 +44,8 @@ public class PeerManagerPlatform extends Peer {
 
         this.initServer();
         this.initClient();
+        scheduledExecutorService.schedule(() -> ChokeManager.choke((List<Peer>) peers.values()), 1, TimeUnit.SECONDS);
+        scheduledExecutorService.schedule(() -> ChokeManager.chokeOpt((List<Peer>) peers.values()), 1, TimeUnit.SECONDS);
     }
 
 
