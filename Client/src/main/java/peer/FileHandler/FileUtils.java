@@ -18,7 +18,7 @@ public class FileUtils {
 	 * @return byte representation of bool
 	 * @throws Exception
 	 */
-	public static byte boolToByte(boolean[] bool) throws Exception {
+	public static byte toByte(boolean[] bool) throws Exception {
 		if (bool.length > 8)
 			throw new Exception("boolean array length exceeded: not compatible with byte");
 		byte val = 0;
@@ -36,7 +36,7 @@ public class FileUtils {
 	 *            byte to be converted into boolean array
 	 * @return boolean representation of byte
 	 */
-	public static boolean[] byteToBoolean(byte val) {
+	public static boolean[] toBool(byte val) {
 		boolean[] bool = new boolean[8];
 		for (int i = 0; i < 8; i++) {
 			bool[7 - i] = (val & 1) == 1 ? true : false;
@@ -58,7 +58,7 @@ public class FileUtils {
 		bitfield[i] = (byte) (bitfield[i] | update);
 	}
 
-	public static boolean checkComplete(byte[] bitfield, int size) {
+	public static boolean checkFullFile(byte[] bitfield, int size) {
 
 		boolean[] interestingPieces = new boolean[size];
 		int finLength;
@@ -77,7 +77,7 @@ public class FileUtils {
 				start = 0;
 				end = 8;
 			}
-			boolean[] x = FileUtils.byteToBoolean(bitfield[i]);
+			boolean[] x = FileUtils.toBool(bitfield[i]);
 			System.arraycopy(x, start, interestingPieces, j, end);
 
 			if (j + 8 < size)

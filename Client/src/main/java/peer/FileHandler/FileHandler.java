@@ -18,16 +18,16 @@ public class FileHandler {
 	 * Table to keep track of requested file pieces at any instant so that redundant
 	 * requests are not made
 	 */
-	private static Hashtable<Integer, Integer> requestedPieces = new Hashtable<Integer, Integer>();
+	private static Hashtable<Integer, Integer> piecesNeeded = new Hashtable<Integer, Integer>();
 
 	/** Number of file pieces the file can be broken into */
-	private static final int noOfFilePieces = (int) Math
+	private static final int numFilePieces = (int) Math
 			.ceil((double) CommonConfig.getFileSize() / CommonConfig.getPieceSize());
 	/** File pieces available by the peer */
-	private static int noOfPiecesAvailable = 0;
-	private static String directory = null;
-	private static String fileName = CommonConfig.getFileName();
-	private static int fileSize = CommonConfig.getFileSize();
+	private static int numPiecesIHave = 0;
+	private static String path = null;
+	private static String fName = CommonConfig.getFileName();
+	private static int fSize = CommonConfig.getFileSize();
 	private static File file = null;
 
 	/**
@@ -39,29 +39,29 @@ public class FileHandler {
 	 *            specifies if the peer has the file
 	 */
 	public FileHandler(int peerId, boolean hasFile) {
-		directory = "peer_" + peerId + "/";
+		path = "peer_" + peerId + "/";
 
-		filePiecesOwned = new boolean[noOfFilePieces];
+		filePiecesOwned = new boolean[numFilePieces];
 
 		if (hasFile) {
 			Arrays.fill(filePiecesOwned, true);
-			noOfPiecesAvailable = noOfFilePieces;
+			numPiecesIHave = numFilePieces;
 		}
 
-		File folder = new File(directory);
+		File folder = new File(path);
 
 		if (!folder.exists()) {
 			folder.mkdirs();
 		}
 
-		file = new File(directory + fileName);
+		file = new File(path + fName);
 
 		if (!file.exists()) {
 			FileOutputStream fos = null;
 			try {
 				fos = new FileOutputStream(file);
 				System.out.println("Writing file.");
-				fos.write(new byte[fileSize]);
+				fos.write(new byte[fSize]);
 				fos.close();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -86,78 +86,78 @@ public class FileHandler {
 	}
 
 	/**
-	 * @return the requestedPieces
+	 * @return the piecesNeeded
 	 */
 	public static Hashtable<Integer, Integer> getRequestedPieces() {
-		return requestedPieces;
+		return piecesNeeded;
 	}
 
 	/**
-	 * @param requestedPieces
-	 *            the requestedPieces to set
+	 * @param piecesNeeded
+	 *            the piecesNeeded to set
 	 */
-	public static void setRequestedPieces(Hashtable<Integer, Integer> requestedPieces) {
-		FileHandler.requestedPieces = requestedPieces;
+	public static void setRequestedPieces(Hashtable<Integer, Integer> piecesNeeded) {
+		FileHandler.piecesNeeded = piecesNeeded;
 	}
 
 	/**
-	 * @return the noOfPiecesAvailable
+	 * @return the numPiecesIHave
 	 */
 	public static int getNoOfPiecesAvailable() {
-		return noOfPiecesAvailable;
+		return numPiecesIHave;
 	}
 
 	/**
-	 * @param noOfPiecesAvailable
-	 *            the noOfPiecesAvailable to set
+	 * @param numPiecesIHave
+	 *            the numPiecesIHave to set
 	 */
-	public static void setNoOfPiecesAvailable(int noOfPiecesAvailable) {
-		FileHandler.noOfPiecesAvailable = noOfPiecesAvailable;
+	public static void setNoOfPiecesAvailable(int numPiecesIHave) {
+		FileHandler.numPiecesIHave = numPiecesIHave;
 	}
 
 	/**
-	 * @return the directory
+	 * @return the path
 	 */
 	public static String getDirectory() {
-		return directory;
+		return path;
 	}
 
 	/**
-	 * @param directory
-	 *            the directory to set
+	 * @param path
+	 *            the path to set
 	 */
-	public static void setDirectory(String directory) {
-		FileHandler.directory = directory;
+	public static void setDirectory(String path) {
+		FileHandler.path = path;
 	}
 
 	/**
-	 * @return the fileName
+	 * @return the fName
 	 */
 	public static String getFileName() {
-		return fileName;
+		return fName;
 	}
 
 	/**
-	 * @param fileName
-	 *            the fileName to set
+	 * @param fName
+	 *            the fName to set
 	 */
-	public static void setFileName(String fileName) {
-		FileHandler.fileName = fileName;
+	public static void setFileName(String fName) {
+		FileHandler.fName = fName;
 	}
 
 	/**
-	 * @return the fileSize
+	 * @return the fSize
 	 */
 	public static int getFileSize() {
-		return fileSize;
+		return fSize;
 	}
 
 	/**
-	 * @param fileSize
-	 *            the fileSize to set
+	 * @param fSize
+	 *            the fSize to set
 	 */
-	public static void setFileSize(int fileSize) {
-		FileHandler.fileSize = fileSize;
+	public static void setFileSize(int fSize) {
+		FileHandler.fSize = fSize;
 	}
 
 	/**
@@ -176,10 +176,10 @@ public class FileHandler {
 	}
 
 	/**
-	 * @return the nooffilepieces
+	 * @return the numFilePieces
 	 */
 	public static int getNooffilepieces() {
-		return noOfFilePieces;
+		return numFilePieces;
 	}
 
 	/**
@@ -195,7 +195,7 @@ public class FileHandler {
 	 * @return true if the file has all the file pieces/complete file
 	 */
 	public static synchronized boolean hasCompleteFile() {
-		return noOfPiecesAvailable == noOfFilePieces ? true : false;
+		return numPiecesIHave == numFilePieces ? true : false;
 	}
 
 	/**
@@ -207,19 +207,19 @@ public class FileHandler {
 	 * @throws Exception
 	 */
 	public static synchronized byte[] getBitField() throws Exception {
-		int size = (int) Math.ceil((double) noOfFilePieces / 8);
+		int size = (int) Math.ceil((double) numFilePieces / 8);
 		byte[] bitfield = new byte[size];
 		int counter = 0;
 		int indexI = 0;
 		// TODO Implement Professor Logic
-		while (indexI < noOfFilePieces) {
+		while (indexI < numFilePieces) {
 			int temp;
-			if (noOfFilePieces > indexI + 8) {
+			if (numFilePieces > indexI + 8) {
 				temp = indexI + 8;
 			} else {
-				temp = noOfFilePieces;
+				temp = numFilePieces;
 			}
-			bitfield[counter++] = FileUtils.boolToByte(Arrays.copyOfRange(filePiecesOwned, indexI, temp));
+			bitfield[counter++] = FileUtils.toByte(Arrays.copyOfRange(filePiecesOwned, indexI, temp));
 			indexI = indexI + 8;
 		}
 		return bitfield;
@@ -233,11 +233,11 @@ public class FileHandler {
 	public static synchronized PiecePayLoad get(int index) {
 		try {
 			FileInputStream fis = new FileInputStream(file);
-			int loc = CommonProperties.getPieceSize() * index;
+			int loc = CommonConfig.getPieceSize() * index;
 			fis.skip(loc);
-			int contentSize = CommonProperties.getPieceSize();
-			if (fileSize - loc < CommonProperties.getPieceSize())
-				contentSize = fileSize - loc;
+			int contentSize = CommonConfig.getPieceSize();
+			if (fSize - loc < CommonConfig.getPieceSize())
+				contentSize = fSize - loc;
 			byte[] content = new byte[contentSize];
 			fis.read(content);
 			fis.close();
@@ -264,7 +264,7 @@ public class FileHandler {
 			fos.write(piece.getContent());
 			fos.close();
 
-			noOfPiecesAvailable++;
+			numPiecesIHave++;
 			filePiecesOwned[piece.getIndex()] = true;
 
 		} catch (IOException e) {
@@ -283,7 +283,7 @@ public class FileHandler {
 	 */
 	public static boolean compareBitfields(byte[] neighborBitfield, byte[] bitfield) {
 		boolean flag = false;
-		int size = (int) Math.ceil((double) noOfFilePieces / 8);
+		int size = (int) Math.ceil((double) numFilePieces / 8);
 		byte[] interesting = new byte[size];
 		if (neighborBitfield == null) {
 			return flag;
@@ -310,12 +310,12 @@ public class FileHandler {
 	 * @return
 	 */
 	public static int requestPiece(byte[] neighborBitfield, byte[] bitfield, int nPID) {
-		int size = (int) Math.ceil((double) noOfFilePieces / 8);
+		int size = (int) Math.ceil((double) numFilePieces / 8);
 		byte[] interesting = new byte[size];
-		boolean[] interestingPieces = new boolean[noOfFilePieces];
+		boolean[] interestingPieces = new boolean[numFilePieces];
 		int finLength;
 
-		finLength = size > 1 ? noOfFilePieces % (8) : noOfFilePieces;
+		finLength = size > 1 ? numFilePieces % (8) : numFilePieces;
 
 		int start, end;
 
@@ -324,15 +324,15 @@ public class FileHandler {
 			interesting[indexI] = (byte) ((bitfield[indexI] ^ neighborBitfield[indexI]) & neighborBitfield[indexI]);
 			start = indexI == size - 1 ? 8 - finLength : 0;
 			end = indexI == size - 1 ? finLength : 8;
-			boolean[] x = FileUtils.byteToBoolean(interesting[indexI]);
+			boolean[] x = FileUtils.toBool(interesting[indexI]);
 			System.arraycopy(x, start, interestingPieces, indexJ, end);
-			indexJ = indexJ + 8 < noOfFilePieces ? indexJ + 8 : noOfFilePieces - finLength;
+			indexJ = indexJ + 8 < numFilePieces ? indexJ + 8 : numFilePieces - finLength;
 			indexI++;
 		}
 		int indexK = 0;
-		while (indexK < noOfFilePieces) {
-			if (interestingPieces[indexK] == true && !requestedPieces.containsKey(indexK)) {
-				requestedPieces.put(indexK, indexK);
+		while (indexK < numFilePieces) {
+			if (interestingPieces[indexK] == true && !piecesNeeded.containsKey(indexK)) {
+				piecesNeeded.put(indexK, indexK);
 				return indexK;
 			}
 			indexK++;
@@ -348,11 +348,11 @@ public class FileHandler {
 				try {
 					do {
 						Thread.sleep(60000);
-						for (Integer ind : requestedPieces.keySet()) {
+						for (Integer ind : piecesNeeded.keySet()) {
 							if (!filePiecesOwned[ind])
-								requestedPieces.remove(ind);
+								piecesNeeded.remove(ind);
 						}
-					} while (noOfPiecesAvailable < noOfFilePieces);
+					} while (numPiecesIHave < numFilePieces);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
