@@ -6,13 +6,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.FileHandler;
 
 import javax.sound.midi.Soundbank;
+import peer.FileHandler.FileController;
 
 public class ChokeManager {
 
     private boolean chokeThreadRunning = true ;
-    private Object lockMyNeighbors;
+    // private Object lockMyNeighbors;
 
 //    Peer myNode = PeerManagerPlatform.my_node;
 
@@ -24,87 +26,95 @@ public class ChokeManager {
     //    p = unchoking interval
     //    m = optimally unchoke interval
 
-    public List<Peer> choke (List<Peer> kNeighborPeers){
+    // public List<Peer> choke (List<Peer> allPeers){
+    public void choke (List<Peer> allPeers){
 
         List<Peer> unchokeList = new ArrayList<Peer>();
 
-        int num_peer = kNeighborPeers.size();
+        int num_peer = allPeers.size();
 
-        System.out.println(" Starting choke ");
+        System.out.println(" Starting selecting k peers to send the file ");
 
         while (chokeThreadRunning) {
-            // synchronized (lockMyNeighbors) { //lock the object
+            synchronized (allPeers) 
+            { //lock the peerlist
 
-                if (kNeighborPeers == null) {
+                if (allPeers == null) {
                     continue;
                 }
 
 				// Randomly selecting neighbors when download of file completed.
-                // myNode.setDoneDonwloading(true);
                 // if (myNode.isDoneDonwloading()) {
-                if (true) {
+                if (FileController.hasCompleteFile()) {
 //					shuffle the list
-                    Collections.shuffle(kNeighborPeers);
+                    Collections.shuffle(allPeers);
                     int nP = 0; // numbers of peers selected
                     for (int i = 0; i < num_peer && nP < CommonConfig.getNumberOfdPreferredNeighbors(); i++) {
-                        if ((kNeighborPeers.get(i)).getInterestedPeers() != null) {
+                        if ((allPeers.get(i)).getInterestedPeers() != null) {
 
-                        // if ((kNeighborPeers.get(i)).getInterestedPeers() && (kNeighborPeers.get(i)).getPeerSockets() != null) {
-                            unchokeList.add(kNeighborPeers.get(i));
+                        if ((allPeers.get(i)).getInterestedPeers() && (allPeers.get(i)).getPeerSockets() != null) {
+                            // unchokeList.add(allPeers.get(i));
+                            allPeers.get(i).setChoked(false);
                             nP++;
                         }
-                    }
+                        }
 
-                } else {
+                    } 
+                }
+                else {
                     // selecting based on the download speeds when file download is not complete.
-                    kNeighborPeers.sort(Comparator.comparing(Peer::getDlSpeed));
+                    allPeers.sort(Comparator.comparing(Peer::getDlSpeed));
                     // selecting the peers
                     float nP = 0; // numbers of peers selected
                     for (int i = 0; i < num_peer && nP < CommonConfig.getNumberOfdPreferredNeighbors(); i++) {
-                        if ((kNeighborPeers.get(i)).getInterestedPeers() && (kNeighborPeers.get(i)).getAllPeerID() != null) { 
-                            unchokeList.add(kNeighborPeers.get(i));
+                        if ((allPeers.get(i)).getInterestedPeers() && (allPeers.get(i)).getAllPeerID() != null) { 
+                            // unchokeList.add(allPeers.get(i));
+                            allPeers.get(i).setChoked(false);
                             nP++;
                         }
                         }
                     }
 
-                // }
+                }
 
             }
 
-        return unchokeList;
+        // return unchokeList;
     }
 
 
 
-    public List<Peer> chokeOpt (List<Peer> kNeighborPeers){
+    // public List<Peer> chokeOpt (List<Peer> allPeers){
+    public void chokeOpt (List<Peer> allPeers){
 
-        List<Peer> optUnchokeList = new ArrayList<Peer>();
 
-        int num_peer = kNeighborPeers.size();
+        // List<Peer> optUnchokeList = new ArrayList<Peer>();
+
+        int num_peer = allPeers.size();
+
+        System.out.println(" Starting optimum peer to send the file ");
 
         while (chokeThreadRunning) {
             // synchronized (lockMyNeighbors) { //lock the object
-
-                if (kNeighborPeers == null) {
+            synchronized (allPeers) {
+                if (allPeers == null) {
                     continue;
                 }
 
 //				shuffle the list
-                Collections.shuffle(kNeighborPeers);
+                Collections.shuffle(allPeers);
                 int nP = 0; // numbers of peers  to be selected selected
                 for (int i = 0; i < num_peer && nP < 1; i++) {
-                    if ((kNeighborPeers.get(i)).getInterestedPeers() && (kNeighborPeers.get(i)).getPeerSockets() != null) {
-                        optUnchokeList.add(kNeighborPeers.get(i));
+                    if ((allPeers.get(i)).getInterestedPeers() && (allPeers.get(i)).getPeerSockets() != null) {
+                        // optUnchokeList.add(allPeers.get(i));
+                        allPeers.get(i).setChoked(false);
                         nP++;
                     }
                 }
-
-            // }
-
+            }
         }
 
-        return optUnchokeList;
+        // return optUnchokeList;
     }
 }
 

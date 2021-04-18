@@ -11,7 +11,7 @@ import java.util.Hashtable;
 
 import config.CommonConfig;
 
-public class FileHandler {
+public class FileController {
 
     private static boolean[] filePiecesOwned;
 	/**
@@ -180,6 +180,7 @@ public class FileHandler {
 			byte[] content = new byte[contentSize];
 			fis.read(content);
 			fis.close();
+            System.out.println("reading chunk of file.");
 			return content;
 		} catch (FileNotFoundException e) {
 			return null;
