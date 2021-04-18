@@ -1,4 +1,4 @@
-package peer.FileHandler;
+package peer.FileController;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.Hashtable;
+
 
 import config.CommonConfig;
 
@@ -31,7 +32,7 @@ public class FileController {
 	private static File file = null;
 
 
-	public FileHandler(int peerId, boolean hasFile) {
+	public FileController(int peerId, boolean hasFile) {
 		path = "peer_" + peerId + "/";
 
 		filePiecesOwned = new boolean[numFilePieces];
@@ -70,7 +71,7 @@ public class FileController {
 
 
 	public static void setFilePiecesOwned(boolean[] filePiecesOwned) {
-		FileHandler.filePiecesOwned = filePiecesOwned;
+		FileController.filePiecesOwned = filePiecesOwned;
 	}
 
 
@@ -80,7 +81,7 @@ public class FileController {
 
 
 	public static void setRequestedPieces(Hashtable<Integer, Integer> piecesNeeded) {
-		FileHandler.piecesNeeded = piecesNeeded;
+		FileController.piecesNeeded = piecesNeeded;
 	}
 
 
@@ -90,7 +91,7 @@ public class FileController {
 
 
 	public static void setNoOfPiecesAvailable(int numPiecesIHave) {
-		FileHandler.numPiecesIHave = numPiecesIHave;
+		FileController.numPiecesIHave = numPiecesIHave;
 	}
 
 
@@ -100,7 +101,7 @@ public class FileController {
 
 
 	public static void setDirectory(String path) {
-		FileHandler.path = path;
+		FileController.path = path;
 	}
 
 
@@ -110,7 +111,7 @@ public class FileController {
 
 
 	public static void setFileName(String fName) {
-		FileHandler.fName = fName;
+		FileController.fName = fName;
 	}
 
 
@@ -120,7 +121,7 @@ public class FileController {
 
 
 	public static void setFileSize(int fSize) {
-		FileHandler.fSize = fSize;
+		FileController.fSize = fSize;
 	}
 
 
@@ -130,7 +131,7 @@ public class FileController {
 
 
 	public static void setFile(File file) {
-		FileHandler.file = file;
+		FileController.file = file;
 	}
 
 
@@ -284,7 +285,7 @@ public class FileController {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Testing file manager");
-        FileHandler f1 = new FileHandler(1005, false);  
+        FileController f1 = new FileController(1005, false);  
 
 	}
     
