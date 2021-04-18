@@ -31,6 +31,7 @@ public class PeerProcess {
 
         ChokeManager chokeM = new ChokeManager();
 
+
         for (Peer peer : peerInfo.getPeerInfoList()) {
             if (id == peer.getId()) {
                 my_node = peer;

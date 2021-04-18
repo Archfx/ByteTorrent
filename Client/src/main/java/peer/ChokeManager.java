@@ -11,10 +11,12 @@ import javax.sound.midi.Soundbank;
 
 public class ChokeManager {
 
-    private boolean chokeThreadRunning ;
+    private boolean chokeThreadRunning = true ;
     private Object lockMyNeighbors;
 
     Peer myNode = PeerStateManagerPlatform.my_node;
+
+    
 
     // TODO -: choking unckoking logic goes here
 
@@ -31,19 +33,23 @@ public class ChokeManager {
         System.out.println(" Starting choke ");
 
         while (chokeThreadRunning) {
-            synchronized (lockMyNeighbors) { //lock the object
+            // synchronized (lockMyNeighbors) { //lock the object
 
                 if (kNeighborPeers == null) {
                     continue;
                 }
 
 				// Randomly selecting neighbors when download of file completed.
-                if (myNode.isDoneDonwloading()) {
+                // myNode.setDoneDonwloading(true);
+                // if (myNode.isDoneDonwloading()) {
+                if (true) {
 //					shuffle the list
                     Collections.shuffle(kNeighborPeers);
                     int nP = 0; // numbers of peers selected
                     for (int i = 0; i < num_peer && nP < CommonConfig.getNumberOfdPreferredNeighbors(); i++) {
-                        if ((kNeighborPeers.get(i)).getInterestedPeers() && (kNeighborPeers.get(i)).getPeerSockets() != null) {
+                        if ((kNeighborPeers.get(i)).getInterestedPeers() != null) {
+
+                        // if ((kNeighborPeers.get(i)).getInterestedPeers() && (kNeighborPeers.get(i)).getPeerSockets() != null) {
                             unchokeList.add(kNeighborPeers.get(i));
                             nP++;
                         }
@@ -62,7 +68,7 @@ public class ChokeManager {
                         }
                     }
 
-                }
+                // }
 
             }
 
@@ -78,7 +84,7 @@ public class ChokeManager {
         int num_peer = kNeighborPeers.size();
 
         while (chokeThreadRunning) {
-            synchronized (lockMyNeighbors) { //lock the object
+            // synchronized (lockMyNeighbors) { //lock the object
 
                 if (kNeighborPeers == null) {
                     continue;
@@ -94,7 +100,7 @@ public class ChokeManager {
                     }
                 }
 
-            }
+            // }
 
         }
 
