@@ -1,4 +1,4 @@
-package peer.FileController;
+package peer.file;
 
 import java.io.File;
 import java.io.FileInputStream;

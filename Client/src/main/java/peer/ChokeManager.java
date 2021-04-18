@@ -3,6 +3,7 @@ package peer;
 import config.CommonConfig;
 import peer.file.FileController;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,7 +27,7 @@ public class ChokeManager {
     // public List<Peer> choke (List<Peer> allPeers){
     public static void choke (List<Peer> allPeers){
 
-        List<Peer> unchokeList = new ArrayList<Peer>();
+        // List<Peer> unchokeList = new ArrayList<Peer>();
 
         int num_peer = allPeers.size();
 
