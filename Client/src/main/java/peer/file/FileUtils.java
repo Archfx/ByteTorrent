@@ -1,4 +1,4 @@
-package peer.FileHandler;
+package peer.file;
 
 public class FileUtils {
 

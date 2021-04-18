@@ -1,5 +1,7 @@
 package peer.message;
 
+import peer.message.payload.PayLoad;
+
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -8,9 +10,9 @@ public class Message implements Serializable {
 
     private int messageLength;
     private MessageType messageType;
-    private byte[] payload;
+    private PayLoad payload;
 
-    public Message(int messageLength, MessageType messageType, byte[] payload) {
+    public Message(int messageLength, MessageType messageType, PayLoad payload) {
         this.messageLength = messageLength;
         this.messageType = messageType;
         this.payload = payload;
@@ -32,11 +34,11 @@ public class Message implements Serializable {
         this.messageType = messageType;
     }
 
-    public byte[] getPayload() {
+    public PayLoad getPayload() {
         return payload;
     }
 
-    public void setPayload(byte[] payload) {
+    public void setPayload(PayLoad payload) {
         this.payload = payload;
     }
 

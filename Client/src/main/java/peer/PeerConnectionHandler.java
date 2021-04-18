@@ -1,8 +1,11 @@
 package peer;
 
+import peer.file.FileUtils;
 import peer.message.Handshake;
 import peer.message.Message;
 import peer.message.MessageGenerator;
+import peer.message.payload.HavePayLoad;
+import peer.message.payload.PayLoad;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -110,11 +113,14 @@ public class PeerConnectionHandler extends Thread {
                         isMeChocked = false;
                         break;
                     case INTERESTED:
-                        Peer.setIsInterested(true);
+                        connectingPeer.setInterested(true);
                         break;
                     case NOT_INTERESTED:
+                        connectingPeer.setInterested(false);
                         break;
                     case HAVE:
+                        HavePayLoad haveIndex = (HavePayLoad)message.getPayload();
+                        FileUtils.updateBitfield(haveIndex.getIndex(), connectingPeer.getBitField());
                         break;
                     case BITFIELD:
                         break;
