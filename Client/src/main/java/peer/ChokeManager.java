@@ -1,15 +1,12 @@
 package peer;
 
 import config.CommonConfig;
+import peer.file.FileController;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.FileHandler;
-
-import javax.sound.midi.Soundbank;
-import peer.FileHandler.FileController;
 
 public class ChokeManager {
 
@@ -50,13 +47,10 @@ public class ChokeManager {
                     Collections.shuffle(allPeers);
                     int nP = 0; // numbers of peers selected
                     for (int i = 0; i < num_peer && nP < CommonConfig.getNumberOfdPreferredNeighbors(); i++) {
-                        if ((allPeers.get(i)).getInterestedPeers() != null) {
-
-                        if ((allPeers.get(i)).getInterestedPeers() && (allPeers.get(i)).getPeerSockets() != null) {
+                        if ((allPeers.get(i)).isInterested() && (allPeers.get(i)).getPeerSockets() != null) {
                             // unchokeList.add(allPeers.get(i));
                             allPeers.get(i).setChoked(false);
                             nP++;
-                        }
                         }
 
                     } 
@@ -67,7 +61,7 @@ public class ChokeManager {
                     // selecting the peers
                     float nP = 0; // numbers of peers selected
                     for (int i = 0; i < num_peer && nP < CommonConfig.getNumberOfdPreferredNeighbors(); i++) {
-                        if ((allPeers.get(i)).getInterestedPeers() && (allPeers.get(i)).getAllPeerID() != null) { 
+                        if ((allPeers.get(i)).isInterested() && (allPeers.get(i)).getAllPeerID() != null) {
                             // unchokeList.add(allPeers.get(i));
                             allPeers.get(i).setChoked(false);
                             nP++;
@@ -105,7 +99,7 @@ public class ChokeManager {
                 Collections.shuffle(allPeers);
                 int nP = 0; // numbers of peers  to be selected selected
                 for (int i = 0; i < num_peer && nP < 1; i++) {
-                    if ((allPeers.get(i)).getInterestedPeers() && (allPeers.get(i)).getPeerSockets() != null) {
+                    if ((allPeers.get(i)).isInterested() && (allPeers.get(i)).getPeerSockets() != null) {
                         // optUnchokeList.add(allPeers.get(i));
                         allPeers.get(i).setChoked(false);
                         nP++;
