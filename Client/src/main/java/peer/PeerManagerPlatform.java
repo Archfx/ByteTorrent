@@ -14,12 +14,13 @@ import java.util.Map;
 
 public class PeerManagerPlatform extends Peer {
     private final CommonConfig cConfig;
-    private static Map<Integer, Peer> peers;
+    private Map<Integer, Peer> peers;
     private ServerSocket socket;
 
-    public PeerManagerPlatform(Peer mySelf, CommonConfig cConfig) {
+    public PeerManagerPlatform(Peer mySelf, Map<Integer, Peer> remotePeers, CommonConfig cConfig) {
         super(mySelf.getPeerId(), mySelf.getAddress(), mySelf.getPort(), mySelf.isHasFile());
         this.cConfig = cConfig;
+        this.peers = remotePeers;
     }
 
     public void init() {

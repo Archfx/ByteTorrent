@@ -5,6 +5,9 @@ import config.PeerInfoConfig;
 import util.LoggerUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PeerProcess {
     public static void main(String[] args) {
@@ -26,7 +29,7 @@ public class PeerProcess {
         Peer my_node = null;
 
         // Assign existing remote peers
-        ArrayList<Peer> remotePeers = new ArrayList<Peer>();
+        Map<Integer,Peer> remotePeers = new HashMap<>();
 
         ChokeManager chokeM = new ChokeManager();
 
@@ -37,15 +40,15 @@ public class PeerProcess {
             }
             else {
                 // Add all other peers
-                remotePeers.add(peer);
+                remotePeers.put(peer.getPeerId(), peer);
             }
         }
 
-        PeerManagerPlatform peerProcess = new PeerManagerPlatform(my_node, commonConfig);
+        PeerManagerPlatform peerProcess = new PeerManagerPlatform(my_node, remotePeers, commonConfig);
 		peerProcess.init();
 
         // peerStateManagerPlatform = new PeerStateManagerPlatform(my_node, remotePeers);
-        System.out.println(" Starting choke "+ chokeM.choke(remotePeers));
+//        System.out.println(" Starting choke "+ chokeM.choke(remotePeers));
         // peerStateManagerPlatform.init();
         
 
