@@ -1,15 +1,14 @@
 package peer;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-// Store Peer state
 public class Peer {
 	private int peerId;
 	private String address;
 	private int port;
 	private boolean hasFile;
 	private byte[] bitField;
-	private boolean choked = true;
-//	public ConnectionHandle cHandle;
+	private AtomicBoolean choked = new AtomicBoolean(true);
 	private Socket socket;
 	private boolean up;
 
@@ -147,11 +146,11 @@ public class Peer {
 	}
 
 	public boolean isChoked() {
-		return choked;
+		return choked.get();
 	}
 
 	public void setChoked(boolean choked) {
-		this.choked = choked;
+		this.choked = new AtomicBoolean(choked);
 	}
 
 	public Socket getSocket() {
