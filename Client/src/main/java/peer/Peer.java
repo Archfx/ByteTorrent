@@ -40,7 +40,7 @@ public class Peer {
 	}
 
 	public void setDoneDonwloading(boolean doneDonwloading) {
-		this.doneDonwloading = doneDonwloading;
+		this.doneDonwloading = true;//doneDonwloading;
 	}
 
 	public Peer(Peer peer) {
