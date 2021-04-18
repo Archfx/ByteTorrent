@@ -75,7 +75,7 @@ public class PeerManagerPlatform extends Peer {
                     } catch (UnknownHostException e) {
                         e.printStackTrace();
                     } catch (ConnectException e) {
-                        e.printStackTrace();
+//                        e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (Exception e) {

@@ -17,8 +17,7 @@ public class PeerProcess {
 
         
         // Get the peer id from arguments
-        // final int id = Integer.parseInt(args[0]);
-        final int id = Integer.parseInt("1001");
+         final int id = Integer.parseInt(args[0]);
 
 
         // Read Configurations from config files
