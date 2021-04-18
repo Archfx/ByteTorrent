@@ -1,28 +1,33 @@
 package peer;
 
+import peer.message.Handshake;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * A handler thread class.  Handlers are spawned from the listening
  * loop and are responsible for dealing with a single client's requests.
  */
 public class PeerConnectionHandler extends Thread {
+    private final Map<Integer, Peer> peers;
     private String message;    //message received from the client
     private String MESSAGE;    //uppercase message send to the client
     private Socket connection;
     private ObjectInputStream in;	//stream read from the socket
     private ObjectOutputStream out;    //stream write to the socket
+    private ObjectInputStream thisPeerInputStream;
     private int no;		//The index number of the client
-    private Peer targetPeer;
+    private Peer thisPeer;
     private PeerMangerService peerMangerService;
 
-    public PeerConnectionHandler(Socket connection, int no) {
+    public PeerConnectionHandler(Socket connection, Map<Integer, Peer> peers) {
         this.connection = connection;
-        this.no = no;
+        this.peers = peers;
     }
 
     public void run() {
@@ -32,33 +37,51 @@ public class PeerConnectionHandler extends Thread {
             out.flush();
             in = new ObjectInputStream(connection.getInputStream());
 
-            // TODO -: implement handshake
+            Handshake handshake = new Handshake(-1);
+            try {
+                handshake = (Handshake) in.readObject();
+            } catch (ClassNotFoundException e) {
+                // TODO -: close connection
+                e.printStackTrace();
+            }
+            Peer thisPeer = peers.get(handshake.getID());
+            if (peers.get(handshake.getID()) == null) {
+                System.out.println("Error performing Handshake : PeerId unknown");
+                // TODO -: close connection ??
+            }
+            else {
+                System.out.println("Received Handshake Message : " + handshake.getID());
+                this.thisPeer = thisPeer;
+                if (thisPeer.getSocket() == null) {
+                    try {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                this.thisPeerInputStream = new ObjectInputStream(thisPeer.getSocket().getInputStream());
+                peerMangerService = new PeerMangerService( new ArrayList<>());
+                try{
+                    while(true)
+                    {
 
-            // TODO -: initialize target peer here after handshake and then
-            peerMangerService = new PeerMangerService( new ArrayList<>());
+                        // TODO -: Listen to Messages
 
-            // TODO -: initialize peer manager service
-
-
-            try{
-                while(true)
-                {
-
-                    // TODO -: Listen to Messages
-
-                    //receive the message sent from the client
-                    message = (String)in.readObject();
-                    //show the message to the user
-                    System.out.println("Receive message: " + message + " from client " + no);
-                    //Capitalize all letters in the message
-                    MESSAGE = message.toUpperCase();
-                    //send MESSAGE back to the client
-                    sendMessage(MESSAGE);
+                        //receive the message sent from the client
+                        message = (String)thisPeerInputStream.readObject();
+                        //show the message to the user
+                        System.out.println("Receive message: " + message + " from client " + no);
+                        //Capitalize all letters in the message
+                        MESSAGE = message.toUpperCase();
+                        //send MESSAGE back to the client
+                        sendMessage(MESSAGE);
+                    }
+                }
+                catch(ClassNotFoundException classnot){
+                    System.err.println("Data received in unknown format");
                 }
             }
-            catch(ClassNotFoundException classnot){
-                System.err.println("Data received in unknown format");
-            }
+
         }
         catch(IOException ioException){
             System.out.println("Disconnect with Client " + no);

@@ -6,11 +6,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
+import java.util.Map;
 
 
 public class PeerManagerPlatform extends Peer {
     private final CommonConfig cConfig;
-    private static List<Peer> peers;
+    private static Map<Integer, Peer> peers;
     private ServerSocket socket;
 
     public PeerManagerPlatform(Peer mySelf, CommonConfig cConfig) {
@@ -51,7 +52,7 @@ public class PeerManagerPlatform extends Peer {
             public void run() {
                 while (true) {
                     try {
-                        for (Peer p : peers) {
+                        for (Peer p : peers.values()) {
                             Socket s = new Socket(p.getAddress(), p.getPort());
                             // TODO: send handshake message
 
@@ -75,7 +76,7 @@ public class PeerManagerPlatform extends Peer {
         int clientNum = 1;
         try {
             try {
-                new PeerConnectionHandler(socket.accept(), clientNum).start();
+                new PeerConnectionHandler(socket.accept(), peers).start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
