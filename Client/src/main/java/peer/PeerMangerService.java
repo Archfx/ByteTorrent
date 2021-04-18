@@ -5,13 +5,12 @@ import java.util.List;
 /**
  * Peer is the peer related to this specific state manager
  */
-public class PeerStateManger extends Peer {
+public class PeerMangerService {
 
     private List<Peer> kNeighborPeers;
     private ChokeManager chokeManager;
 
-    public PeerStateManger(Peer thisPeer, List<Peer> kNeighborPeers) {
-        super(thisPeer);
+    public PeerMangerService( List<Peer> kNeighborPeers) {
         this.kNeighborPeers = kNeighborPeers;
         init();
 

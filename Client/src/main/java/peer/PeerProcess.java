@@ -2,7 +2,6 @@ package peer;
 
 import config.CommonConfig;
 import config.PeerInfoConfig;
-import config.RemotePeerInfo;
 import util.LoggerUtil;
 
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ public class PeerProcess {
             }
         }
 
-        PeerProcessThread peerProcess = new PeerProcessThread(my_node, commonConfig);
+        PeerManagerPlatform peerProcess = new PeerManagerPlatform(my_node, commonConfig);
 		peerProcess.init();
 
         // peerStateManagerPlatform = new PeerStateManagerPlatform(my_node, remotePeers);
