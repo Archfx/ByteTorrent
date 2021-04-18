@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Hashtable;
 
 import config.CommonConfig;
+import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
 
 public class FileHandler {
 
@@ -30,14 +31,7 @@ public class FileHandler {
 	private static int fSize = CommonConfig.getFileSize();
 	private static File file = null;
 
-	/**
-	 * Constructor for the instance of FileManager
-	 * 
-	 * @param peerId
-	 *            specifies the peerid for the file manager
-	 * @param hasFile
-	 *            specifies if the peer has the file
-	 */
+
 	public FileHandler(int peerId, boolean hasFile) {
 		path = "peer_" + peerId + "/";
 
@@ -70,142 +64,92 @@ public class FileHandler {
 
 	}
 
-	/**
-	 * @return the filePiecesOwned
-	 */
+
 	public static boolean[] getFilePiecesOwned() {
 		return filePiecesOwned;
 	}
 
-	/**
-	 * @param filePiecesOwned
-	 *            the filePiecesOwned to set
-	 */
+
 	public static void setFilePiecesOwned(boolean[] filePiecesOwned) {
 		FileHandler.filePiecesOwned = filePiecesOwned;
 	}
 
-	/**
-	 * @return the piecesNeeded
-	 */
+
 	public static Hashtable<Integer, Integer> getRequestedPieces() {
 		return piecesNeeded;
 	}
 
-	/**
-	 * @param piecesNeeded
-	 *            the piecesNeeded to set
-	 */
+
 	public static void setRequestedPieces(Hashtable<Integer, Integer> piecesNeeded) {
 		FileHandler.piecesNeeded = piecesNeeded;
 	}
 
-	/**
-	 * @return the numPiecesIHave
-	 */
+
 	public static int getNoOfPiecesAvailable() {
 		return numPiecesIHave;
 	}
 
-	/**
-	 * @param numPiecesIHave
-	 *            the numPiecesIHave to set
-	 */
+
 	public static void setNoOfPiecesAvailable(int numPiecesIHave) {
 		FileHandler.numPiecesIHave = numPiecesIHave;
 	}
 
-	/**
-	 * @return the path
-	 */
+
 	public static String getDirectory() {
 		return path;
 	}
 
-	/**
-	 * @param path
-	 *            the path to set
-	 */
+
 	public static void setDirectory(String path) {
 		FileHandler.path = path;
 	}
 
-	/**
-	 * @return the fName
-	 */
+
 	public static String getFileName() {
 		return fName;
 	}
 
-	/**
-	 * @param fName
-	 *            the fName to set
-	 */
+
 	public static void setFileName(String fName) {
 		FileHandler.fName = fName;
 	}
 
-	/**
-	 * @return the fSize
-	 */
+
 	public static int getFileSize() {
 		return fSize;
 	}
 
-	/**
-	 * @param fSize
-	 *            the fSize to set
-	 */
+
 	public static void setFileSize(int fSize) {
 		FileHandler.fSize = fSize;
 	}
 
-	/**
-	 * @return the file
-	 */
+
 	public static File getFile() {
 		return file;
 	}
 
-	/**
-	 * @param file
-	 *            the file to set
-	 */
+
 	public static void setFile(File file) {
 		FileHandler.file = file;
 	}
 
-	/**
-	 * @return the numFilePieces
-	 */
+
 	public static int getNooffilepieces() {
 		return numFilePieces;
 	}
 
-	/**
-	 * @param index
-	 *            The index of the piece we need to check
-	 * @return true if the piece is not available
-	 */
+
 	public static boolean isInteresting(int index) {
 		return filePiecesOwned[index] ? true : false;
 	}
 
-	/**
-	 * @return true if the file has all the file pieces/complete file
-	 */
+
 	public static synchronized boolean hasCompleteFile() {
 		return numPiecesIHave == numFilePieces ? true : false;
 	}
 
-	/**
-	 * Creates bitfield first time during initialization for the peer
-	 * 
-	 * @param pieces
-	 *            boolean representation of pieces available
-	 * @return byte format of the pieces available
-	 * @throws Exception
-	 */
+
 	public static synchronized byte[] getBitField() throws Exception {
 		int size = (int) Math.ceil((double) numFilePieces / 8);
 		byte[] bitfield = new byte[size];
@@ -225,11 +169,7 @@ public class FileHandler {
 		return bitfield;
 	}
 
-	/**
-	 * @param index
-	 *            index of the file piece requested
-	 * @return the file piece that was requested
-	 */
+
 	public static synchronized PiecePayLoad get(int index) {
 		try {
 			FileInputStream fis = new FileInputStream(file);
@@ -249,12 +189,7 @@ public class FileHandler {
 		}
 	}
 
-	/**
-	 * @param piece
-	 *            The file piece that needs to be added to the file
-	 * @throws Exception
-	 *             If unable to add the file piece to the file
-	 */
+
 	public static synchronized void store(PiecePayLoad piece) throws Exception {
 		int loc = CommonConfig.getPieceSize() * piece.getIndex();
 		RandomAccessFile fos = null;
@@ -272,15 +207,7 @@ public class FileHandler {
 		}
 	}
 
-	/**
-	 * Compares bitfields of two peers to decide interesting or not interesting
-	 * 
-	 * @param neighborBitfield
-	 *            Neighboring peer's bitfield
-	 * @param bitfield
-	 *            Host peer's bitfield
-	 * @return
-	 */
+
 	public static boolean compareBitfields(byte[] neighborBitfield, byte[] bitfield) {
 		boolean flag = false;
 		int size = (int) Math.ceil((double) numFilePieces / 8);
@@ -299,16 +226,7 @@ public class FileHandler {
 		return flag;
 	}
 
-	/**
-	 * Randomly requests a file piece to a neighbor which it does not have and has
-	 * not been requested to other peers
-	 * 
-	 * @param neighborBitfield
-	 *            Neighboring peer's bitfield
-	 * @param bitfield
-	 *            Host peer's bitfield
-	 * @return
-	 */
+
 	public static int requestPiece(byte[] neighborBitfield, byte[] bitfield, int nPID) {
 		int size = (int) Math.ceil((double) numFilePieces / 8);
 		byte[] interesting = new byte[size];
@@ -365,7 +283,8 @@ public class FileHandler {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		System.out.println("Testing file manager");
+        FileHandler f1 = new FileHandler(1005, false);  
 
 	}
     
