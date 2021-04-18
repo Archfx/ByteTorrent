@@ -1,15 +1,14 @@
 package peer;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-// Store Peer state
 public class Peer {
 	private int peerId;
 	private String address;
 	private int port;
 	private boolean hasFile;
 	private byte[] bitField;
-	private boolean choked = true;
-//	public ConnectionHandle cHandle;
+	private AtomicBoolean choked = new AtomicBoolean(true);
 	private Socket socket;
 	private boolean up;
 
@@ -19,8 +18,8 @@ public class Peer {
 
 	private boolean doneDonwloading;
 
-	private static Boolean interestedPeer; //For choke unchoke
-    private static Peer unChoked; //For choke unchoke
+	private boolean isInterested; //For choke unchoke
+    private Peer unChoked; //For choke unchoke
 
 
 
@@ -44,65 +43,6 @@ public class Peer {
 		this.address = peer.getAddress();
 		this.port = peer.getPort();
 		this.hasFile = peer.isHasFile();
-	}
-
-
-	public static Peer getUnChoked() {
-		return unChoked;
-	}
-
-
-
-	public static void setUnChoked(Peer unChoked) {
-		Peer.unChoked = unChoked;
-	}
-
-
-
-	public Boolean getInterestedPeers() {
-		return interestedPeer;
-	}
-
-
-
-	public static void setInterestedPeers(Boolean interestedPeers) {
-		Peer.interestedPeer = interestedPeers;
-	}
-
-
-
-	public Socket getPeerSockets() {
-		return peerSockets;
-	}
-
-
-
-	public void setPeerSockets(Socket peerSockets) {
-		this.peerSockets = peerSockets;
-	}
-
-
-
-	public Integer getAllPeerID() {
-		return allPeerID;
-	}
-
-
-
-	public void setAllPeerID(Integer allPeerID) {
-		this.allPeerID = allPeerID;
-	}
-
-
-
-	public Float getDlSpeed() {
-		return dlSpeed;
-	}
-
-
-
-	public void setDlSpeed(Float dlSpeed) {
-		this.dlSpeed = dlSpeed;
 	}
 
 
@@ -146,12 +86,12 @@ public class Peer {
 		this.bitField = bitField;
 	}
 
-	public boolean isChoked() {
-		return choked;
+	public boolean getChoked() {
+		return choked.get();
 	}
 
 	public void setChoked(boolean choked) {
-		this.choked = choked;
+		this.choked = new AtomicBoolean(choked);
 	}
 
 	public Socket getSocket() {
@@ -170,12 +110,44 @@ public class Peer {
 		this.up = up;
 	}
 
-	public static Boolean getInterestedPeer() {
-		return interestedPeer;
+	public Float getDlSpeed() {
+		return dlSpeed;
 	}
 
-	public static void setInterestedPeer(Boolean interestedPeer) {
-		Peer.interestedPeer = interestedPeer;
+	public void setDlSpeed(Float dlSpeed) {
+		this.dlSpeed = dlSpeed;
+	}
+
+	public Integer getAllPeerID() {
+		return allPeerID;
+	}
+
+	public void setAllPeerID(Integer allPeerID) {
+		this.allPeerID = allPeerID;
+	}
+
+	public Socket getPeerSockets() {
+		return peerSockets;
+	}
+
+	public void setPeerSockets(Socket peerSockets) {
+		this.peerSockets = peerSockets;
+	}
+
+	public boolean isInterested() {
+		return isInterested;
+	}
+
+	public void setInterested(boolean interested) {
+		isInterested = interested;
+	}
+
+	public Peer getUnChoked() {
+		return unChoked;
+	}
+
+	public void setUnChoked(Peer unChoked) {
+		this.unChoked = unChoked;
 	}
 }
 
