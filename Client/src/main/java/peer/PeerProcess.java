@@ -42,8 +42,8 @@ public class PeerProcess {
             }
         }
 
-        PeerProcessThread peerProcess = new Process(peerId, ipAddress, portNumber, hasFile, commInfo);
-		peerProcess.init(peerProcess);
+        PeerProcessThread peerProcess = new PeerProcessThread(my_node, commonConfig);
+		peerProcess.init();
 
         // peerStateManagerPlatform = new PeerStateManagerPlatform(my_node, remotePeers);
         System.out.println(" Starting choke "+ chokeM.choke(remotePeers));
