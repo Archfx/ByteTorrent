@@ -30,7 +30,7 @@ public class PeerManagerPlatform extends Peer {
 
         try {
             socket = new ServerSocket(this.getPort());
-            System.out.println("Created server for " + this.getAddress());
+            System.out.println("Created server for " + this.getAddress() + ":" + this.getPort());
         } catch (IOException e) {
         }
 
@@ -54,12 +54,12 @@ public class PeerManagerPlatform extends Peer {
     public void initClient() {
         new Thread() {
             public void run() {
+                System.out.println("Initializing client");
                 while (true) {
-                    System.out.println("ssss");
                     try {
                         for (Peer peer : peers.values()) {
                             if (!peer.isUp()) {
-                                Socket s = new Socket("localhost", 8000);
+                                Socket s = new Socket(peer.getAddress(), peer.getPort());
                                 ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
                                 out.flush();
                                 out.writeObject(new Handshake(getPeerId()));
