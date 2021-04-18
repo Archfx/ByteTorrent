@@ -1,13 +1,9 @@
 package peer;
-import java.io.OptionalDataException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 // Store Peer state
 public class Peer {
-	private int id;
+	private int peerId;
 	private String address;
 	private int port;
 	private boolean hasFile;
@@ -29,7 +25,7 @@ public class Peer {
 
 
 	public Peer(int id, String address, int port, boolean hasFile) {
-		this.id = id;
+		this.peerId = id;
 		this.address = address;
 		this.port = port;
 		this.hasFile = hasFile;
@@ -44,7 +40,7 @@ public class Peer {
 	}
 
 	public Peer(Peer peer) {
-		this.id = peer.getId();
+		this.peerId = peer.getPeerId();
 		this.address = peer.getAddress();
 		this.port = peer.getPort();
 		this.hasFile = peer.isHasFile();
@@ -110,12 +106,12 @@ public class Peer {
 	}
 
 
-	public int getId() {
-		return id;
+	public int getPeerId() {
+		return peerId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setPeerId(int peerId) {
+		this.peerId = peerId;
 	}
 
 	public String getAddress() {

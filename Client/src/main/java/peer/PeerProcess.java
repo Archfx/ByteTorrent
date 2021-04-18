@@ -32,7 +32,7 @@ public class PeerProcess {
 
 
         for (Peer peer : peerInfo.getPeerInfoList()) {
-            if (id == peer.getId()) {
+            if (id == peer.getPeerId()) {
                 my_node = peer;
             }
             else {

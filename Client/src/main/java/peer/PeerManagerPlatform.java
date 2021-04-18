@@ -1,11 +1,14 @@
 package peer;
 
 import config.CommonConfig;
+import peer.message.Handshake;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
+import java.net.UnknownHostException;
 import java.util.Map;
 
 
@@ -15,12 +18,12 @@ public class PeerManagerPlatform extends Peer {
     private ServerSocket socket;
 
     public PeerManagerPlatform(Peer mySelf, CommonConfig cConfig) {
-        super(mySelf.getId(), mySelf.getAddress(), mySelf.getPort(), mySelf.isHasFile());
+        super(mySelf.getPeerId(), mySelf.getAddress(), mySelf.getPort(), mySelf.isHasFile());
         this.cConfig = cConfig;
     }
 
     public void init() {
-        System.out.println("Starting peer " + this.getId());
+        System.out.println("Starting peer " + this.getPeerId());
 
         // TODO: handle file status
 
@@ -51,25 +54,35 @@ public class PeerManagerPlatform extends Peer {
         new Thread() {
             public void run() {
                 while (true) {
+                    System.out.println("ssss");
                     try {
-                        for (Peer p : peers.values()) {
-                            Socket s = new Socket(p.getAddress(), p.getPort());
-                            // TODO: send handshake message
-
-                            p.setSocket(s);
-                            p.setUp(true);
+                        for (Peer peer : peers.values()) {
+                            if (!peer.isUp()) {
+                                Socket s = new Socket(peer.getAddress(), peer.getPort());
+                                ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
+                                out.flush();
+                                out.writeObject(new Handshake(getPeerId()));
+                                out.flush();
+                                out.reset();
+                                System.out.println("Handshake Message sent to peer " + peer.getPeerId() + " from" + getPeerId());
+                                peer.setSocket(s);
+                                peer.setUp(true);
+                            }
+                            // Sleep to not spam
+                            Thread.sleep(10000);
                         }
-                        // Sleep to not spam
-                        Thread.sleep(10000);
+                    } catch (UnknownHostException e) {
+                        e.printStackTrace();
+                    } catch (ConnectException e) {
+                        // System.out.println("Peer not accepting connections");
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             }
-
-            ;
-        };
-
+        }.start();
     }
 
     private void startListening() {
