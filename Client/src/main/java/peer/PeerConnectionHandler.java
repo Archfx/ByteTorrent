@@ -1,6 +1,8 @@
 package peer;
 
 import peer.message.Handshake;
+import peer.message.Message;
+import peer.message.MessageGenerator;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -54,11 +56,17 @@ public class PeerConnectionHandler extends Thread {
                 this.thisPeer = thisPeer;
                 if (thisPeer.getSocket() == null) {
                     try {
+                        // waiting for the client connection to be established
                         Thread.sleep(10000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
+
+                // TODO -: use file manager to get bit field
+                Message bitFieldMessage = MessageGenerator.bitfield(new byte[]{});
+                sendMessage(bitFieldMessage);
+
                 this.thisPeerInputStream = new ObjectInputStream(thisPeer.getSocket().getInputStream());
                 peerMangerService = new PeerMangerService( new ArrayList<>());
                 try{
@@ -74,7 +82,7 @@ public class PeerConnectionHandler extends Thread {
                         //Capitalize all letters in the message
                         MESSAGE = message.toUpperCase();
                         //send MESSAGE back to the client
-                        sendMessage(MESSAGE);
+//                        sendMessage(MESSAGE);
                     }
                 }
                 catch(ClassNotFoundException classnot){
@@ -100,7 +108,7 @@ public class PeerConnectionHandler extends Thread {
     }
 
     //send a message to the output stream
-    public void sendMessage(String msg)
+    public void sendMessage(Message msg)
     {
         try{
             out.writeObject(msg);

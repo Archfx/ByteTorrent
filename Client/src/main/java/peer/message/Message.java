@@ -1,9 +1,10 @@
 package peer.message;
 
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-public class Message {
+public class Message implements Serializable {
 
     private int messageLength;
     private MessageType messageType;

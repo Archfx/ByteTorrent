@@ -6,38 +6,38 @@ import static peer.message.MessageType.*;
 
 public class MessageGenerator {
 
-    public static String choke() {
-        return new Message(0, CHOKE, new byte[0]).toString();
+    public static Message choke() {
+        return new Message(0, CHOKE, new byte[0]);
     }
 
-    public static String unChoke() {
-        return new Message(0, UNCHOKE, new byte[0]).toString();
+    public static Message unChoke() {
+        return new Message(0, UNCHOKE, new byte[0]);
     }
 
-    public static String interested() {
-        return new Message(0, INTERESTED, new byte[0]).toString();
+    public static Message interested() {
+        return new Message(0, INTERESTED, new byte[0]);
     }
 
-    public static String notInterested() {
-        return new Message(0, NOT_INTERESTED, new byte[0]).toString();
+    public static Message notInterested() {
+        return new Message(0, NOT_INTERESTED, new byte[0]);
     }
 
-    public static String have(int index) {
+    public static Message have(int index) {
         ByteBuffer b = ByteBuffer.allocate(4);
         b.putInt(index);
-        return new Message(4, HAVE, b.array()).toString();
+        return new Message(4, HAVE, b.array());
     }
 
-    public static String bitfield(int size, byte[] bitField) {
-        return new Message(size, BITFIELD, bitField).toString();
+    public static Message bitfield(byte[] bitField) {
+        return new Message(bitField.length, BITFIELD, bitField);
     }
 
-    public static String request(int index) {
-        return new Message(4, REQUEST, intToByteArray(index)).toString();
+    public static Message request(int index) {
+        return new Message(4, REQUEST, intToByteArray(index));
     }
 
-    public static String piece(int index, byte[] piece) {
-        return new Message(4 + piece.length, PIECE, concatArray(intToByteArray(index), piece)).toString();
+    public static Message piece(int index, byte[] piece) {
+        return new Message(4 + piece.length, PIECE, concatArray(intToByteArray(index), piece));
     }
 
 
