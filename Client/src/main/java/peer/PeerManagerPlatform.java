@@ -2,6 +2,7 @@ package peer;
 
 import config.CommonConfig;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
@@ -11,7 +12,6 @@ public class PeerManagerPlatform extends Peer {
     private final CommonConfig cConfig;
     private static List<Peer> peers;
     private ServerSocket socket;
-    private PeerMangerService peerManager;
 
     public PeerManagerPlatform(Peer mySelf, CommonConfig cConfig) {
         super(mySelf.getId(), mySelf.getAddress(), mySelf.getPort(), mySelf.isHasFile());
@@ -20,14 +20,14 @@ public class PeerManagerPlatform extends Peer {
 
     public void init() {
         System.out.println("Starting peer " + this.getId());
-        
+
         // TODO: handle file status
 
         try {
             socket = new ServerSocket(this.getPort());
             System.out.println("Created server for " + this.getAddress());
+        } catch (IOException e) {
         }
-        catch (Exception e) {}
 
         this.initServer();
         this.initClient();
@@ -39,7 +39,7 @@ public class PeerManagerPlatform extends Peer {
             @Override
             public void run() {
                 while (!socket.isClosed()) {
-                        startListening();
+                    startListening();
                 }
             }
         }).start();
@@ -71,8 +71,23 @@ public class PeerManagerPlatform extends Peer {
 
     }
 
-    private void startListening(){
-        // TODO -: listen to handhshake and other messages and act accordingly
+    private void startListening() {
+        int clientNum = 1;
+        try {
+            try {
+                new PeerConnectionHandler(socket.accept(), clientNum).start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Client " + clientNum + " is connected!");
+            clientNum++;
+        } finally {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

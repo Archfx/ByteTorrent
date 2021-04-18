@@ -14,7 +14,7 @@ public class ChokeManager {
     private boolean chokeThreadRunning = true ;
     private Object lockMyNeighbors;
 
-    Peer myNode = PeerStateManagerPlatform.my_node;
+//    Peer myNode = PeerManagerPlatform.my_node;
 
     
 

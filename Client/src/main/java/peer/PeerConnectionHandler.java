@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * A handler thread class.  Handlers are spawned from the listening
@@ -16,6 +17,8 @@ public class PeerConnectionHandler extends Thread {
     private ObjectInputStream in;	//stream read from the socket
     private ObjectOutputStream out;    //stream write to the socket
     private int no;		//The index number of the client
+    private Peer targetPeer;
+    private PeerMangerService peerMangerService;
 
     public PeerConnectionHandler(Socket connection, int no) {
         this.connection = connection;
@@ -28,9 +31,21 @@ public class PeerConnectionHandler extends Thread {
             out = new ObjectOutputStream(connection.getOutputStream());
             out.flush();
             in = new ObjectInputStream(connection.getInputStream());
+
+            // TODO -: implement handshake
+
+            // TODO -: initialize target peer here after handshake and then
+            peerMangerService = new PeerMangerService( new ArrayList<>());
+
+            // TODO -: initialize peer manager service
+
+
             try{
                 while(true)
                 {
+
+                    // TODO -: Listen to Messages
+
                     //receive the message sent from the client
                     message = (String)in.readObject();
                     //show the message to the user

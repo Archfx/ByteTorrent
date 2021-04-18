@@ -10,7 +10,6 @@ public class PeerProcess {
     public static void main(String[] args) {
 
         LoggerUtil.LogInfoMessage("Process Thread Started");
-        PeerStateManagerPlatform peerStateManagerPlatform;
         // System.out.println(port);
 
         

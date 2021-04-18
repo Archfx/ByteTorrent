@@ -1,4 +1,4 @@
-package h;
+package peer.message;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;
