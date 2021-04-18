@@ -43,18 +43,13 @@ public class PeerProcess {
             }
         }
 
+        PeerProcessThread peerProcess = new PeerProcessThread(my_node, commonConfig);
+		peerProcess.init();
 
-
-
-
-        peerStateManagerPlatform = new PeerStateManagerPlatform(my_node, remotePeers);
+        // peerStateManagerPlatform = new PeerStateManagerPlatform(my_node, remotePeers);
         System.out.println(" Starting choke "+ chokeM.choke(remotePeers));
-        peerStateManagerPlatform.init();
+        // peerStateManagerPlatform.init();
         
-
-        
-//        peerStateManagerPlatform = new PeerStateManagerPlatform(my_node, remotePeers);
-//        peerStateManagerPlatform.init();
 
     }
 }
