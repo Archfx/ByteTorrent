@@ -104,10 +104,13 @@ public class PeerConnectionHandler extends Thread {
 
                 switch (message.getMessageType()) {
                     case CHOKE:
+                        isMeChocked = true;
                         break;
                     case UNCHOKE:
+                        isMeChocked = false;
                         break;
                     case INTERESTED:
+                        Peer.setIsInterested(true);
                         break;
                     case NOT_INTERESTED:
                         break;
