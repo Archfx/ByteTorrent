@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Hashtable;
 
 import config.CommonConfig;
-import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
 
 public class FileHandler {
 
@@ -170,7 +169,7 @@ public class FileHandler {
 	}
 
 
-	public static synchronized PiecePayLoad get(int index) {
+	public static synchronized byte[] getFilePart(int index) {
 		try {
 			FileInputStream fis = new FileInputStream(file);
 			int loc = CommonConfig.getPieceSize() * index;
@@ -181,7 +180,7 @@ public class FileHandler {
 			byte[] content = new byte[contentSize];
 			fis.read(content);
 			fis.close();
-			return new PiecePayLoad(content, index);
+			return content;
 		} catch (FileNotFoundException e) {
 			return null;
 		} catch (IOException e) {
@@ -190,17 +189,17 @@ public class FileHandler {
 	}
 
 
-	public static synchronized void store(PiecePayLoad piece) throws Exception {
-		int loc = CommonConfig.getPieceSize() * piece.getIndex();
+	public static synchronized void store( byte[] content, int index) throws Exception {
+		int loc = CommonConfig.getPieceSize() * index;
 		RandomAccessFile fos = null;
 		try {
 			fos = new RandomAccessFile(file, "rw");
 			fos.seek(loc);
-			fos.write(piece.getContent());
+			fos.write(content);
 			fos.close();
 
 			numPiecesIHave++;
-			filePiecesOwned[piece.getIndex()] = true;
+			filePiecesOwned[index] = true;
 
 		} catch (IOException e) {
 			e.printStackTrace();
