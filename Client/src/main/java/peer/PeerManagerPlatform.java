@@ -59,7 +59,7 @@ public class PeerManagerPlatform extends Peer {
                     try {
                         for (Peer peer : peers.values()) {
                             if (!peer.isUp()) {
-                                Socket s = new Socket(peer.getAddress(), peer.getPort());
+                                Socket s = new Socket("localhost", 8000);
                                 ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
                                 out.flush();
                                 out.writeObject(new Handshake(getPeerId()));
@@ -75,7 +75,7 @@ public class PeerManagerPlatform extends Peer {
                     } catch (UnknownHostException e) {
                         e.printStackTrace();
                     } catch (ConnectException e) {
-                        // System.out.println("Peer not accepting connections");
+                        e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (Exception e) {
