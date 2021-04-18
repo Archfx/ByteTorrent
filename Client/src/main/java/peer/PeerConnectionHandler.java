@@ -17,13 +17,11 @@ import java.util.Map;
  */
 public class PeerConnectionHandler extends Thread {
     private final Map<Integer, Peer> peers;
-    private String message;    //message received from the client
-    private String MESSAGE;    //uppercase message send to the client
+    private Message message;    //message received from the client
     private Socket connection;
     private ObjectInputStream in;	//stream read from the socket
     private ObjectOutputStream out;    //stream write to the socket
     private ObjectInputStream thisPeerInputStream;
-    private int no;		//The index number of the client
     private Peer thisPeer;
     private PeerMangerService peerMangerService;
 
@@ -66,6 +64,7 @@ public class PeerConnectionHandler extends Thread {
                 // TODO -: use file manager to get bit field
                 Message bitFieldMessage = MessageGenerator.bitfield(new byte[]{});
                 sendMessage(bitFieldMessage);
+                System.out.println("Sent bit field message of length" + bitFieldMessage.getMessageLength() );
 
                 this.thisPeerInputStream = new ObjectInputStream(thisPeer.getSocket().getInputStream());
                 peerMangerService = new PeerMangerService( new ArrayList<>());
@@ -76,13 +75,9 @@ public class PeerConnectionHandler extends Thread {
                         // TODO -: Listen to Messages
 
                         //receive the message sent from the client
-                        message = (String)thisPeerInputStream.readObject();
+                        message = (Message)thisPeerInputStream.readObject();
                         //show the message to the user
-                        System.out.println("Receive message: " + message + " from client " + no);
-                        //Capitalize all letters in the message
-                        MESSAGE = message.toUpperCase();
-                        //send MESSAGE back to the client
-//                        sendMessage(MESSAGE);
+                        System.out.println("Receive message: " + message.getMessageType());
                     }
                 }
                 catch(ClassNotFoundException classnot){
@@ -92,7 +87,7 @@ public class PeerConnectionHandler extends Thread {
 
         }
         catch(IOException ioException){
-            System.out.println("Disconnect with Client " + no);
+            System.out.println("Disconnect with Client ");
         }
         finally{
             //Close connections
@@ -102,7 +97,7 @@ public class PeerConnectionHandler extends Thread {
                 connection.close();
             }
             catch(IOException ioException){
-                System.out.println("Disconnect with Client " + no);
+                System.out.println("Disconnect with Client ");
             }
         }
     }
@@ -113,7 +108,7 @@ public class PeerConnectionHandler extends Thread {
         try{
             out.writeObject(msg);
             out.flush();
-            System.out.println("Send message: " + msg + " to Client " + no);
+            System.out.println("Send message: " + msg.getMessageType() + " to Client ");
         }
         catch(IOException ioException){
             ioException.printStackTrace();
