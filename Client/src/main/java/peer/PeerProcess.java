@@ -42,14 +42,13 @@ public class PeerProcess {
             }
         }
 
-        peerStateManagerPlatform = new PeerStateManagerPlatform(my_node, remotePeers);
-        System.out.println(" Starting choke "+ chokeM.choke(remotePeers));
-        peerStateManagerPlatform.init();
-        
+        PeerProcessThread peerProcess = new Process(peerId, ipAddress, portNumber, hasFile, commInfo);
+		peerProcess.init(peerProcess);
 
+        // peerStateManagerPlatform = new PeerStateManagerPlatform(my_node, remotePeers);
+        System.out.println(" Starting choke "+ chokeM.choke(remotePeers));
+        // peerStateManagerPlatform.init();
         
-//        peerStateManagerPlatform = new PeerStateManagerPlatform(my_node, remotePeers);
-//        peerStateManagerPlatform.init();
 
     }
 }
