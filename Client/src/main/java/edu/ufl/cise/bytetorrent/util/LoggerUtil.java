@@ -1,5 +1,7 @@
 package edu.ufl.cise.bytetorrent.util;
 
+import edu.ufl.cise.bytetorrent.PeerManagerPlatform;
+import edu.ufl.cise.bytetorrent.model.Peer;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
@@ -9,8 +11,7 @@ import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilder;
 import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFactory;
 import org.apache.logging.log4j.core.config.builder.api.RootLoggerComponentBuilder;
 import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
-import peer.Peer;
-import peer.PeerManagerPlatform;
+
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
