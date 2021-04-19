@@ -14,6 +14,7 @@ public class PeerProcess {
         LoggerUtil.LogInfoMessage("Process Thread Started");
         final int id = Integer.parseInt(args[0]);
         PeerInfoConfig peerInfo = PeerInfoConfig.getInstance();
+        CommonConfig commonConfig = CommonConfig.getInstance();
         Peer my_node = null;
 
         Map<Integer,Peer> remotePeers = new HashMap<>();
