@@ -1,4 +1,4 @@
-package peer.service;
+package service;
 
 import java.io.File;
 import java.io.FileInputStream;

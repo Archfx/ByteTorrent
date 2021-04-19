@@ -1,7 +1,7 @@
-package peer;
+package root;
 
 import model.Peer;
-import peer.service.FileManagementService;
+import service.FileManagementService;
 import util.FileUtils;
 import model.message.Handshake;
 import model.message.Message;

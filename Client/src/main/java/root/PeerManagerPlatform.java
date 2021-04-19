@@ -1,9 +1,9 @@
-package peer;
+package root;
 
 import config.CommonConfig;
 import model.Peer;
-import peer.service.ChokeManagementService;
-import peer.service.FileManagementService;
+import service.ChokeManagementService;
+import service.FileManagementService;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;

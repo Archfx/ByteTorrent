@@ -1,5 +1,5 @@
 package model;
-import peer.PeerConnectionHandler;
+import root.PeerConnectionHandler;
 
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;

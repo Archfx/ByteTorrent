@@ -1,4 +1,4 @@
-package peer.service;
+package service;
 
 import config.CommonConfig;
 import model.Peer;
