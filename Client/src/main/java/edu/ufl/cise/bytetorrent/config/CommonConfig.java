@@ -1,4 +1,4 @@
-package config;
+package edu.ufl.cise.bytetorrent.config;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -74,14 +74,14 @@ public class CommonConfig {
     }
 
 //    public static void main(String[] args) throws Exception {
-//        CommonConfig config = CommonConfig.getInstance();
-//        System.out.println("Reading Common config\n");
-//        System.out.println("NumberOfPreferredNeighbors : " + config.getNumberOfdPreferredNeighbors());
-//        System.out.println("UnchokingInterval : " + config.getUnchokingInterval());
-//        System.out.println("OptimisticUnchokingInterval : " + config.getOptimisticUnchokingInterval());
-//        System.out.println("FileName : " + config.getFileName());
-//        System.out.println("FileSize : " + config.getFileSize());
-//        System.out.println("PieceSize : " + config.getPieceSize());
+//        CommonConfig edu.ufl.cise.bytetorrent.config = CommonConfig.getInstance();
+//        System.out.println("Reading Common edu.ufl.cise.bytetorrent.config\n");
+//        System.out.println("NumberOfPreferredNeighbors : " + edu.ufl.cise.bytetorrent.config.getNumberOfdPreferredNeighbors());
+//        System.out.println("UnchokingInterval : " + edu.ufl.cise.bytetorrent.config.getUnchokingInterval());
+//        System.out.println("OptimisticUnchokingInterval : " + edu.ufl.cise.bytetorrent.config.getOptimisticUnchokingInterval());
+//        System.out.println("FileName : " + edu.ufl.cise.bytetorrent.config.getFileName());
+//        System.out.println("FileSize : " + edu.ufl.cise.bytetorrent.config.getFileSize());
+//        System.out.println("PieceSize : " + edu.ufl.cise.bytetorrent.config.getPieceSize());
 //        System.out.println("\nAdding Peers to the System\n");
 //        PeerInfoConfig remotePeerInfo = PeerInfoConfig.getInstance();
 //        for (Peer peer : remotePeerInfo.getPeerInfoList()) {

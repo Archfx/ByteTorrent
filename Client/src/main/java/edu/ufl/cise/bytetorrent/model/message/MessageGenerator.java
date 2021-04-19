@@ -1,11 +1,11 @@
-package model.message;
+package edu.ufl.cise.bytetorrent.model.message;
 
-import model.message.payload.BitFieldPayLoad;
-import model.message.payload.HavePayLoad;
-import model.message.payload.PiecePayLoad;
-import model.message.payload.RequestPayLoad;
+import edu.ufl.cise.bytetorrent.model.message.payload.BitFieldPayLoad;
+import edu.ufl.cise.bytetorrent.model.message.payload.HavePayLoad;
+import edu.ufl.cise.bytetorrent.model.message.payload.PiecePayLoad;
+import edu.ufl.cise.bytetorrent.model.message.payload.RequestPayLoad;
 
-import static model.message.MessageType.*;
+import static edu.ufl.cise.bytetorrent.model.message.MessageType.*;
 
 public class MessageGenerator {
 

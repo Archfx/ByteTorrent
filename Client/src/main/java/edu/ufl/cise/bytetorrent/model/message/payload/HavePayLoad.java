@@ -1,4 +1,4 @@
-package model.message.payload;
+package edu.ufl.cise.bytetorrent.model.message.payload;
 
 public class HavePayLoad extends PayLoad {
 

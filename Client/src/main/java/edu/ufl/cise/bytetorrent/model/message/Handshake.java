@@ -1,4 +1,4 @@
-package model.message;
+package edu.ufl.cise.bytetorrent.model.message;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;
