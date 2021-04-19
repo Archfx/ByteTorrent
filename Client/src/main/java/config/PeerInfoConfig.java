@@ -1,6 +1,6 @@
 package config;
 
-import peer.Peer;
+import model.Peer;
 
 import java.util.ArrayList;
 import java.io.BufferedReader;

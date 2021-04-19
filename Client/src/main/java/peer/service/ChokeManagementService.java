@@ -1,7 +1,7 @@
 package peer.service;
 
 import config.CommonConfig;
-import peer.Peer;
+import model.Peer;
 import model.message.MessageGenerator;
 
 

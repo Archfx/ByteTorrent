@@ -1,5 +1,6 @@
 package peer;
 
+import model.Peer;
 import peer.service.FileManagementService;
 import util.FileUtils;
 import model.message.Handshake;

@@ -1,6 +1,7 @@
 package peer;
 
 import config.CommonConfig;
+import model.Peer;
 import peer.service.ChokeManagementService;
 import peer.service.FileManagementService;
 

@@ -1,7 +1,5 @@
 package config;
 
-import peer.Peer;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
