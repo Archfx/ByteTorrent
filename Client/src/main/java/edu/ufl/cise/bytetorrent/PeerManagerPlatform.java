@@ -2,6 +2,7 @@ package edu.ufl.cise.bytetorrent;
 
 import edu.ufl.cise.bytetorrent.config.CommonConfig;
 import edu.ufl.cise.bytetorrent.model.Peer;
+import edu.ufl.cise.bytetorrent.model.message.Handshake;
 import edu.ufl.cise.bytetorrent.service.ChokeManagementService;
 import edu.ufl.cise.bytetorrent.service.FileManagementService;
 
