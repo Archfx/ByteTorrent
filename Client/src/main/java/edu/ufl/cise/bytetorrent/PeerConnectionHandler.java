@@ -121,7 +121,6 @@ public class PeerConnectionHandler extends Thread {
                             FileUtils.updateBitfield(haveIndex.getIndex(), connectingPeer.getBitField());
                             if (!FileManagementService.isInteresting(haveIndex.getIndex())) {
                                 System.out.println("Peer " + connectingPeer.getPeerId() + " has interesting pieces");
-                                ;
                                 sendMessage(MessageGenerator.interested());
                             }
                             break;
