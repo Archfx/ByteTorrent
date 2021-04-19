@@ -15,7 +15,7 @@ public class Peer {
 	private boolean up;
 	private PeerConnectionHandler connectionHandler;
 
-	private Float dlSpeed; //For choke unchoke
+	private float dlSpeed; //For choke unchoke
     private Integer allPeerID; //For choke unchoke
 
 	private boolean doneDonwloading;
