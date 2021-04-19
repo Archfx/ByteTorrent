@@ -1,4 +1,4 @@
-package util;
+package edu.ufl.cise.bytetorrent.util;
 
 public class FileUtils {
 

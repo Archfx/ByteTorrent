@@ -1,10 +1,10 @@
-package root;
+package edu.ufl.cise.bytetorrent;
 
-import config.CommonConfig;
-import config.PeerInfoConfig;
-import model.Peer;
-import service.ChokeManagementService;
-import util.LoggerUtil;
+import edu.ufl.cise.bytetorrent.config.CommonConfig;
+import edu.ufl.cise.bytetorrent.config.PeerInfoConfig;
+import edu.ufl.cise.bytetorrent.model.Peer;
+import edu.ufl.cise.bytetorrent.service.ChokeManagementService;
+import edu.ufl.cise.bytetorrent.util.LoggerUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class PeerProcess {
          final int id = Integer.parseInt(args[0]);
 
 
-        // Read Configurations from config files
+        // Read Configurations from edu.ufl.cise.bytetorrent.config files
         CommonConfig commonConfig = CommonConfig.getInstance();
         PeerInfoConfig peerInfo = PeerInfoConfig.getInstance();
 

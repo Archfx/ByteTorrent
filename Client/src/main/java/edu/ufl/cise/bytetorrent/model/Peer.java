@@ -1,5 +1,5 @@
-package model;
-import root.PeerConnectionHandler;
+package edu.ufl.cise.bytetorrent.model;
+import edu.ufl.cise.bytetorrent.PeerConnectionHandler;
 
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;

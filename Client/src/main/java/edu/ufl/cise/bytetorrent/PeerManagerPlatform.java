@@ -1,9 +1,9 @@
-package root;
+package edu.ufl.cise.bytetorrent;
 
-import config.CommonConfig;
-import model.Peer;
-import service.ChokeManagementService;
-import service.FileManagementService;
+import edu.ufl.cise.bytetorrent.config.CommonConfig;
+import edu.ufl.cise.bytetorrent.model.Peer;
+import edu.ufl.cise.bytetorrent.service.ChokeManagementService;
+import edu.ufl.cise.bytetorrent.service.FileManagementService;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -134,7 +134,7 @@ public class PeerManagerPlatform extends Peer {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("Client " + clientNum + " is connected!");
+            System.out.println("edu.ufl.cise.bytetorrent.Client " + clientNum + " is connected!");
             clientNum++;
         } finally {
             try {

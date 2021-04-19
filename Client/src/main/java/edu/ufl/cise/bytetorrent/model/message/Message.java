@@ -1,6 +1,6 @@
-package model.message;
+package edu.ufl.cise.bytetorrent.model.message;
 
-import model.message.payload.PayLoad;
+import edu.ufl.cise.bytetorrent.model.message.payload.PayLoad;
 
 import java.io.Serializable;
 
