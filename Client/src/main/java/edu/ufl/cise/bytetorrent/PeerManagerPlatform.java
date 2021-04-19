@@ -16,29 +16,28 @@ import java.util.ArrayList;
 import java.util.Map;
 
 
-public class PeerManagerPlatform extends Peer {
+public class PeerManagerPlatform {
 
     private Map<Integer, Peer> peers;
-    private Peer my_self;
+    private Peer selfPeer;
     private ServerSocket socket;
 
     ChokeManagementService myCM = new ChokeManagementService();
 
     public PeerManagerPlatform(Peer mySelf, Map<Integer, Peer> remotePeers) {
-        super(mySelf.getPeerId(), mySelf.getAddress(), mySelf.getPort(), mySelf.isHasFile());
         this.peers = remotePeers;
-        this.my_self = mySelf;
+        this.selfPeer = mySelf;
     }
 
     public void init() {
-        System.out.println("Starting peer " + this.getPeerId());
+        System.out.println("Starting peer " + selfPeer.getPeerId());
 
-        new FileManagementService(this.getPeerId(), this.isHasFile());
+        new FileManagementService(selfPeer.getPeerId(), selfPeer.isHasFile());
 
         try {
-            this.setBitField(FileManagementService.getBitField());
-            socket = new ServerSocket(this.getPort());
-            System.out.println("Created server for " + this.getAddress() + ":" + this.getPort());
+            selfPeer.setBitField(FileManagementService.getBitField());
+            socket = new ServerSocket(selfPeer.getPort());
+            System.out.println("Created server for " + selfPeer.getAddress() + ":" + selfPeer.getPort());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -100,10 +99,10 @@ public class PeerManagerPlatform extends Peer {
                                 Socket s = new Socket(peer.getAddress(), peer.getPort());
                                 ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
                                 out.flush();
-                                out.writeObject(new Handshake(getPeerId()));
+                                out.writeObject(new Handshake(selfPeer.getPeerId()));
                                 out.flush();
                                 out.reset();
-                                System.out.println("Handshake Message sent to peer " + peer.getPeerId() + " from" + getPeerId());
+                                System.out.println("Handshake Message sent to peer " + peer.getPeerId() + " from" + selfPeer.getPeerId());
                                 peer.setSocket(s);
                                 peer.setUp(true);
                             }
@@ -128,7 +127,7 @@ public class PeerManagerPlatform extends Peer {
         int clientNum = 1;
         while (!socket.isClosed()) {
             try {
-                new PeerConnectionHandler(socket.accept(), peers, (Peer) this).start();
+                new PeerConnectionHandler(socket.accept(), peers, selfPeer).start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
