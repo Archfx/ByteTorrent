@@ -1,9 +1,9 @@
-package peer;
+package root;
 
 import config.CommonConfig;
 import config.PeerInfoConfig;
 import model.Peer;
-import peer.service.ChokeManagementService;
+import service.ChokeManagementService;
 import util.LoggerUtil;
 
 import java.util.HashMap;
