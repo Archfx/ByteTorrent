@@ -78,10 +78,10 @@ public class PeerConnectionHandler extends Thread {
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Disconnect with edu.ufl.cise.bytetorrent.Client ");
+            System.out.println("Disconnect with client ");
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Disconnect with edu.ufl.cise.bytetorrent.Client ");
+            System.out.println("Disconnect with Client ");
         }
     }
 
