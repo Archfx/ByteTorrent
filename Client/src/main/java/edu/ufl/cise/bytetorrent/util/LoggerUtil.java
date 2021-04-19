@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 public class LoggerUtil {
 
-    private static LoggerUtil loggerUtil = new LoggerUtil();
     private static Peer myPeer;
     private static String message;
 //    private static SimpleDateFormat formatter;
@@ -24,7 +23,7 @@ public class LoggerUtil {
 
 
     private LoggerUtil(){
-        initialize();
+
     }
 
     public static void initialize(){

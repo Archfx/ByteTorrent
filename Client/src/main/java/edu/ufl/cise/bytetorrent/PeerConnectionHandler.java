@@ -147,10 +147,6 @@ public class PeerConnectionHandler extends Thread {
                             PiecePayLoad piece = (PiecePayLoad) message.getPayload();
                             try {
                                 FileManagementService.store(piece.getContent(), piece.getIndex());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            try {
                                 selfPeer.setBitField(FileManagementService.getBitField());
                             } catch (Exception e) {
                                 e.printStackTrace();
