@@ -4,6 +4,7 @@ import config.CommonConfig;
 import peer.service.ChokeManagementService;
 import peer.service.FileManagementService;
 import peer.message.Handshake;
+import util.LoggerUtil;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -19,6 +20,7 @@ public class PeerManagerPlatform extends Peer {
 
     private final CommonConfig cConfig;
     public Map<Integer, Peer> peers;
+    public static Peer my_self;
     private ServerSocket socket;
     
     ChokeManagementService myCM = new ChokeManagementService();
@@ -27,6 +29,7 @@ public class PeerManagerPlatform extends Peer {
         super(mySelf.getPeerId(), mySelf.getAddress(), mySelf.getPort(), mySelf.isHasFile());
         this.cConfig = cConfig;
         this.peers = remotePeers;
+        this.my_self = mySelf;
     }
 
     public void init() {
