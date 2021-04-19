@@ -1,6 +1,8 @@
 package peer;
 
 import config.CommonConfig;
+import org.apache.logging.log4j.core.appender.FileManager;
+import peer.file.FileController;
 import peer.message.Handshake;
 
 import java.io.IOException;
@@ -19,7 +21,6 @@ import java.util.concurrent.TimeUnit;
 
 
 public class PeerManagerPlatform extends Peer {
-    private ScheduledExecutorService scheduledExecutorService;
 
     private final CommonConfig cConfig;
     public Map<Integer, Peer> peers;
@@ -29,7 +30,6 @@ public class PeerManagerPlatform extends Peer {
 
     public PeerManagerPlatform(Peer mySelf, Map<Integer, Peer> remotePeers, CommonConfig cConfig) {
         super(mySelf.getPeerId(), mySelf.getAddress(), mySelf.getPort(), mySelf.isHasFile());
-        this.scheduledExecutorService = Executors.newScheduledThreadPool(2);
         this.cConfig = cConfig;
         this.peers = remotePeers;
     }
@@ -37,21 +37,50 @@ public class PeerManagerPlatform extends Peer {
     public void init() {
         System.out.println("Starting peer " + this.getPeerId());
 
-        // TODO: handle file status
+        new FileController(this.getPeerId(), this.isHasFile());
 
         try {
+            this.setBitField(FileController.getBitField());
             socket = new ServerSocket(this.getPort());
             System.out.println("Created server for " + this.getAddress() + ":" + this.getPort());
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         this.initServer();
         // myCM.choke( new ArrayList<Peer>(peers.values()));
         this.initClient();
         System.out.println("Starting timers for choking || 1: "+CommonConfig.getUnchokingInterval()+"||2 :"+CommonConfig.getOptimisticUnchokingInterval());
-       
-        scheduledExecutorService.schedule(() -> myCM.choke( new ArrayList<Peer>(peers.values())), 1, TimeUnit.SECONDS);
-        scheduledExecutorService.schedule(() -> myCM.chokeOpt( new ArrayList<Peer>(peers.values())), 1, TimeUnit.SECONDS);
+
+        (new Thread() {
+            @Override
+            public void run() {
+                while (true) {
+                    myCM.choke( new ArrayList<Peer>(peers.values()));
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
+        (new Thread() {
+            @Override
+            public void run() {
+                while (true) {
+                    myCM.chokeOpt( new ArrayList<Peer>(peers.values()));
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
     }
 
 
@@ -91,7 +120,7 @@ public class PeerManagerPlatform extends Peer {
                     } catch (UnknownHostException e) {
                         e.printStackTrace();
                     } catch (ConnectException e) {
-                        e.printStackTrace();
+//                        e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (Exception e) {

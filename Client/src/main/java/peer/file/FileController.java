@@ -65,81 +65,6 @@ public class FileController {
 	}
 
 
-	public static boolean[] getFilePiecesOwned() {
-		return filePiecesOwned;
-	}
-
-
-	public static void setFilePiecesOwned(boolean[] filePiecesOwned) {
-		FileController.filePiecesOwned = filePiecesOwned;
-	}
-
-
-	public static Hashtable<Integer, Integer> getRequestedPieces() {
-		return piecesNeeded;
-	}
-
-
-	public static void setRequestedPieces(Hashtable<Integer, Integer> piecesNeeded) {
-		FileController.piecesNeeded = piecesNeeded;
-	}
-
-
-	public static int getNoOfPiecesAvailable() {
-		return numPiecesIHave;
-	}
-
-
-	public static void setNoOfPiecesAvailable(int numPiecesIHave) {
-		FileController.numPiecesIHave = numPiecesIHave;
-	}
-
-
-	public static String getDirectory() {
-		return path;
-	}
-
-
-	public static void setDirectory(String path) {
-		FileController.path = path;
-	}
-
-
-	public static String getFileName() {
-		return fName;
-	}
-
-
-	public static void setFileName(String fName) {
-		FileController.fName = fName;
-	}
-
-
-	public static int getFileSize() {
-		return fSize;
-	}
-
-
-	public static void setFileSize(int fSize) {
-		FileController.fSize = fSize;
-	}
-
-
-	public static File getFile() {
-		return file;
-	}
-
-
-	public static void setFile(File file) {
-		FileController.file = file;
-	}
-
-
-	public static int getNooffilepieces() {
-		return numFilePieces;
-	}
-
-
 	public static boolean isInteresting(int index) {
 		return filePiecesOwned[index] ? true : false;
 	}
@@ -277,15 +202,6 @@ public class FileController {
 				}
 			}
 		}).start();
-
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		System.out.println("Testing file manager");
-        FileController f1 = new FileController(1005, false);  
 
 	}
     

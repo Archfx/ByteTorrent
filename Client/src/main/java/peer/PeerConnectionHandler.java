@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -25,7 +24,6 @@ public class PeerConnectionHandler extends Thread {
     private ObjectOutputStream out;    //stream write to the socket
     private ObjectInputStream thisPeerInputStream;
     private Peer connectingPeer;
-    private PeerMangerService peerMangerService;
     private boolean isMeChocked;
     private Peer selfPeer;
 
@@ -68,110 +66,111 @@ public class PeerConnectionHandler extends Thread {
                     }
                 }
 
-                // TODO -: use file manager to get bit field
-                Message bitFieldMessage = MessageGenerator.bitfield(new byte[]{});
+                Message bitFieldMessage = MessageGenerator.bitfield(FileController.getBitField());
                 sendMessage(bitFieldMessage);
                 System.out.println("Sent bit field message of length" + bitFieldMessage.getMessageLength());
 
                 this.thisPeerInputStream = new ObjectInputStream(thisPeer.getSocket().getInputStream());
-                peerMangerService = new PeerMangerService(new ArrayList<>());
                 new Thread(this::listenToMessages).start();
-                new Thread(this::sendChockeUnchoke).start();
             }
 
         } catch (IOException ioException) {
+            ioException.printStackTrace();
             System.out.println("Disconnect with Client ");
-        } finally {
-            //Close connections
-            try {
-                in.close();
-                out.close();
-                connection.close();
-            } catch (IOException ioException) {
-                System.out.println("Disconnect with Client ");
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Disconnect with Client ");
         }
     }
 
-    private void sendMessage(Message msg) {
+    public void sendMessage(Message msg) {
         try {
             out.writeObject(msg);
             out.flush();
-            System.out.println("Send message: " + msg.getMessageType() + " to Client ");
+            System.out.println("Send message: " + msg.getMessageType() + " to " + connectingPeer.getPeerId());
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
     }
 
     private void listenToMessages() {
-        try {
             while (true) {
-                Message message = (Message) thisPeerInputStream.readObject();
-                System.out.println("Receive message: " + message.getMessageType() + " from " + connectingPeer.getPeerId());
+                Message message = null;
+                try {
+                    message = (Message) thisPeerInputStream.readObject();
+                    System.out.println("Receive message: " + message.getMessageType() + " from " + connectingPeer.getPeerId());
 
-                switch (message.getMessageType()) {
-                    case CHOKE:
-                        isMeChocked = true;
-                        break;
-                    case UNCHOKE:
-                        isMeChocked = false;
-                        break;
-                    case INTERESTED:
-                        connectingPeer.setInterested(true);
-                        break;
-                    case NOT_INTERESTED:
-                        connectingPeer.setInterested(false);
-                        break;
-                    case HAVE:
-                        HavePayLoad haveIndex = (HavePayLoad)message.getPayload();
-                        FileUtils.updateBitfield(haveIndex.getIndex(), connectingPeer.getBitField());
-                        if (!FileController.isInteresting(haveIndex.getIndex())) {
-                            System.out.println("Peer " + connectingPeer.getPeerId() + " has interesting pieces");;
-                            sendMessage(MessageGenerator.interested());
-                        }
-                        break;
-                    case BITFIELD:
-                        BitFieldPayLoad bitFieldPayLoad = (BitFieldPayLoad)message.getPayload();
-                        connectingPeer.setBitField(bitFieldPayLoad.getBitfield());
-                        if (!FileController.compareBitfields(bitFieldPayLoad.getBitfield(), connectingPeer.getBitField())) {
-                            System.out.println("Peer " + connectingPeer.getPeerId() + " have no any interesting pieces");
-                            sendMessage(MessageGenerator.notInterested());
-                        }
-                        else {
-                            System.out.println("Peer " + connectingPeer.getPeerId() + " has interesting pieces");
-                            sendMessage(MessageGenerator.interested());
-                        }
-                        break;
-                    case REQUEST:
-                        RequestPayLoad requestPayLoad = (RequestPayLoad)message.getPayload();
-                        byte[] pieceContent = FileController.getFilePart(requestPayLoad.getIndex());
-                        // TODO -: check this ??? request index is same as file index
-                        sendMessage(MessageGenerator.piece(requestPayLoad.getIndex(), pieceContent));
-                        break;
-                    case PIECE:
-                        PiecePayLoad piece = (PiecePayLoad) message.getPayload();
-                        try {
-                            FileController.store(piece.getContent(), piece.getIndex());
-                        } catch (Exception e) {
-                            // TODO: handle exception
-                            e.printStackTrace();
-                        }
+                    switch (message.getMessageType()) {
+                        case CHOKE:
+                            isMeChocked = true;
+                            break;
+                        case UNCHOKE:
+                            isMeChocked = false;
+                            sendRequestMessage();
+                            break;
+                        case INTERESTED:
+                            connectingPeer.setInterested(true);
+                            break;
+                        case NOT_INTERESTED:
+                            connectingPeer.setInterested(false);
+                            break;
+                        case HAVE:
+                            HavePayLoad haveIndex = (HavePayLoad) message.getPayload();
+                            FileUtils.updateBitfield(haveIndex.getIndex(), connectingPeer.getBitField());
+                            if (!FileController.isInteresting(haveIndex.getIndex())) {
+                                System.out.println("Peer " + connectingPeer.getPeerId() + " has interesting pieces");
+                                ;
+                                sendMessage(MessageGenerator.interested());
+                            }
+                            break;
+                        case BITFIELD:
+                            BitFieldPayLoad bitFieldPayLoad = (BitFieldPayLoad) message.getPayload();
+                            connectingPeer.setBitField(bitFieldPayLoad.getBitfield());
+                            if (!FileController.compareBitfields(bitFieldPayLoad.getBitfield(), selfPeer.getBitField())) {
+                                System.out.println("Peer " + connectingPeer.getPeerId() + " have no any interesting pieces");
+                                sendMessage(MessageGenerator.notInterested());
+                            } else {
+                                System.out.println("Peer " + connectingPeer.getPeerId() + " has interesting pieces");
+                                sendMessage(MessageGenerator.interested());
+                            }
+                            break;
+                        case REQUEST:
+                            RequestPayLoad requestPayLoad = (RequestPayLoad) message.getPayload();
+                            byte[] pieceContent = FileController.getFilePart(requestPayLoad.getIndex());
+                            // TODO -: check this ??? request index is same as file index
+                            sendMessage(MessageGenerator.piece(requestPayLoad.getIndex(), pieceContent));
+                            break;
+                        case PIECE:
+                            PiecePayLoad piece = (PiecePayLoad) message.getPayload();
+                            try {
+                                FileController.store(piece.getContent(), piece.getIndex());
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                                e.printStackTrace();
+                            }
 
-                        connectingPeer.setBitField(FileController.getBitField());
+                            try {
+                                selfPeer.setBitField(FileController.getBitField());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
-                        peers.values().stream().filter(Peer::isInterested).forEach(peer -> peer.getConnectionHandler().sendMessage(MessageGenerator.have(piece.getIndex())));
+                            peers.values().stream().filter(Peer::isInterested).forEach(peer -> peer.getConnectionHandler().sendMessage(MessageGenerator.have(piece.getIndex())));
 //                        piecesDownloaded++;
 
-                        if (!isMeChocked)
-                            sendRequestMessage();
-                        break;
+                            if (!isMeChocked)
+                                sendRequestMessage();
+                            break;
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
+
             }
-        } catch (ClassNotFoundException | IOException e) {
-            System.err.println("Data received in unknown format");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+
     }
 
     private void sendRequestMessage() {
@@ -179,13 +178,9 @@ public class PeerConnectionHandler extends Thread {
         if (pieceIdx == -1) {
             System.out.println("No more interesting pieces to request from peer " + connectingPeer.getPeerId());
             sendMessage(MessageGenerator.notInterested());
-        }
-        else {
+        } else {
             sendMessage(MessageGenerator.request(pieceIdx));
         }
     }
 
-    private void sendChockeUnchoke() {
-
-    }
 }

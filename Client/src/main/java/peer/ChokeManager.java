@@ -2,16 +2,15 @@ package peer;
 
 import config.CommonConfig;
 import peer.file.FileController;
+import peer.message.MessageGenerator;
 
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 public class ChokeManager {
 
-    private boolean chokeThreadRunning = true ;
     // private Object lockMyNeighbors;
 
 //    Peer myNode = PeerManagerPlatform.my_node;
@@ -33,13 +32,8 @@ public class ChokeManager {
 
         System.out.println(" Starting selecting k peers to send the file ");
 
-        while (chokeThreadRunning) {
             synchronized (allPeers) 
             { //lock the peerlist
-
-                if (allPeers == null) {
-                    continue;
-                }
 
 				// Randomly selecting neighbors when download of file completed.
                 // if (myNode.isDoneDonwloading()) {
@@ -47,10 +41,19 @@ public class ChokeManager {
 //					shuffle the list
                     Collections.shuffle(allPeers);
                     int nP = 0; // numbers of peers selected
-                    for (int i = 0; i < num_peer && nP < CommonConfig.getNumberOfdPreferredNeighbors(); i++) {
-                        if ((allPeers.get(i)).isInterested() && (allPeers.get(i)).getPeerSockets() != null) {
-                            // unchokeList.add(allPeers.get(i));
-                            allPeers.get(i).setChoked(false);
+                    for (int i = 0; i < num_peer ; i++) {
+                        if ((allPeers.get(i)).isInterested() && (allPeers.get(i)).getSocket() != null) {
+                            Peer unChokedPeer = allPeers.get(i);
+                            if(nP < CommonConfig.getNumberOfdPreferredNeighbors()){
+                                if(unChokedPeer.getChoked()){
+                                    unChokedPeer.setChoked(false);
+                                    unChokedPeer.getConnectionHandler().sendMessage(MessageGenerator.unChoke());
+                                }
+                            }
+                            else {
+                                unChokedPeer.setChoked(true);
+                                unChokedPeer.getConnectionHandler().sendMessage(MessageGenerator.choke());
+                            }
                             nP++;
                         }
 
@@ -61,10 +64,19 @@ public class ChokeManager {
                     allPeers.sort(Comparator.comparing(Peer::getDlSpeed));
                     // selecting the peers
                     float nP = 0; // numbers of peers selected
-                    for (int i = 0; i < num_peer && nP < CommonConfig.getNumberOfdPreferredNeighbors(); i++) {
+                    for (int i = 0; i < num_peer ; i++) {
                         if ((allPeers.get(i)).isInterested() && (allPeers.get(i)).getAllPeerID() != null) {
-                            // unchokeList.add(allPeers.get(i));
-                            allPeers.get(i).setChoked(false);
+                            Peer unChokedPeer = allPeers.get(i);
+                            if(nP < CommonConfig.getNumberOfdPreferredNeighbors()){
+                                if(unChokedPeer.getChoked()){
+                                    unChokedPeer.setChoked(false);
+                                    unChokedPeer.getConnectionHandler().sendMessage(MessageGenerator.unChoke());
+                                }
+                            }
+                            else {
+                                unChokedPeer.setChoked(true);
+                                unChokedPeer.getConnectionHandler().sendMessage(MessageGenerator.choke());
+                            }
                             nP++;
                         }
                         }
@@ -72,7 +84,7 @@ public class ChokeManager {
 
                 }
 
-            }
+
 
         // return unchokeList;
     }
@@ -89,27 +101,25 @@ public class ChokeManager {
 
         System.out.println(" Starting optimum peer to send the file ");
 
-        while (chokeThreadRunning) {
             // synchronized (lockMyNeighbors) { //lock the object
             synchronized (allPeers) {
-                if (allPeers == null) {
-                    continue;
-                }
 
 //				shuffle the list
                 Collections.shuffle(allPeers);
                 int nP = 0; // numbers of peers  to be selected selected
                 for (int i = 0; i < num_peer && nP < 1; i++) {
-                    if ((allPeers.get(i)).isInterested() && (allPeers.get(i)).getPeerSockets() != null) {
+                    if ((allPeers.get(i)).isInterested() && (allPeers.get(i)).getSocket() != null) {
                         // optUnchokeList.add(allPeers.get(i));
-                        allPeers.get(i).setChoked(false);
                         nP++;
+                        Peer unChokedPeer = allPeers.get(i);
+                        if(unChokedPeer.getChoked()){
+                            unChokedPeer.setChoked(false);
+                            unChokedPeer.getConnectionHandler().sendMessage(MessageGenerator.unChoke());
+                        }
                     }
                 }
             }
         }
 
-        // return optUnchokeList;
-    }
 }
 

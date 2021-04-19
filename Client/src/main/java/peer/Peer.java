@@ -15,12 +15,10 @@ public class Peer {
 
 	private Float dlSpeed; //For choke unchoke
     private Integer allPeerID; //For choke unchoke
-    private Socket peerSockets; //For choke unchoke
 
 	private boolean doneDonwloading;
 
 	private boolean isInterested; //For choke unchoke
-    private Peer unChoked; //For choke unchoke
 
 
 
@@ -127,28 +125,12 @@ public class Peer {
 		this.allPeerID = allPeerID;
 	}
 
-	public Socket getPeerSockets() {
-		return peerSockets;
-	}
-
-	public void setPeerSockets(Socket peerSockets) {
-		this.peerSockets = peerSockets;
-	}
-
 	public boolean isInterested() {
 		return isInterested;
 	}
 
 	public void setInterested(boolean interested) {
 		isInterested = interested;
-	}
-
-	public Peer getUnChoked() {
-		return unChoked;
-	}
-
-	public void setUnChoked(Peer unChoked) {
-		this.unChoked = unChoked;
 	}
 
 	public PeerConnectionHandler getConnectionHandler() {
