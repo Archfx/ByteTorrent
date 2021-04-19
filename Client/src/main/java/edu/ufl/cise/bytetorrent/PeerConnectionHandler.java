@@ -71,7 +71,9 @@ public class PeerConnectionHandler extends Thread {
                 Message bitFieldMessage = MessageGenerator.bitfield(FileManagementService.getBitField());
                 sendMessage(bitFieldMessage);
                 System.out.println("Sent bit field message of length" + bitFieldMessage.getMessageLength());
-
+                while (thisPeer.getSocket() == null){
+                    Thread.sleep(1000);
+                }
                 this.thisPeerInputStream = new ObjectInputStream(thisPeer.getSocket().getInputStream());
                 new Thread(this::listenToMessages).start();
             }

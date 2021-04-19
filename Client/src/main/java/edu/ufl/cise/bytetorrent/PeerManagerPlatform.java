@@ -20,7 +20,7 @@ public class PeerManagerPlatform extends Peer {
 
     public Map<Integer, Peer> peers;
     private ServerSocket socket;
-    
+
     ChokeManagementService myCM = new ChokeManagementService();
 
     public PeerManagerPlatform(Peer mySelf, Map<Integer, Peer> remotePeers) {
@@ -45,13 +45,13 @@ public class PeerManagerPlatform extends Peer {
 
         this.initServer();
         this.initClient();
-        System.out.println("Starting timers for choking || 1: "+CommonConfig.getUnchokingInterval()+"||2 :"+CommonConfig.getOptimisticUnchokingInterval());
+        System.out.println("Starting timers for choking || 1: " + CommonConfig.getUnchokingInterval() + "||2 :" + CommonConfig.getOptimisticUnchokingInterval());
 
         (new Thread() {
             @Override
             public void run() {
                 while (true) {
-                    myCM.choke( new ArrayList<Peer>(peers.values()));
+                    myCM.choke(new ArrayList<Peer>(peers.values()));
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -65,7 +65,7 @@ public class PeerManagerPlatform extends Peer {
             @Override
             public void run() {
                 while (true) {
-                    myCM.chokeOpt( new ArrayList<Peer>(peers.values()));
+                    myCM.chokeOpt(new ArrayList<Peer>(peers.values()));
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -81,9 +81,7 @@ public class PeerManagerPlatform extends Peer {
         (new Thread() {
             @Override
             public void run() {
-                while (!socket.isClosed()) {
-                    startListening();
-                }
+                startListening();
             }
         }).start();
 
@@ -113,7 +111,7 @@ public class PeerManagerPlatform extends Peer {
                     } catch (UnknownHostException e) {
                         e.printStackTrace();
                     } catch (ConnectException e) {
-                        e.printStackTrace();
+//                        e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (Exception e) {
@@ -126,22 +124,16 @@ public class PeerManagerPlatform extends Peer {
 
     private void startListening() {
         int clientNum = 1;
-        try {
+        while (!socket.isClosed()) {
             try {
-                new PeerConnectionHandler(socket.accept(), peers, (Peer)this).start();
+                new PeerConnectionHandler(socket.accept(), peers, (Peer) this).start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             System.out.println("peer " + clientNum + " is connected!");
             clientNum++;
-        } finally {
-            try {
-                socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
-    
+
 
 }
