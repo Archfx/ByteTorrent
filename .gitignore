@@ -13,3 +13,6 @@
 # Maven
 log/
 target/
+
+#spesific
+peer_*
