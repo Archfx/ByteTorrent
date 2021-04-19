@@ -1,10 +1,8 @@
-package peer.message;
+package model.message;
 
-import peer.message.payload.PayLoad;
+import model.message.payload.PayLoad;
 
 import java.io.Serializable;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 public class Message implements Serializable {
 

@@ -2,7 +2,7 @@ package peer.service;
 
 import config.CommonConfig;
 import peer.Peer;
-import peer.message.MessageGenerator;
+import model.message.MessageGenerator;
 
 
 import java.util.Collections;

@@ -2,10 +2,10 @@ package peer;
 
 import peer.service.FileManagementService;
 import util.FileUtils;
-import peer.message.Handshake;
-import peer.message.Message;
-import peer.message.MessageGenerator;
-import peer.message.payload.*;
+import model.message.Handshake;
+import model.message.Message;
+import model.message.MessageGenerator;
+import model.message.payload.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

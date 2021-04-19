@@ -1,4 +1,4 @@
-package peer.message;
+package model.message;
 
 public enum MessageType {
 

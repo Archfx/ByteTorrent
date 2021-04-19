@@ -1,13 +1,11 @@
-package peer.message;
+package model.message;
 
-import peer.message.payload.BitFieldPayLoad;
-import peer.message.payload.HavePayLoad;
-import peer.message.payload.PiecePayLoad;
-import peer.message.payload.RequestPayLoad;
+import model.message.payload.BitFieldPayLoad;
+import model.message.payload.HavePayLoad;
+import model.message.payload.PiecePayLoad;
+import model.message.payload.RequestPayLoad;
 
-import java.nio.ByteBuffer;
-
-import static peer.message.MessageType.*;
+import static model.message.MessageType.*;
 
 public class MessageGenerator {
 

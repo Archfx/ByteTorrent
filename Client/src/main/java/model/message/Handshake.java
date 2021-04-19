@@ -1,4 +1,4 @@
-package peer.message;
+package model.message;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;

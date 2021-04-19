@@ -3,7 +3,6 @@ package peer;
 import config.CommonConfig;
 import peer.service.ChokeManagementService;
 import peer.service.FileManagementService;
-import peer.message.Handshake;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
