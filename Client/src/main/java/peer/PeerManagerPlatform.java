@@ -106,7 +106,7 @@ public class PeerManagerPlatform extends Peer {
         int clientNum = 1;
         try {
             try {
-                new PeerConnectionHandler(socket.accept(), peers).start();
+                new PeerConnectionHandler(socket.accept(), peers, (Peer)this).start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -130,7 +130,7 @@ public class PeerManagerPlatform extends Peer {
         System.out.println(" Starting selecting k peers to send the file ");
 
         while (chokeThreadRunning) {
-            synchronized (allPeers) 
+            synchronized (allPeers)
             { //lock the peerlist
 
                 if (allPeers == null) {
@@ -150,7 +150,7 @@ public class PeerManagerPlatform extends Peer {
                             nP++;
                         }
 
-                    } 
+                    }
                 }
                 else {
                     // selecting based on the download speeds when file download is not complete.

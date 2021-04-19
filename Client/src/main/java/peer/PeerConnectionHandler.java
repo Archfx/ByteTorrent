@@ -27,10 +27,12 @@ public class PeerConnectionHandler extends Thread {
     private Peer connectingPeer;
     private PeerMangerService peerMangerService;
     private boolean isMeChocked;
+    private Peer selfPeer;
 
-    public PeerConnectionHandler(Socket connection, Map<Integer, Peer> peers) {
+    public PeerConnectionHandler(Socket connection, Map<Integer, Peer> peers, Peer selfPeer) {
         this.connection = connection;
         this.peers = peers;
+        this.selfPeer = selfPeer;
     }
 
     public void run() {
@@ -173,7 +175,14 @@ public class PeerConnectionHandler extends Thread {
     }
 
     private void sendRequestMessage() {
-
+        int pieceIdx = FileController.requestPiece(connectingPeer.getBitField(), selfPeer.getBitField(), connectingPeer.getPeerId());
+        if (pieceIdx == -1) {
+            System.out.println("No more interesting pieces to request from peer " + connectingPeer.getPeerId());
+            sendMessage(MessageGenerator.notInterested());
+        }
+        else {
+            sendMessage(MessageGenerator.request(pieceIdx));
+        }
     }
 
     private void sendChockeUnchoke() {
