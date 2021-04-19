@@ -1,7 +1,7 @@
-package peer;
+package peer.service;
 
 import config.CommonConfig;
-import peer.file.FileController;
+import peer.Peer;
 import peer.message.MessageGenerator;
 
 
@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class ChokeManager {
+public class ChokeManagementService {
 
     // private Object lockMyNeighbors;
 
@@ -37,7 +37,7 @@ public class ChokeManager {
 
 				// Randomly selecting neighbors when download of file completed.
                 // if (myNode.isDoneDonwloading()) {
-                if (FileController.hasCompleteFile()) {
+                if (FileManagementService.hasCompleteFile()) {
 //					shuffle the list
                     Collections.shuffle(allPeers);
                     int nP = 0; // numbers of peers selected

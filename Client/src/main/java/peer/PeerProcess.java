@@ -2,11 +2,10 @@ package peer;
 
 import config.CommonConfig;
 import config.PeerInfoConfig;
+import peer.service.ChokeManagementService;
 import util.LoggerUtil;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class PeerProcess {
@@ -30,7 +29,7 @@ public class PeerProcess {
         // Assign existing remote peers
         Map<Integer,Peer> remotePeers = new HashMap<>();
 
-        ChokeManager chokeM = new ChokeManager();
+        ChokeManagementService chokeM = new ChokeManagementService();
 
 
         for (Peer peer : peerInfo.getPeerInfoList()) {

@@ -1,7 +1,7 @@
 package peer;
 
-import peer.file.FileController;
-import peer.file.FileUtils;
+import peer.service.FileManagementService;
+import util.FileUtils;
 import peer.message.Handshake;
 import peer.message.Message;
 import peer.message.MessageGenerator;
@@ -66,7 +66,7 @@ public class PeerConnectionHandler extends Thread {
                     }
                 }
 
-                Message bitFieldMessage = MessageGenerator.bitfield(FileController.getBitField());
+                Message bitFieldMessage = MessageGenerator.bitfield(FileManagementService.getBitField());
                 sendMessage(bitFieldMessage);
                 System.out.println("Sent bit field message of length" + bitFieldMessage.getMessageLength());
 
@@ -117,7 +117,7 @@ public class PeerConnectionHandler extends Thread {
                         case HAVE:
                             HavePayLoad haveIndex = (HavePayLoad) message.getPayload();
                             FileUtils.updateBitfield(haveIndex.getIndex(), connectingPeer.getBitField());
-                            if (!FileController.isInteresting(haveIndex.getIndex())) {
+                            if (!FileManagementService.isInteresting(haveIndex.getIndex())) {
                                 System.out.println("Peer " + connectingPeer.getPeerId() + " has interesting pieces");
                                 ;
                                 sendMessage(MessageGenerator.interested());
@@ -126,7 +126,7 @@ public class PeerConnectionHandler extends Thread {
                         case BITFIELD:
                             BitFieldPayLoad bitFieldPayLoad = (BitFieldPayLoad) message.getPayload();
                             connectingPeer.setBitField(bitFieldPayLoad.getBitfield());
-                            if (!FileController.compareBitfields(bitFieldPayLoad.getBitfield(), selfPeer.getBitField())) {
+                            if (!FileManagementService.compareBitfields(bitFieldPayLoad.getBitfield(), selfPeer.getBitField())) {
                                 System.out.println("Peer " + connectingPeer.getPeerId() + " have no any interesting pieces");
                                 sendMessage(MessageGenerator.notInterested());
                             } else {
@@ -136,21 +136,21 @@ public class PeerConnectionHandler extends Thread {
                             break;
                         case REQUEST:
                             RequestPayLoad requestPayLoad = (RequestPayLoad) message.getPayload();
-                            byte[] pieceContent = FileController.getFilePart(requestPayLoad.getIndex());
+                            byte[] pieceContent = FileManagementService.getFilePart(requestPayLoad.getIndex());
                             // TODO -: check this ??? request index is same as file index
                             sendMessage(MessageGenerator.piece(requestPayLoad.getIndex(), pieceContent));
                             break;
                         case PIECE:
                             PiecePayLoad piece = (PiecePayLoad) message.getPayload();
                             try {
-                                FileController.store(piece.getContent(), piece.getIndex());
+                                FileManagementService.store(piece.getContent(), piece.getIndex());
                             } catch (Exception e) {
                                 // TODO: handle exception
                                 e.printStackTrace();
                             }
 
                             try {
-                                selfPeer.setBitField(FileController.getBitField());
+                                selfPeer.setBitField(FileManagementService.getBitField());
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -174,7 +174,7 @@ public class PeerConnectionHandler extends Thread {
     }
 
     private void sendRequestMessage() {
-        int pieceIdx = FileController.requestPiece(connectingPeer.getBitField(), selfPeer.getBitField(), connectingPeer.getPeerId());
+        int pieceIdx = FileManagementService.requestPiece(connectingPeer.getBitField(), selfPeer.getBitField(), connectingPeer.getPeerId());
         if (pieceIdx == -1) {
             System.out.println("No more interesting pieces to request from peer " + connectingPeer.getPeerId());
             sendMessage(MessageGenerator.notInterested());

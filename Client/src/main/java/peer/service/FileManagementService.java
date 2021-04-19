@@ -1,4 +1,4 @@
-package peer.file;
+package peer.service;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,8 +11,9 @@ import java.util.Hashtable;
 
 
 import config.CommonConfig;
+import util.FileUtils;
 
-public class FileController {
+public class FileManagementService {
 
     private static boolean[] filePiecesOwned;
 	/**
@@ -32,7 +33,7 @@ public class FileController {
 	private static File file = null;
 
 
-	public FileController(int peerId, boolean hasFile) {
+	public FileManagementService(int peerId, boolean hasFile) {
 		path = "peer_" + peerId + "/";
 
 		filePiecesOwned = new boolean[numFilePieces];

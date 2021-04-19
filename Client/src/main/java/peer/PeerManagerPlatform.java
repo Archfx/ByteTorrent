@@ -1,8 +1,8 @@
 package peer;
 
 import config.CommonConfig;
-import org.apache.logging.log4j.core.appender.FileManager;
-import peer.file.FileController;
+import peer.service.ChokeManagementService;
+import peer.service.FileManagementService;
 import peer.message.Handshake;
 
 import java.io.IOException;
@@ -12,12 +12,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 
 public class PeerManagerPlatform extends Peer {
@@ -26,7 +21,7 @@ public class PeerManagerPlatform extends Peer {
     public Map<Integer, Peer> peers;
     private ServerSocket socket;
     
-    ChokeManager myCM = new ChokeManager(); 
+    ChokeManagementService myCM = new ChokeManagementService();
 
     public PeerManagerPlatform(Peer mySelf, Map<Integer, Peer> remotePeers, CommonConfig cConfig) {
         super(mySelf.getPeerId(), mySelf.getAddress(), mySelf.getPort(), mySelf.isHasFile());
@@ -37,10 +32,10 @@ public class PeerManagerPlatform extends Peer {
     public void init() {
         System.out.println("Starting peer " + this.getPeerId());
 
-        new FileController(this.getPeerId(), this.isHasFile());
+        new FileManagementService(this.getPeerId(), this.isHasFile());
 
         try {
-            this.setBitField(FileController.getBitField());
+            this.setBitField(FileManagementService.getBitField());
             socket = new ServerSocket(this.getPort());
             System.out.println("Created server for " + this.getAddress() + ":" + this.getPort());
         } catch (IOException e) {
