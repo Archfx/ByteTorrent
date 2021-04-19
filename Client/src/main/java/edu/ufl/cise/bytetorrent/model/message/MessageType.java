@@ -1,4 +1,4 @@
-package peer.message;
+package edu.ufl.cise.bytetorrent.model.message;
 
 public enum MessageType {
 

@@ -1,8 +1,8 @@
-package peer.service;
+package edu.ufl.cise.bytetorrent.service;
 
-import config.CommonConfig;
-import peer.Peer;
-import peer.message.MessageGenerator;
+import edu.ufl.cise.bytetorrent.config.CommonConfig;
+import edu.ufl.cise.bytetorrent.model.Peer;
+import edu.ufl.cise.bytetorrent.model.message.MessageGenerator;
 
 
 import java.util.Collections;

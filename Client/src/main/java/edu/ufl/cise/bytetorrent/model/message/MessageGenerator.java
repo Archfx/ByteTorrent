@@ -1,13 +1,11 @@
-package peer.message;
+package edu.ufl.cise.bytetorrent.model.message;
 
-import peer.message.payload.BitFieldPayLoad;
-import peer.message.payload.HavePayLoad;
-import peer.message.payload.PiecePayLoad;
-import peer.message.payload.RequestPayLoad;
+import edu.ufl.cise.bytetorrent.model.message.payload.BitFieldPayLoad;
+import edu.ufl.cise.bytetorrent.model.message.payload.HavePayLoad;
+import edu.ufl.cise.bytetorrent.model.message.payload.PiecePayLoad;
+import edu.ufl.cise.bytetorrent.model.message.payload.RequestPayLoad;
 
-import java.nio.ByteBuffer;
-
-import static peer.message.MessageType.*;
+import static edu.ufl.cise.bytetorrent.model.message.MessageType.*;
 
 public class MessageGenerator {
 

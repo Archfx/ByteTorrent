@@ -1,11 +1,12 @@
-package peer;
+package edu.ufl.cise.bytetorrent;
 
-import peer.service.FileManagementService;
-import util.FileUtils;
-import peer.message.Handshake;
-import peer.message.Message;
-import peer.message.MessageGenerator;
-import peer.message.payload.*;
+import edu.ufl.cise.bytetorrent.model.Peer;
+import edu.ufl.cise.bytetorrent.service.FileManagementService;
+import edu.ufl.cise.bytetorrent.util.FileUtils;
+import edu.ufl.cise.bytetorrent.model.message.Handshake;
+import edu.ufl.cise.bytetorrent.model.message.Message;
+import edu.ufl.cise.bytetorrent.model.message.MessageGenerator;
+import edu.ufl.cise.bytetorrent.model.message.payload.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -26,6 +27,7 @@ public class PeerConnectionHandler extends Thread {
     private Peer connectingPeer;
     private boolean isMeChocked;
     private Peer selfPeer;
+    private float downloadSpeed = 0;
 
     public PeerConnectionHandler(Socket connection, Map<Integer, Peer> peers, Peer selfPeer) {
         this.connection = connection;
@@ -44,7 +46,7 @@ public class PeerConnectionHandler extends Thread {
             try {
                 handshake = (Handshake) in.readObject();
             } catch (ClassNotFoundException e) {
-                // TODO -: close connection
+                // TODO -: close connection ??
                 e.printStackTrace();
             }
 
@@ -74,9 +76,9 @@ public class PeerConnectionHandler extends Thread {
                 new Thread(this::listenToMessages).start();
             }
 
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-            System.out.println("Disconnect with Client ");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Disconnect with client ");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Disconnect with Client ");
@@ -137,27 +139,22 @@ public class PeerConnectionHandler extends Thread {
                         case REQUEST:
                             RequestPayLoad requestPayLoad = (RequestPayLoad) message.getPayload();
                             byte[] pieceContent = FileManagementService.getFilePart(requestPayLoad.getIndex());
-                            // TODO -: check this ??? request index is same as file index
                             sendMessage(MessageGenerator.piece(requestPayLoad.getIndex(), pieceContent));
+                            connectingPeer.setDlSpeed(downloadSpeed++);
                             break;
                         case PIECE:
                             PiecePayLoad piece = (PiecePayLoad) message.getPayload();
                             try {
                                 FileManagementService.store(piece.getContent(), piece.getIndex());
                             } catch (Exception e) {
-                                // TODO: handle exception
                                 e.printStackTrace();
                             }
-
                             try {
                                 selfPeer.setBitField(FileManagementService.getBitField());
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-
                             peers.values().stream().filter(Peer::isInterested).forEach(peer -> peer.getConnectionHandler().sendMessage(MessageGenerator.have(piece.getIndex())));
-//                        piecesDownloaded++;
-
                             if (!isMeChocked)
                                 sendRequestMessage();
                             break;

@@ -1,4 +1,4 @@
-package peer.message.payload;
+package edu.ufl.cise.bytetorrent.model.message.payload;
 
 public class PiecePayLoad extends PayLoad {
 

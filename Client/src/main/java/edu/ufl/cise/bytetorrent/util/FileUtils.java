@@ -1,11 +1,11 @@
-package util;
+package edu.ufl.cise.bytetorrent.util;
 
 public class FileUtils {
 
 
-	public static byte toByte(boolean[] bool) throws Exception {
+	public static byte toByte(boolean[] bool) {
 		if (bool.length > 8)
-			throw new Exception("boolean array length exceeded: not compatible with byte");
+			throw new RuntimeException("boolean array length needed to be greater than 8");
 		byte val = 0;
 		for (boolean x : bool) {
 			val = (byte) (val << 1);

@@ -1,10 +1,11 @@
-package peer.message.payload;
+package edu.ufl.cise.bytetorrent.model.message.payload;
 
-public class HavePayLoad extends PayLoad {
+
+public class RequestPayLoad extends PayLoad {
 
 	private int index;
 
-	public HavePayLoad(int index) {
+	public RequestPayLoad(int index) {
 		super();
 		this.index = index;
 	}

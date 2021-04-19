@@ -1,10 +1,10 @@
-package peer;
+package edu.ufl.cise.bytetorrent;
 
-import config.CommonConfig;
-import peer.service.ChokeManagementService;
-import peer.service.FileManagementService;
-import peer.message.Handshake;
-import util.LoggerUtil;
+import edu.ufl.cise.bytetorrent.config.CommonConfig;
+import edu.ufl.cise.bytetorrent.model.Peer;
+import edu.ufl.cise.bytetorrent.model.message.Handshake;
+import edu.ufl.cise.bytetorrent.service.ChokeManagementService;
+import edu.ufl.cise.bytetorrent.service.FileManagementService;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -18,16 +18,14 @@ import java.util.Map;
 
 public class PeerManagerPlatform extends Peer {
 
-    private final CommonConfig cConfig;
     public Map<Integer, Peer> peers;
     public static Peer my_self;
     private ServerSocket socket;
     
     ChokeManagementService myCM = new ChokeManagementService();
 
-    public PeerManagerPlatform(Peer mySelf, Map<Integer, Peer> remotePeers, CommonConfig cConfig) {
+    public PeerManagerPlatform(Peer mySelf, Map<Integer, Peer> remotePeers) {
         super(mySelf.getPeerId(), mySelf.getAddress(), mySelf.getPort(), mySelf.isHasFile());
-        this.cConfig = cConfig;
         this.peers = remotePeers;
         this.my_self = mySelf;
     }
@@ -48,7 +46,6 @@ public class PeerManagerPlatform extends Peer {
         }
 
         this.initServer();
-        // myCM.choke( new ArrayList<Peer>(peers.values()));
         this.initClient();
         System.out.println("Starting timers for choking || 1: "+CommonConfig.getUnchokingInterval()+"||2 :"+CommonConfig.getOptimisticUnchokingInterval());
 
@@ -118,7 +115,7 @@ public class PeerManagerPlatform extends Peer {
                     } catch (UnknownHostException e) {
                         e.printStackTrace();
                     } catch (ConnectException e) {
-//                        e.printStackTrace();
+                        e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (Exception e) {
@@ -137,7 +134,7 @@ public class PeerManagerPlatform extends Peer {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("Client " + clientNum + " is connected!");
+            System.out.println("peer " + clientNum + " is connected!");
             clientNum++;
         } finally {
             try {

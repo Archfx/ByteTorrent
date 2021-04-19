@@ -1,4 +1,4 @@
-package peer.service;
+package edu.ufl.cise.bytetorrent.service;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,8 +10,8 @@ import java.util.Arrays;
 import java.util.Hashtable;
 
 
-import config.CommonConfig;
-import util.FileUtils;
+import edu.ufl.cise.bytetorrent.config.CommonConfig;
+import edu.ufl.cise.bytetorrent.util.FileUtils;
 
 public class FileManagementService {
 
