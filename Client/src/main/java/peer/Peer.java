@@ -11,6 +11,7 @@ public class Peer {
 	private AtomicBoolean choked = new AtomicBoolean(true);
 	private Socket socket;
 	private boolean up;
+	private PeerConnectionHandler connectionHandler;
 
 	private Float dlSpeed; //For choke unchoke
     private Integer allPeerID; //For choke unchoke
@@ -148,6 +149,14 @@ public class Peer {
 
 	public void setUnChoked(Peer unChoked) {
 		this.unChoked = unChoked;
+	}
+
+	public PeerConnectionHandler getConnectionHandler() {
+		return connectionHandler;
+	}
+
+	public void setConnectionHandler(PeerConnectionHandler connectionHandler) {
+		this.connectionHandler = connectionHandler;
 	}
 }
 

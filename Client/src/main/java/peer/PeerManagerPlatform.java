@@ -106,7 +106,7 @@ public class PeerManagerPlatform extends Peer {
         int clientNum = 1;
         try {
             try {
-                new PeerConnectionHandler(socket.accept(), peers).start();
+                new PeerConnectionHandler(socket.accept(), peers, (Peer)this).start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
