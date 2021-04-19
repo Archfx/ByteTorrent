@@ -2,6 +2,7 @@ package peer;
 
 import config.CommonConfig;
 import model.Peer;
+import model.message.Handshake;
 import peer.service.ChokeManagementService;
 import peer.service.FileManagementService;
 
@@ -47,7 +48,7 @@ public class PeerManagerPlatform extends Peer {
         this.initServer();
         // myCM.choke( new ArrayList<Peer>(peers.values()));
         this.initClient();
-        System.out.println("Starting timers for choking || 1: "+CommonConfig.getUnchokingInterval()+"||2 :"+CommonConfig.getOptimisticUnchokingInterval());
+//        System.out.println("Starting timers for choking || 1: "+CommonConfig.getUnchokingInterval()+"||2 :"+CommonConfig.getOptimisticUnchokingInterval());
 
         (new Thread() {
             @Override
@@ -55,7 +56,7 @@ public class PeerManagerPlatform extends Peer {
                 while (true) {
                     myCM.choke( new ArrayList<Peer>(peers.values()));
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(1000*CommonConfig.getUnchokingInterval());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -69,7 +70,7 @@ public class PeerManagerPlatform extends Peer {
                 while (true) {
                     myCM.chokeOpt( new ArrayList<Peer>(peers.values()));
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(1000*CommonConfig.getOptimisticUnchokingInterval());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
