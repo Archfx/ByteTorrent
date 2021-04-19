@@ -19,6 +19,7 @@ import java.util.Map;
 public class PeerManagerPlatform extends Peer {
 
     public Map<Integer, Peer> peers;
+    public static Peer my_self;
     private ServerSocket socket;
 
     ChokeManagementService myCM = new ChokeManagementService();
@@ -26,6 +27,7 @@ public class PeerManagerPlatform extends Peer {
     public PeerManagerPlatform(Peer mySelf, Map<Integer, Peer> remotePeers) {
         super(mySelf.getPeerId(), mySelf.getAddress(), mySelf.getPort(), mySelf.isHasFile());
         this.peers = remotePeers;
+        this.my_self = mySelf;
     }
 
     public void init() {
