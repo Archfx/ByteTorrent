@@ -18,15 +18,13 @@ import java.util.Map;
 
 public class PeerManagerPlatform extends Peer {
 
-    private final CommonConfig cConfig;
     public Map<Integer, Peer> peers;
     private ServerSocket socket;
     
     ChokeManagementService myCM = new ChokeManagementService();
 
-    public PeerManagerPlatform(Peer mySelf, Map<Integer, Peer> remotePeers, CommonConfig cConfig) {
+    public PeerManagerPlatform(Peer mySelf, Map<Integer, Peer> remotePeers) {
         super(mySelf.getPeerId(), mySelf.getAddress(), mySelf.getPort(), mySelf.isHasFile());
-        this.cConfig = cConfig;
         this.peers = remotePeers;
     }
 
@@ -46,7 +44,6 @@ public class PeerManagerPlatform extends Peer {
         }
 
         this.initServer();
-        // myCM.choke( new ArrayList<Peer>(peers.values()));
         this.initClient();
         System.out.println("Starting timers for choking || 1: "+CommonConfig.getUnchokingInterval()+"||2 :"+CommonConfig.getOptimisticUnchokingInterval());
 
@@ -116,7 +113,7 @@ public class PeerManagerPlatform extends Peer {
                     } catch (UnknownHostException e) {
                         e.printStackTrace();
                     } catch (ConnectException e) {
-//                        e.printStackTrace();
+                        e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (Exception e) {
@@ -135,7 +132,7 @@ public class PeerManagerPlatform extends Peer {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("edu.ufl.cise.bytetorrent.Client " + clientNum + " is connected!");
+            System.out.println("peer " + clientNum + " is connected!");
             clientNum++;
         } finally {
             try {

@@ -13,7 +13,6 @@ public class PeerProcess {
 
         LoggerUtil.LogInfoMessage("Process Thread Started");
         final int id = Integer.parseInt(args[0]);
-        CommonConfig commonConfig = CommonConfig.getInstance();
         PeerInfoConfig peerInfo = PeerInfoConfig.getInstance();
         Peer my_node = null;
 
@@ -28,7 +27,7 @@ public class PeerProcess {
             }
         }
 
-        PeerManagerPlatform peerProcess = new PeerManagerPlatform(my_node, remotePeers, commonConfig);
+        PeerManagerPlatform peerProcess = new PeerManagerPlatform(my_node, remotePeers);
 		peerProcess.init();
 
     }
