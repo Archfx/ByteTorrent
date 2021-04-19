@@ -2,7 +2,7 @@ package edu.ufl.cise.bytetorrent;
 
 import edu.ufl.cise.bytetorrent.model.Peer;
 import edu.ufl.cise.bytetorrent.service.FileManagementService;
-import edu.ufl.cise.bytetorrent.util.FileUtils;
+import edu.ufl.cise.bytetorrent.util.FileUtil;
 import edu.ufl.cise.bytetorrent.model.message.Handshake;
 import edu.ufl.cise.bytetorrent.model.message.Message;
 import edu.ufl.cise.bytetorrent.model.message.MessageGenerator;
@@ -21,7 +21,6 @@ import java.util.Map;
 public class PeerConnectionHandler extends Thread {
     private final Map<Integer, Peer> peers;
     private final Socket connection;
-    private ObjectInputStream in;    //stream read from the socket
     private ObjectOutputStream out;    //stream write to the socket
     private ObjectInputStream thisPeerInputStream;
     private Peer connectingPeer;
@@ -40,7 +39,8 @@ public class PeerConnectionHandler extends Thread {
             //initialize Input and Output streams
             out = new ObjectOutputStream(connection.getOutputStream());
             out.flush();
-            in = new ObjectInputStream(connection.getInputStream());
+            //stream read from the socket
+            ObjectInputStream in = new ObjectInputStream(connection.getInputStream());
 
             Handshake handshake = new Handshake(-1);
             try {
@@ -120,7 +120,7 @@ public class PeerConnectionHandler extends Thread {
                             break;
                         case HAVE:
                             HavePayLoad haveIndex = (HavePayLoad) message.getPayload();
-                            FileUtils.updateBitfield(haveIndex.getIndex(), connectingPeer.getBitField());
+                            FileUtil.updateBitfield(haveIndex.getIndex(), connectingPeer.getBitField());
                             if (!FileManagementService.isInteresting(haveIndex.getIndex())) {
                                 System.out.println("Peer " + connectingPeer.getPeerId() + " has interesting pieces");
                                 sendMessage(MessageGenerator.interested());
@@ -161,9 +161,7 @@ public class PeerConnectionHandler extends Thread {
                             break;
                     }
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
 

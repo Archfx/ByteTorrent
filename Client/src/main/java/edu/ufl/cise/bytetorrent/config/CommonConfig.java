@@ -41,7 +41,7 @@ public class CommonConfig {
         }
     }
 
-    public static CommonConfig getInstance()
+    public static CommonConfig initialize()
     {
         if (commonConfig == null)
             commonConfig = new CommonConfig();

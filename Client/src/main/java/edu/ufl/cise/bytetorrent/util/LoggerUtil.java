@@ -1,6 +1,5 @@
 package edu.ufl.cise.bytetorrent.util;
 
-import edu.ufl.cise.bytetorrent.PeerManagerPlatform;
 import edu.ufl.cise.bytetorrent.model.Peer;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -13,14 +12,12 @@ import org.apache.logging.log4j.core.config.builder.api.RootLoggerComponentBuild
 import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class LoggerUtil {
 
     private static LoggerUtil loggerUtil = new LoggerUtil();
-    private static Peer my_peer;
+    private static Peer myPeer;
     private static String message;
 //    private static SimpleDateFormat formatter;
 //    private static Date date;
@@ -45,7 +42,6 @@ public class LoggerUtil {
         builder.add(appenderBuilder);
         builder.add(rootLogger);
         Configurator.initialize(builder.build());
-        my_peer = PeerManagerPlatform.my_self;
 //        formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
     }
 
@@ -60,21 +56,21 @@ public class LoggerUtil {
     public static void LogMakeTcpConnection(String peerID) {
 //        date = new Date(System.currentTimeMillis());
 //        String message = "["+date + "]: ";
-        message += "Peer "+my_peer.getPeerId()+ " makes a connection to Peer "+peerID+".";
+        message += "Peer "+ myPeer.getPeerId()+ " makes a connection to Peer "+peerID+".";
         LogInfoMessage(message);
     }
 
     public static void LogConnectedMsg(String peerID) {
 //        date = new Date(System.currentTimeMillis());
 //        String message = "["+date + "]: ";
-        message += "Peer "+my_peer.getPeerId()+ " is connected from Peer "+peerID+".";
+        message += "Peer "+ myPeer.getPeerId()+ " is connected from Peer "+peerID+".";
         LogInfoMessage(message);
     }
 
     public static void LogChangeNeighbors(ArrayList<Peer> neighbors) {
 //        date = new Date(System.currentTimeMillis());
 //        String message = "["+date + "]: ";
-        message += "Peer "+my_peer.getPeerId()+ " has the preferred neighbors ";
+        message += "Peer "+ myPeer.getPeerId()+ " has the preferred neighbors ";
         for (Peer p : neighbors) {
             message += p.getPeerId()+",";
         }
@@ -84,49 +80,49 @@ public class LoggerUtil {
     public static void LogOptUnchokeNeighbor(String peerID) {
 //        date = new Date(System.currentTimeMillis());
 //        String message = "["+date + "]: ";
-        message += "Peer "+my_peer.getPeerId()+ " has optimistically unchoked neighbor "+peerID+".";
+        message += "Peer "+ myPeer.getPeerId()+ " has optimistically unchoked neighbor "+peerID+".";
         LogInfoMessage(message);
     }
 
     public static void LogReceivedUnchokingMsg(String peerID) {
 //        date = new Date(System.currentTimeMillis());
 //        String message = "["+date + "]: ";
-        message += "Peer "+my_peer.getPeerId()+ " is unchoked by "+peerID+".";
+        message += "Peer "+ myPeer.getPeerId()+ " is unchoked by "+peerID+".";
         LogInfoMessage(message);
     }
 
     public static void LogReceivedChokingMsg(String peerID) {
 //        date = new Date(System.currentTimeMillis());
 //        String message = "["+date + "]: ";
-        message += "Peer "+my_peer.getPeerId()+ " is choked by "+peerID+".";
+        message += "Peer "+ myPeer.getPeerId()+ " is choked by "+peerID+".";
         LogInfoMessage(message);
     }
 
     public static void LogReceivedHaveMsg(String peerID, int piece_index) {
 //        date = new Date(System.currentTimeMillis());
 //        String message = "["+date + "]: ";
-        message += "Peer "+my_peer.getPeerId()+ " received the ‘have’ message from "+peerID+" for the piece "+piece_index+".";
+        message += "Peer "+ myPeer.getPeerId()+ " received the ‘have’ message from "+peerID+" for the piece "+piece_index+".";
         LogInfoMessage(message);
     }
 
     public static void LogReceivedInterestedMsg(String peerID) {
 //        date = new Date(System.currentTimeMillis());
 //        String message = "["+date + "]: ";
-        message += "Peer "+my_peer.getPeerId()+ " received the ‘interested’message from "+peerID+".";
+        message += "Peer "+ myPeer.getPeerId()+ " received the ‘interested’message from "+peerID+".";
         LogInfoMessage(message);
     }
 
     public static void LogReceivedNotInterestedMsg(String peerID) {
 //        date = new Date(System.currentTimeMillis());
 //        String message = "["+date + "]: ";
-        message += "Peer "+my_peer.getPeerId()+ " received the ‘not interested’message from "+peerID+".";
+        message += "Peer "+ myPeer.getPeerId()+ " received the ‘not interested’message from "+peerID+".";
         LogInfoMessage(message);
     }
 
     public static void LogDownloadingPiece(String peerID, int piece_index, int number_of_piece) {
 //        date = new Date(System.currentTimeMillis());
 //        String message = "["+date + "]: ";
-        message += "Peer "+my_peer.getPeerId()+ " has downloaded the piece "+piece_index+" from "+peerID+". " +
+        message += "Peer "+ myPeer.getPeerId()+ " has downloaded the piece "+piece_index+" from "+peerID+". " +
                 "Now the number of pieces it has is "+number_of_piece+".";
         LogInfoMessage(message);
     }
@@ -134,9 +130,11 @@ public class LoggerUtil {
     public static void LogCompleteDownload() {
 //        date = new Date(System.currentTimeMillis());
 //        String message = "["+date + "]: ";
-        message += "Peer "+my_peer.getPeerId()+ " as downloaded the complete file.";
+        message += "Peer "+ myPeer.getPeerId()+ " as downloaded the complete file.";
         LogInfoMessage(message);
     }
 
-
+    public static void setMyPeer(Peer myPeer) {
+        LoggerUtil.myPeer = myPeer;
+    }
 }

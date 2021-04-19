@@ -14,21 +14,22 @@ public class PeerProcess {
         LoggerUtil.LogInfoMessage("Process Thread Started");
         final int id = Integer.parseInt(args[0]);
         PeerInfoConfig peerInfo = PeerInfoConfig.getInstance();
-        CommonConfig commonConfig = CommonConfig.getInstance();
-        Peer my_node = null;
+        CommonConfig.initialize();
+        Peer selfPeer = null;
 
         Map<Integer,Peer> remotePeers = new HashMap<>();
 
         for (Peer peer : peerInfo.getPeerInfoList()) {
             if (id == peer.getPeerId()) {
-                my_node = peer;
+                selfPeer = peer;
             }
             else {
                 remotePeers.put(peer.getPeerId(), peer);
             }
         }
 
-        PeerManagerPlatform peerProcess = new PeerManagerPlatform(my_node, remotePeers);
+        LoggerUtil.setMyPeer(selfPeer);
+        PeerManagerPlatform peerProcess = new PeerManagerPlatform(selfPeer, remotePeers);
 		peerProcess.init();
 
     }

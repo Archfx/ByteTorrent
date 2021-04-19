@@ -18,8 +18,8 @@ import java.util.Map;
 
 public class PeerManagerPlatform extends Peer {
 
-    public Map<Integer, Peer> peers;
-    public static Peer my_self;
+    private Map<Integer, Peer> peers;
+    private Peer my_self;
     private ServerSocket socket;
 
     ChokeManagementService myCM = new ChokeManagementService();

@@ -1,7 +1,10 @@
 package edu.ufl.cise.bytetorrent.util;
 
-public class FileUtils {
+public class FileUtil {
 
+	private FileUtil(){
+
+	}
 
 	public static byte toByte(boolean[] bool) {
 		if (bool.length > 8)
@@ -14,7 +17,6 @@ public class FileUtils {
 		return val;
 	}
 
-
 	public static boolean[] toBool(byte val) {
 		boolean[] bool = new boolean[8];
 		for (int i = 0; i < 8; i++) {
@@ -24,49 +26,12 @@ public class FileUtils {
 		return bool;
 	}
 
-
 	public static void updateBitfield(long index, byte[] bitfield) {
 		int i = (int) (index / 8);
 		int u = (int) (index % 8);
 		byte update = 1;
 		update = (byte) (update << u);
 		bitfield[i] = (byte) (bitfield[i] | update);
-	}
-
-	public static boolean checkFullFile(byte[] bitfield, int size) {
-
-		boolean[] piecesInterested = new boolean[size];
-		int finLength;
-
-		if (size > 1)
-			finLength = (size % (8));
-		else
-			finLength = size;
-
-		int start, end;
-		for (int i = 0, j = 0; i < bitfield.length; i++) {
-			if (i == bitfield.length - 1) {
-				start = 8 - finLength;
-				end = finLength;
-			} else {
-				start = 0;
-				end = 8;
-			}
-			boolean[] x = FileUtils.toBool(bitfield[i]);
-			System.arraycopy(x, start, piecesInterested, j, end);
-
-			if (j + 8 < size)
-				j = j + 8;
-			else
-				j = size - finLength;
-
-		}
-
-		for (int k = 0; k < piecesInterested.length; k++) {
-			if (piecesInterested[k] = false)
-				return false;
-		}
-		return true;
 	}
 
 }

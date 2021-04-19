@@ -11,7 +11,7 @@ import java.util.Hashtable;
 
 
 import edu.ufl.cise.bytetorrent.config.CommonConfig;
-import edu.ufl.cise.bytetorrent.util.FileUtils;
+import edu.ufl.cise.bytetorrent.util.FileUtil;
 
 public class FileManagementService {
 
@@ -89,7 +89,7 @@ public class FileManagementService {
 			} else {
 				temp = numFilePieces;
 			}
-			bitfield[counter++] = FileUtils.toByte(Arrays.copyOfRange(filePiecesOwned, indexI, temp));
+			bitfield[counter++] = FileUtil.toByte(Arrays.copyOfRange(filePiecesOwned, indexI, temp));
 			indexI = indexI + 8;
 		}
 		return bitfield;
@@ -169,7 +169,7 @@ public class FileManagementService {
 			interesting[indexI] = (byte) ((bitfield[indexI] ^ neighborBitfield[indexI]) & neighborBitfield[indexI]);
 			start = indexI == size - 1 ? 8 - finLength : 0;
 			end = indexI == size - 1 ? finLength : 8;
-			boolean[] x = FileUtils.toBool(interesting[indexI]);
+			boolean[] x = FileUtil.toBool(interesting[indexI]);
 			System.arraycopy(x, start, interestingPieces, indexJ, end);
 			indexJ = indexJ + 8 < numFilePieces ? indexJ + 8 : numFilePieces - finLength;
 			indexI++;
