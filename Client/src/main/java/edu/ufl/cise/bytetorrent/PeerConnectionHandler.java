@@ -27,6 +27,7 @@ public class PeerConnectionHandler extends Thread {
     private Peer connectingPeer;
     private boolean isMeChocked;
     private Peer selfPeer;
+    private float downloadSpeed = 0;
 
     public PeerConnectionHandler(Socket connection, Map<Integer, Peer> peers, Peer selfPeer) {
         this.connection = connection;
@@ -139,6 +140,7 @@ public class PeerConnectionHandler extends Thread {
                             RequestPayLoad requestPayLoad = (RequestPayLoad) message.getPayload();
                             byte[] pieceContent = FileManagementService.getFilePart(requestPayLoad.getIndex());
                             sendMessage(MessageGenerator.piece(requestPayLoad.getIndex(), pieceContent));
+                            connectingPeer.setDlSpeed(downloadSpeed++);
                             break;
                         case PIECE:
                             PiecePayLoad piece = (PiecePayLoad) message.getPayload();
