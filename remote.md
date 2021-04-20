@@ -38,7 +38,7 @@ ssh MYUSERNAME@lin114-00.cise.ufl.edu
 Run the program
 ```
 cd ByteTorrent
-java -cp Client/target/Client-1.0-SNAPSHOP.jar edu.ufl.cise.bytetorrent.StartRemotePeers
+java -cp Client/target/Client-1.0-SNAPSHOT.jar edu.ufl.cise.bytetorrent.StartRemotePeers
 ```
 
 
