@@ -180,6 +180,11 @@ public class PeerConnectionHandler extends Thread {
             }catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         System.out.println("Exit listen messages for " + connectingPeer.getPeerId());
         cleanUp();
