@@ -184,26 +184,5 @@ public class FileManagementService {
 		}
 		return -1;
 	}
-
-	public static void checker() {
-
-		(new Thread() {
-			@Override
-			public void run() {
-				try {
-					do {
-						Thread.sleep(60000);
-						for (Integer ind : piecesNeeded.keySet()) {
-							if (!filePiecesOwned[ind])
-								piecesNeeded.remove(ind);
-						}
-					} while (numPiecesIHave < numFilePieces);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}).start();
-
-	}
     
 }

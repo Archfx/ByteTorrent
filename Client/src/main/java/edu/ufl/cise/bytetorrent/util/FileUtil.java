@@ -1,37 +1,42 @@
 package edu.ufl.cise.bytetorrent.util;
 
 public class FileUtil {
+	private static int byte_const = 8;
 
-	private FileUtil(){
+	private FileUtil(){ }
 
+	// Update the bit_field value
+	public static void updateBitfield(long index, byte[] bit_field) {
+		byte u = 1;
+		int i = (int) (index / byte_const);
+		int k = (int) (index % byte_const);
+
+		u = (byte) (u << k);
+		bit_field[i] = (byte) (bit_field[i] | u);
 	}
 
-	public static byte toByte(boolean[] bool) {
-		if (bool.length > 8)
+	// convert boolean array to byte
+	public static byte toByte(boolean[] bool_array) {
+		if (bool_array.length > byte_const)
 			throw new RuntimeException("boolean array length needed to be greater than 8");
-		byte val = 0;
-		for (boolean x : bool) {
-			val = (byte) (val << 1);
-			val = (byte) (val | (x ? 1 : 0));
+		byte value = 0;
+		for (boolean bool : bool_array) {
+			value = (byte) (value << 1);
+			value = (byte) (value | (bool ? 1 : 0));
 		}
-		return val;
+		return value;
 	}
 
-	public static boolean[] toBool(byte val) {
-		boolean[] bool = new boolean[8];
-		for (int i = 0; i < 8; i++) {
-			bool[7 - i] = (val & 1) == 1 ? true : false;
-			val = (byte) (val >> 1);
+	// Convert byte to bool array
+	public static boolean[] toBool(byte value) {
+		boolean[] bool = new boolean[byte_const];
+		for (int i = 0; i < byte_const; i++) {
+			bool[7 - i] = (value & 1) == 1 ? true : false;
+			value = (byte) (value >> 1);
 		}
 		return bool;
 	}
 
-	public static void updateBitfield(long index, byte[] bitfield) {
-		int i = (int) (index / 8);
-		int u = (int) (index % 8);
-		byte update = 1;
-		update = (byte) (update << u);
-		bitfield[i] = (byte) (bitfield[i] | update);
-	}
+
 
 }
