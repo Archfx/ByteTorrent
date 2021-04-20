@@ -112,8 +112,8 @@ public class LoggerUtil {
         LogInfoMessage(message);
     }
 
-    public static void LogCompleteDownload() {
-        String message = "Peer "+ myPeer.getPeerId()+ " as downloaded the complete file.";
+    public static void LogCompleteDownload(Peer connectedPeer) {
+        String message = "Peer "+ connectedPeer.getPeerId()+ " as downloaded the complete file.";
         LogInfoMessage(message);
     }
 
