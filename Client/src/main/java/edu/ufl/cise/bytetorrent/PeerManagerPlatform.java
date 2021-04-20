@@ -47,7 +47,7 @@ public class PeerManagerPlatform {
 
         this.initServer();
         this.initClient();
-        LoggerUtil.LogInfoMessage("Starting timers for choking || 1: " + CommonConfig.getUnchokingInterval() + "||2 :" + CommonConfig.getOptimisticUnchokingInterval());
+        //LoggerUtil.LogInfoMessage("Starting timers for choking || 1: " + CommonConfig.getUnchokingInterval() + "||2 :" + CommonConfig.getOptimisticUnchokingInterval());
 
         (new Thread() {
             @Override

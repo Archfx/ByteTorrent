@@ -130,6 +130,7 @@ public class PeerConnectionHandler extends Thread {
                             if (FileManagementService.getNumFilePieces() == connectingPeer.incrementAndGetNoOfPieces()) {
                                 connectingPeer.setHasFile(true);
                                 System.out.println("Peer completed Downloading :" + connectingPeer.getPeerId());
+                                LoggerUtil.LogCompleteDownload(connectingPeer);
                                 checkAllDownloaded();
                             }
                             LoggerUtil.LogReceivedHaveMsg(String.valueOf(connectingPeer.getPeerId()), haveIndex.getIndex());
