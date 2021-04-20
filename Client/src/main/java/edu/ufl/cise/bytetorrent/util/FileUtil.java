@@ -1,18 +1,19 @@
 package edu.ufl.cise.bytetorrent.util;
 
 public class FileUtil {
-	private static int byte_const = 8;
+	private static final int byte_const = 8;
 
 	private FileUtil(){ }
 
 	// Update the bit_field value
-	public static void updateBitfield(long index, byte[] bit_field) {
+	public static byte[] updateBitfield(long index, byte[] bit_field) {
 		byte u = 1;
 		int i = (int) (index / byte_const);
 		int k = (int) (index % byte_const);
 
 		u = (byte) (u << k);
 		bit_field[i] = (byte) (bit_field[i] | u);
+		return bit_field;
 	}
 
 	// convert boolean array to byte

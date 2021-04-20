@@ -22,7 +22,7 @@ import java.util.Map;
 public class PeerConnectionHandler extends Thread {
     private final Map<Integer, Peer> peers;
     private final Socket connection;
-    private ObjectOutputStream out;    //stream write to the socket
+    private ObjectOutputStream out;
     private ObjectInputStream thisPeerInputStream;
     private Peer connectingPeer;
     private boolean isMeChocked;
@@ -37,10 +37,8 @@ public class PeerConnectionHandler extends Thread {
 
     public void run() {
         try {
-            //initialize Input and Output streams
             out = new ObjectOutputStream(connection.getOutputStream());
             out.flush();
-            //stream read from the socket
             ObjectInputStream in = new ObjectInputStream(connection.getInputStream());
 
             Handshake handshake = new Handshake(-1);
@@ -100,7 +98,7 @@ public class PeerConnectionHandler extends Thread {
     }
 
     private void listenToMessages() {
-            while (true) {
+            while (!selfPeer.isCompletedDownloading()) {
                 Message message = null;
                 try {
                     message = (Message) thisPeerInputStream.readObject();
@@ -126,10 +124,11 @@ public class PeerConnectionHandler extends Thread {
                             break;
                         case HAVE:
                             HavePayLoad haveIndex = (HavePayLoad) message.getPayload();
-                            FileUtil.updateBitfield(haveIndex.getIndex(), connectingPeer.getBitField());
-                            if (!FileManagementService.isInteresting(haveIndex.getIndex())) {
-                                System.out.println("Peer " + connectingPeer.getPeerId() + " has interesting pieces");
-                                sendMessage(MessageGenerator.interested());
+                            connectingPeer.setBitField(FileUtil.updateBitfield(haveIndex.getIndex(), connectingPeer.getBitField()));
+                            if (FileManagementService.getNumFilePieces() == connectingPeer.incrementAndGetNoOfPieces()){
+                                connectingPeer.setCompletedDownloading(true);
+                                System.out.println("Peer completed Downloading :" + connectingPeer.getPeerId());
+                                checkAllDownloaded();
                             }
                             LoggerUtil.LogReceivedHaveMsg(String.valueOf(connectingPeer.getPeerId()), haveIndex.getIndex());
                             break;
@@ -158,19 +157,31 @@ public class PeerConnectionHandler extends Thread {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            peers.values().stream().filter(Peer::isInterested).forEach(peer -> peer.getConnectionHandler().sendMessage(MessageGenerator.have(piece.getIndex())));
+                            peers.values().stream().filter(peer -> peer.getConnectionHandler() != null).forEach(peer -> peer.getConnectionHandler().sendMessage(MessageGenerator.have(piece.getIndex())));
                             if (!isMeChocked)
                                 sendRequestMessage();
                             LoggerUtil.LogDownloadingPiece(String.valueOf(connectingPeer.getPeerId()), piece.getIndex(), 1);
+                            if (FileManagementService.hasCompleteFile()){
+                                checkAllDownloaded();
+                            }
                             break;
                     }
 
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-
             }
+            System.out.println("Exit listen messages");
+    }
 
+    private void checkAllDownloaded() {
+        if ((selfPeer.isHasFile() || FileManagementService.hasCompleteFile()) && checkAllPeersDownloaded()){
+               selfPeer.setCompletedDownloading(true);
+        }
+    }
+
+    private boolean checkAllPeersDownloaded(){
+        return peers.values().stream().filter(peer -> peer.isHasFile() || peer.isCompletedDownloading()).count() == peers.size();
     }
 
     private void sendRequestMessage() {

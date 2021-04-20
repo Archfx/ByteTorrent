@@ -57,4 +57,8 @@ public class PeerInfoConfig {
     public ArrayList<Peer> getPeerInfoList() {
         return peerInfoList;
     }
+
+    public int getNoOfPeers(){
+        return peerInfoList.size();
+    }
 }

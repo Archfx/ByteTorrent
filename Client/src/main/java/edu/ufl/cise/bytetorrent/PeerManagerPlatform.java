@@ -52,7 +52,7 @@ public class PeerManagerPlatform {
         (new Thread() {
             @Override
             public void run() {
-                while (true) {
+                while (!selfPeer.isCompletedDownloading()) {
                     myCM.choke(new ArrayList<Peer>(peers.values()));
                     try {
                         Thread.sleep(1000);
@@ -60,13 +60,14 @@ public class PeerManagerPlatform {
                         e.printStackTrace();
                     }
                 }
+                System.out.println("Exit choke");
             }
         }).start();
 
         (new Thread() {
             @Override
             public void run() {
-                while (true) {
+                while (!selfPeer.isCompletedDownloading()) {
                     myCM.chokeOpt(new ArrayList<Peer>(peers.values()));
                     try {
                         Thread.sleep(1000);
@@ -74,6 +75,7 @@ public class PeerManagerPlatform {
                         e.printStackTrace();
                     }
                 }
+                System.out.println("Exit choke opt");
             }
         }).start();
     }
@@ -93,7 +95,7 @@ public class PeerManagerPlatform {
         new Thread() {
             public void run() {
                 LoggerUtil.LogInfoMessage("Initializing client");
-                while (true) {
+                while (!selfPeer.isCompletedDownloading()) {
                     try {
                         for (Peer peer : peers.values()) {
                             if (!peer.isUp()) {
@@ -121,20 +123,24 @@ public class PeerManagerPlatform {
                         e.printStackTrace();
                     }
                 }
+                System.out.println("Exit choke client threads");
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }.start();
     }
 
     private void startListening() {
-        int clientNum = 1;
-        while (!socket.isClosed()) {
+        while (!socket.isClosed() || !selfPeer.isCompletedDownloading()) {
             try {
                 new PeerConnectionHandler(socket.accept(), peers, selfPeer).start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-//            System.out.println("peer " + clientNum + " is connected!");
-            clientNum++;
+            System.out.println("Exit server");
         }
     }
 
