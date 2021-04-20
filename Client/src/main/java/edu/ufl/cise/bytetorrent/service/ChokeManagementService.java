@@ -3,8 +3,10 @@ package edu.ufl.cise.bytetorrent.service;
 import edu.ufl.cise.bytetorrent.config.CommonConfig;
 import edu.ufl.cise.bytetorrent.model.Peer;
 import edu.ufl.cise.bytetorrent.model.message.MessageGenerator;
+import edu.ufl.cise.bytetorrent.util.LoggerUtil;
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -26,11 +28,12 @@ public class ChokeManagementService {
     // public List<Peer> choke (List<Peer> allPeers){
     public void choke (List<Peer> allPeers){
 
-        // List<Peer> unchokeList = new ArrayList<Peer>();
+        List<Peer> unchokeList = new ArrayList<Peer>();
 
         int num_peer = allPeers.size();
 
         System.out.println(" Starting selecting k peers to send the file ");
+        LoggerUtil logchoke = new LoggerUtil();
 
             synchronized (allPeers) 
             { //lock the peerlist
@@ -41,6 +44,7 @@ public class ChokeManagementService {
 //					shuffle the list
                     Collections.shuffle(allPeers);
                     int nP = 0; // numbers of peers selected
+
                     for (int i = 0; i < num_peer ; i++) {
                         if ((allPeers.get(i)).isInterested() && (allPeers.get(i)).getSocket() != null) {
                             Peer unChokedPeer = allPeers.get(i);
@@ -49,6 +53,8 @@ public class ChokeManagementService {
                                     unChokedPeer.setChoked(false);
                                     unChokedPeer.getConnectionHandler().sendMessage(MessageGenerator.unChoke());
                                 }
+                                unchokeList.add(unChokedPeer);
+
                             }
                             else {
                                 unChokedPeer.setChoked(true);
@@ -64,6 +70,7 @@ public class ChokeManagementService {
                     allPeers.sort(Comparator.comparing(Peer::getDlSpeed));
                     // selecting the peers
                     float nP = 0; // numbers of peers selected
+
                     for (int i = 0; i < num_peer ; i++) {
                         if ((allPeers.get(i)).isInterested() && (allPeers.get(i)).getAllPeerID() != null) {
                             Peer unChokedPeer = allPeers.get(i);
@@ -72,6 +79,7 @@ public class ChokeManagementService {
                                     unChokedPeer.setChoked(false);
                                     unChokedPeer.getConnectionHandler().sendMessage(MessageGenerator.unChoke());
                                 }
+                                unchokeList.add(unChokedPeer);
                             }
                             else {
                                 unChokedPeer.setChoked(true);
@@ -84,7 +92,7 @@ public class ChokeManagementService {
 
                 }
 
-
+            logchoke.LogChangeNeighbors((ArrayList<Peer>) unchokeList);
 
         // return unchokeList;
     }
@@ -100,6 +108,7 @@ public class ChokeManagementService {
         int num_peer = allPeers.size();
 
         System.out.println(" Starting optimum peer to send the file ");
+        LoggerUtil logchoke = new LoggerUtil();
 
             // synchronized (lockMyNeighbors) { //lock the object
             synchronized (allPeers) {
@@ -115,6 +124,7 @@ public class ChokeManagementService {
                         if(unChokedPeer.getChoked()){
                             unChokedPeer.setChoked(false);
                             unChokedPeer.getConnectionHandler().sendMessage(MessageGenerator.unChoke());
+                            logchoke.LogOptUnchokeNeighbor(String.valueOf(unChokedPeer.getPeerId()));
                         }
                     }
                 }
