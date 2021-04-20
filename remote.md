@@ -7,7 +7,7 @@ mvn package
     
 Next, be inside UF's network, for example:
 ```
-ssh storm@cise.ufl.edu
+ssh user@storm.cise.ufl.edu
 ```             
 
 Clone the repository, called ByteTorrent on `storm`
@@ -16,6 +16,10 @@ Clone the repository, called ByteTorrent on `storm`
 Now, go transfer the compiled jar to server
 ```
 scp Client/target/Client-1.0-SNAPSHOT.jar storm@cise.ufl.edu:~/ByteTorrent/Client/target
+```
+Also need to scp lib files:
+```
+scp -r Client/target/lib user@storm.cise.ufl.edu:~/ByteTorrent/Client/target
 ```
 
 Next ssh into each server to approve the key exchange:
