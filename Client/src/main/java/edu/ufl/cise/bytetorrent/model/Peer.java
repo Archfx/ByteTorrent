@@ -3,6 +3,7 @@ import edu.ufl.cise.bytetorrent.PeerConnectionHandler;
 
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Peer {
 	private int peerId;
@@ -10,7 +11,8 @@ public class Peer {
 	private int port;
 	private boolean hasFile;
 	private byte[] bitField;
-	private AtomicBoolean choked = new AtomicBoolean(true);
+	private AtomicInteger noOfPiecesOwned;
+	private AtomicBoolean choked;
 	private Socket socket;
 	private boolean up;
 	private PeerConnectionHandler connectionHandler;
@@ -24,6 +26,8 @@ public class Peer {
 		this.address = address;
 		this.port = port;
 		this.hasFile = hasFile;
+		this.noOfPiecesOwned = new AtomicInteger();
+		this.choked = new AtomicBoolean(true);
 	}
 
 	public boolean isCompletedDownloading() {
@@ -128,6 +132,14 @@ public class Peer {
 
 	public void setConnectionHandler(PeerConnectionHandler connectionHandler) {
 		this.connectionHandler = connectionHandler;
+	}
+
+	public int incrementAndGetNoOfPieces() {
+		return noOfPiecesOwned.incrementAndGet();
+	}
+
+	public void setDlSpeed(float dlSpeed) {
+		this.dlSpeed = dlSpeed;
 	}
 }
 

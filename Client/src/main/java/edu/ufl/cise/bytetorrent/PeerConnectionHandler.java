@@ -100,7 +100,7 @@ public class PeerConnectionHandler extends Thread {
     }
 
     private void listenToMessages() {
-            while (true) {
+            while (!selfPeer.isCompletedDownloading()) {
                 Message message = null;
                 try {
                     message = (Message) thisPeerInputStream.readObject();
@@ -126,7 +126,12 @@ public class PeerConnectionHandler extends Thread {
                             break;
                         case HAVE:
                             HavePayLoad haveIndex = (HavePayLoad) message.getPayload();
-                            FileUtil.updateBitfield(haveIndex.getIndex(), connectingPeer.getBitField());
+                            connectingPeer.setBitField(FileUtil.updateBitfield(haveIndex.getIndex(), connectingPeer.getBitField()));
+                            if (FileManagementService.getNumFilePieces() == connectingPeer.incrementAndGetNoOfPieces()){
+                                connectingPeer.setCompletedDownloading(true);
+                                System.out.println("Peer completed Downloading" + connectingPeer.getPeerId());
+                                checkAllDownloaded();
+                            }
                             LoggerUtil.LogReceivedHaveMsg(String.valueOf(connectingPeer.getPeerId()), haveIndex.getIndex());
                             break;
                         case BITFIELD:
@@ -167,6 +172,16 @@ public class PeerConnectionHandler extends Thread {
 
             }
 
+    }
+
+    private void checkAllDownloaded() {
+        if ((selfPeer.isHasFile() || FileManagementService.hasCompleteFile()) && checkAllPeersDownloaded()){
+               selfPeer.setCompletedDownloading(true);
+        }
+    }
+
+    private boolean checkAllPeersDownloaded(){
+        return peers.values().stream().filter(peer -> peer.isHasFile() || peer.isCompletedDownloading()).count() == peers.size();
     }
 
     private void sendRequestMessage() {

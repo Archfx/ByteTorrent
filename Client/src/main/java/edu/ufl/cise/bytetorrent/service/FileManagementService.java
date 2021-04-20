@@ -66,13 +66,8 @@ public class FileManagementService {
 	}
 
 
-	public static boolean isInteresting(int index) {
-		return !filePiecesOwned[index];
-	}
-
-
 	public static synchronized boolean hasCompleteFile() {
-		return numPiecesIHave == numFilePieces ? true : false;
+		return numPiecesIHave == numFilePieces;
 	}
 
 
@@ -184,5 +179,8 @@ public class FileManagementService {
 		}
 		return -1;
 	}
-    
+
+	public static int getNumFilePieces() {
+		return numFilePieces;
+	}
 }
