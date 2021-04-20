@@ -127,10 +127,6 @@ public class PeerConnectionHandler extends Thread {
                         case HAVE:
                             HavePayLoad haveIndex = (HavePayLoad) message.getPayload();
                             FileUtil.updateBitfield(haveIndex.getIndex(), connectingPeer.getBitField());
-                            if (!FileManagementService.isInteresting(haveIndex.getIndex())) {
-                                System.out.println("Peer " + connectingPeer.getPeerId() + " has interesting pieces");
-                                sendMessage(MessageGenerator.interested());
-                            }
                             LoggerUtil.LogReceivedHaveMsg(String.valueOf(connectingPeer.getPeerId()), haveIndex.getIndex());
                             break;
                         case BITFIELD:
@@ -158,7 +154,7 @@ public class PeerConnectionHandler extends Thread {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            peers.values().stream().filter(Peer::isInterested).forEach(peer -> peer.getConnectionHandler().sendMessage(MessageGenerator.have(piece.getIndex())));
+                            peers.values().stream().filter(peer -> peer.getConnectionHandler() != null).forEach(peer -> peer.getConnectionHandler().sendMessage(MessageGenerator.have(piece.getIndex())));
                             if (!isMeChocked)
                                 sendRequestMessage();
                             LoggerUtil.LogDownloadingPiece(String.valueOf(connectingPeer.getPeerId()), piece.getIndex(), 1);

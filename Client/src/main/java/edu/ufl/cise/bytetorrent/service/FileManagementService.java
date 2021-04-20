@@ -67,7 +67,7 @@ public class FileManagementService {
 
 
 	public static boolean isInteresting(int index) {
-		return filePiecesOwned[index] ? true : false;
+		return !filePiecesOwned[index];
 	}
 
 
