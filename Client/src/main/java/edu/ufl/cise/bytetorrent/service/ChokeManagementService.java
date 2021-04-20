@@ -29,6 +29,7 @@ public class ChokeManagementService {
     public void choke (List<Peer> allPeers){
 
         List<Peer> unchokeList = new ArrayList<Peer>();
+        boolean isPreferredNeighborsChanged = false;
 
         int num_peer = allPeers.size();
 
@@ -52,6 +53,7 @@ public class ChokeManagementService {
                                     unChokedPeer.getConnectionHandler().sendMessage(MessageGenerator.unChoke());
                                 }
                                 unchokeList.add(unChokedPeer);
+                                isPreferredNeighborsChanged = true;
 
                             }
                             else {
@@ -78,6 +80,7 @@ public class ChokeManagementService {
                                     unChokedPeer.getConnectionHandler().sendMessage(MessageGenerator.unChoke());
                                 }
                                 unchokeList.add(unChokedPeer);
+                                isPreferredNeighborsChanged = true;
                             }
                             else {
                                 unChokedPeer.setChoked(true);
@@ -89,8 +92,10 @@ public class ChokeManagementService {
                     }
 
                 }
-
-            LoggerUtil.LogChangeNeighbors((ArrayList<Peer>) unchokeList);
+            if (isPreferredNeighborsChanged) {
+                LoggerUtil.LogChangeNeighbors((ArrayList<Peer>) unchokeList);
+                isPreferredNeighborsChanged = false;
+            }
 
         // return unchokeList;
     }
