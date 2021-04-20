@@ -67,10 +67,11 @@ public class StartRemotePeers {
 				RemotePeerInfo pInfo = (RemotePeerInfo) myStart.peerInfoVector.elementAt(i);
 				
 				System.out.println("Start remote peer " + pInfo.peerId +  " at " + pInfo.peerAddress );
+                                System.out.println("ssh " + pInfo.peerAddress + " cd " + path + "; java -cp Client/target/Client-1.0-SNAPSHOT.jar edu.ufl.cise.bytetorrent.PeerProcess " + pInfo.peerId);
 				
 				// *********************** IMPORTANT *************************** //
 				// If your program is JAVA, use this line.
-				Runtime.getRuntime().exec("ssh " + pInfo.peerAddress + " cd " + path + "; java -cp Client/target/Client-1.0-SNAPSHOT.jar  " + pInfo.peerId);
+                                Runtime.getRuntime().exec("ssh " + pInfo.peerAddress + " cd " + path + "; java -cp Client/target/Client-1.0-SNAPSHOT.jar edu.ufl.cise.bytetorrent.PeerProcess " + pInfo.peerId);
 				
 				// If your program is C/C++, use this line instead of the above line. 
 				//Runtime.getRuntime().exec("ssh " + pInfo.peerAddress + " cd " + path + "; ./peerProcess " + pInfo.peerId);
