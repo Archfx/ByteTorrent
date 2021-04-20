@@ -33,9 +33,7 @@ public class ChokeManagementService {
         int num_peer = allPeers.size();
 
         System.out.println(" Starting selecting k peers to send the file ");
-        LoggerUtil logchoke = new LoggerUtil();
-
-            synchronized (allPeers) 
+                    synchronized (allPeers)
             { //lock the peerlist
 
 				// Randomly selecting neighbors when download of file completed.
@@ -92,7 +90,7 @@ public class ChokeManagementService {
 
                 }
 
-            logchoke.LogChangeNeighbors((ArrayList<Peer>) unchokeList);
+            LoggerUtil.LogChangeNeighbors((ArrayList<Peer>) unchokeList);
 
         // return unchokeList;
     }
@@ -108,8 +106,6 @@ public class ChokeManagementService {
         int num_peer = allPeers.size();
 
         System.out.println(" Starting optimum peer to send the file ");
-        LoggerUtil logchoke = new LoggerUtil();
-
             // synchronized (lockMyNeighbors) { //lock the object
             synchronized (allPeers) {
 
@@ -124,7 +120,7 @@ public class ChokeManagementService {
                         if(unChokedPeer.getChoked()){
                             unChokedPeer.setChoked(false);
                             unChokedPeer.getConnectionHandler().sendMessage(MessageGenerator.unChoke());
-                            logchoke.LogOptUnchokeNeighbor(String.valueOf(unChokedPeer.getPeerId()));
+                            LoggerUtil.LogOptUnchokeNeighbor(String.valueOf(unChokedPeer.getPeerId()));
                         }
                     }
                 }
