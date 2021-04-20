@@ -47,7 +47,6 @@ public class PeerConnectionHandler extends Thread {
             try {
                 handshake = (Handshake) in.readObject();
             } catch (ClassNotFoundException e) {
-                // TODO -: close connection ??
                 e.printStackTrace();
             }
 
@@ -57,7 +56,6 @@ public class PeerConnectionHandler extends Thread {
 
             if (peers.get(handshake.getID()) == null) {
                 System.out.println("Error performing Handshake : PeerId unknown");
-                // TODO -: close connection ??
             } else {
                 System.out.println("Received Handshake Message : " + handshake.getID());
                 this.connectingPeer = thisPeer;

@@ -115,7 +115,7 @@ public class PeerManagerPlatform {
                     } catch (UnknownHostException e) {
                         e.printStackTrace();
                     } catch (ConnectException e) {
-//                        e.printStackTrace();
+                        e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (Exception e) {
@@ -148,6 +148,5 @@ public class PeerManagerPlatform {
         System.out.println("Exit server");
         System.exit(0);
     }
-
 
 }
