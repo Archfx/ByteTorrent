@@ -6,8 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.Random;
 
 
 import edu.ufl.cise.bytetorrent.config.CommonConfig;
@@ -163,12 +165,21 @@ public class FileManagementService {
 			indexI++;
 		}
 		int indexK = 0;
+		ArrayList<Integer> temp_pieces_needed  =  new ArrayList<Integer>();
 		while (indexK < numFilePieces) {
-			if (interestingPieces[indexK] == true && !piecesNeeded.containsKey(indexK)) {
-				piecesNeeded.put(indexK, indexK);
-				return indexK;
+			if (interestingPieces[indexK] && !piecesNeeded.containsKey(indexK)) {
+//				piecesNeeded.put(indexK, indexK);
+				temp_pieces_needed.add(indexK);
+//				return indexK;
 			}
 			indexK++;
+		}
+		if (temp_pieces_needed.size() != 0) {
+			Random randomGenerator = new Random();
+			int index = randomGenerator.nextInt(temp_pieces_needed.size());
+			int piece = temp_pieces_needed.get(index);
+			piecesNeeded.put(piece, piece);
+			return piece;
 		}
 		return -1;
 	}
