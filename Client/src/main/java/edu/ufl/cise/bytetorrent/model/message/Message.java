@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 public class Message implements Serializable {
 
+    private static final long serialVersionUID = 1006287186974479948L;
     private int messageLength;
     private MessageType messageType;
     private PayLoad payload;
