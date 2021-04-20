@@ -14,15 +14,10 @@ public class Peer {
 	private Socket socket;
 	private boolean up;
 	private PeerConnectionHandler connectionHandler;
-
-	private float dlSpeed; //For choke unchoke
-    private Integer allPeerID; //For choke unchoke
-
-	private boolean doneDonwloading;
-
-	private boolean isInterested; //For choke unchoke
-
-
+	private float dlSpeed;
+    private Integer allPeerID;
+	private boolean isCompletedDownloading;
+	private boolean isInterested;
 
 	public Peer(int id, String address, int port, boolean hasFile) {
 		this.peerId = id;
@@ -31,21 +26,13 @@ public class Peer {
 		this.hasFile = hasFile;
 	}
 
-	public boolean isDoneDonwloading() {
-		return doneDonwloading;
+	public boolean isCompletedDownloading() {
+		return isCompletedDownloading;
 	}
 
-	public void setDoneDonwloading(boolean doneDonwloading) {
-		this.doneDonwloading = true;//doneDonwloading;
+	public void setCompletedDownloading(boolean completedDownloading) {
+		this.isCompletedDownloading = true;
 	}
-
-	public Peer(Peer peer) {
-		this.peerId = peer.getPeerId();
-		this.address = peer.getAddress();
-		this.port = peer.getPort();
-		this.hasFile = peer.isHasFile();
-	}
-
 
 	public int getPeerId() {
 		return peerId;
