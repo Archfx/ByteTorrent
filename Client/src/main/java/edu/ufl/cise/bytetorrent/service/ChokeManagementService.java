@@ -90,7 +90,7 @@ public class ChokeManagementService {
 
                 }
 
-//            LoggerUtil.LogChangeNeighbors((ArrayList<Peer>) unchokeList);
+            LoggerUtil.LogChangeNeighbors((ArrayList<Peer>) unchokeList);
 
         // return unchokeList;
     }
