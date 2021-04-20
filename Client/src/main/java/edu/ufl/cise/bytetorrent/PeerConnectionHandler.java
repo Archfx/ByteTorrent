@@ -16,7 +16,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Map;
-
+import java.io.BufferedOutputStream;
 /**
  * A handler thread class.  Handlers are spawned from the listening
  * loop and are responsible for dealing with a single client's requests.
@@ -39,7 +39,7 @@ public class PeerConnectionHandler extends Thread {
 
     public void run() {
         try {
-            out = new ObjectOutputStream(connection.getOutputStream());
+            out = new ObjectOutputStream(new BufferedOutputStream(connection.getOutputStream()));
             out.flush();
             ObjectInputStream in = new ObjectInputStream(connection.getInputStream());
 
