@@ -11,6 +11,7 @@ import edu.ufl.cise.bytetorrent.util.LoggerUtil;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.BufferedInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
@@ -75,7 +76,7 @@ public class PeerConnectionHandler extends Thread {
                 while (thisPeer.getSocket() == null) {
                     Thread.sleep(1000);
                 }
-                this.thisPeerInputStream = new ObjectInputStream(thisPeer.getSocket().getInputStream());
+                this.thisPeerInputStream = new ObjectInputStream(new BufferedInputStream(thisPeer.getSocket().getInputStream()));
                 new Thread(this::listenToMessages).start();
             }
 
