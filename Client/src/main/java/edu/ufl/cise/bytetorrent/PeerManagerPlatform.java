@@ -55,7 +55,7 @@ public class PeerManagerPlatform {
                 while (!selfPeer.isCompletedDownloading()) {
                     myCM.choke(new ArrayList<Peer>(peers.values()));
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(1000*CommonConfig.getUnchokingInterval());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -70,7 +70,7 @@ public class PeerManagerPlatform {
                 while (!selfPeer.isCompletedDownloading()) {
                     myCM.chokeOpt(new ArrayList<Peer>(peers.values()));
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(1000*CommonConfig.getOptimisticUnchokingInterval());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
