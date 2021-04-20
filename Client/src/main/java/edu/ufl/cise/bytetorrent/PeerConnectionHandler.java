@@ -22,7 +22,7 @@ import java.util.Map;
 public class PeerConnectionHandler extends Thread {
     private final Map<Integer, Peer> peers;
     private final Socket connection;
-    private ObjectOutputStream out;    //stream write to the socket
+    private ObjectOutputStream out;
     private ObjectInputStream thisPeerInputStream;
     private Peer connectingPeer;
     private boolean isMeChocked;
@@ -37,10 +37,8 @@ public class PeerConnectionHandler extends Thread {
 
     public void run() {
         try {
-            //initialize Input and Output streams
             out = new ObjectOutputStream(connection.getOutputStream());
             out.flush();
-            //stream read from the socket
             ObjectInputStream in = new ObjectInputStream(connection.getInputStream());
 
             Handshake handshake = new Handshake(-1);
@@ -129,7 +127,7 @@ public class PeerConnectionHandler extends Thread {
                             connectingPeer.setBitField(FileUtil.updateBitfield(haveIndex.getIndex(), connectingPeer.getBitField()));
                             if (FileManagementService.getNumFilePieces() == connectingPeer.incrementAndGetNoOfPieces()){
                                 connectingPeer.setCompletedDownloading(true);
-                                System.out.println("Peer completed Downloading" + connectingPeer.getPeerId());
+                                System.out.println("Peer completed Downloading :" + connectingPeer.getPeerId());
                                 checkAllDownloaded();
                             }
                             LoggerUtil.LogReceivedHaveMsg(String.valueOf(connectingPeer.getPeerId()), haveIndex.getIndex());
@@ -163,15 +161,17 @@ public class PeerConnectionHandler extends Thread {
                             if (!isMeChocked)
                                 sendRequestMessage();
                             LoggerUtil.LogDownloadingPiece(String.valueOf(connectingPeer.getPeerId()), piece.getIndex(), 1);
+                            if (FileManagementService.hasCompleteFile()){
+                                checkAllDownloaded();
+                            }
                             break;
                     }
 
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-
             }
-
+            System.out.println("Exit listen messages");
     }
 
     private void checkAllDownloaded() {

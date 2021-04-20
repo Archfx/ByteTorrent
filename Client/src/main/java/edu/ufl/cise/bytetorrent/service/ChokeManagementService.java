@@ -32,7 +32,7 @@ public class ChokeManagementService {
 
         int num_peer = allPeers.size();
 
-        System.out.println(" Starting selecting k peers to send the file ");
+//        System.out.println(" Starting selecting k peers to send the file ");
                     synchronized (allPeers)
             { //lock the peerlist
 
@@ -90,7 +90,7 @@ public class ChokeManagementService {
 
                 }
 
-            LoggerUtil.LogChangeNeighbors((ArrayList<Peer>) unchokeList);
+//            LoggerUtil.LogChangeNeighbors((ArrayList<Peer>) unchokeList);
 
         // return unchokeList;
     }
@@ -105,7 +105,7 @@ public class ChokeManagementService {
 
         int num_peer = allPeers.size();
 
-        System.out.println(" Starting optimum peer to send the file ");
+//        System.out.println(" Starting optimum peer to send the file ");
             // synchronized (lockMyNeighbors) { //lock the object
             synchronized (allPeers) {
 
