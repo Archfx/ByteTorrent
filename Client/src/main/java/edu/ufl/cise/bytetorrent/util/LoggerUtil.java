@@ -22,7 +22,7 @@ public class LoggerUtil {
 //    private static Date date;
 
 
-    private LoggerUtil(){
+    public LoggerUtil(){
 
     }
 
