@@ -4,12 +4,11 @@ import edu.ufl.cise.bytetorrent.model.Peer;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
+import org.apache.logging.log4j.core.appender.RollingFileAppender;
 import org.apache.logging.log4j.core.config.Configurator;
-import org.apache.logging.log4j.core.config.builder.api.AppenderComponentBuilder;
-import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilder;
-import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFactory;
-import org.apache.logging.log4j.core.config.builder.api.RootLoggerComponentBuilder;
+import org.apache.logging.log4j.core.config.builder.api.*;
 import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
+import org.apache.logging.log4j.core.layout.PatternLayout;
 
 
 import java.util.ArrayList;
@@ -18,30 +17,40 @@ public class LoggerUtil {
 
     private static Peer myPeer;
     private static String message;
-//    private static SimpleDateFormat formatter;
-//    private static Date date;
 
+    private LoggerUtil(){ }
 
-    private LoggerUtil(){
-
-    }
-
-    public static void initialize(){
+    public static void initialize(int peerID){
         ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
 
         builder.setStatusLevel(Level.INFO);
         builder.setConfigurationName("DefaultLogger");
+
         AppenderComponentBuilder appenderBuilder = builder.newAppender("Console", "CONSOLE")
                 .addAttribute("target", ConsoleAppender.Target.SYSTEM_OUT);
         appenderBuilder.add(builder.newLayout("PatternLayout")
                 .addAttribute("pattern", "%d %p %c [%t] %m%n"));
+
+        LayoutComponentBuilder layoutBuilder = builder.newLayout("PatternLayout")
+                .addAttribute("pattern", "%d [%t] %-5level: %msg%n");
+        ComponentBuilder triggeringPolicy = builder.newComponent("Policies")
+                .addComponent(builder.newComponent("CronTriggeringPolicy").addAttribute("schedule", "0 0 0 * * ?"))
+                .addComponent(builder.newComponent("SizeBasedTriggeringPolicy").addAttribute("size", "100M"));
+        AppenderComponentBuilder rollingAppenderBuilder = builder.newAppender("rolling", "RollingFile")
+                .addAttribute("fileName", "log_peer_"+peerID+".log")
+                .addAttribute("filePattern", "log_peer_"+peerID+".log-%d{MM-dd-yy}.log.gz")
+                .add(layoutBuilder)
+                .addComponent(triggeringPolicy);
+
         RootLoggerComponentBuilder rootLogger = builder.newRootLogger(Level.DEBUG);
         rootLogger.add(builder.newAppenderRef("Console"));
+        rootLogger.add(builder.newAppenderRef("rolling"));
 
         builder.add(appenderBuilder);
         builder.add(rootLogger);
+        builder.add(rollingAppenderBuilder);
+
         Configurator.initialize(builder.build());
-//        formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
     }
 
     public static void LogInfoMessage(String message){

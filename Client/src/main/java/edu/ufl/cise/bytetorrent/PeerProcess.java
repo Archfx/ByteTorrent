@@ -11,9 +11,9 @@ import java.util.Map;
 public class PeerProcess {
     public static void main(String[] args) {
 
-        LoggerUtil.initialize();
+        final int id = Integer.parseInt("1001");
+        LoggerUtil.initialize(id);
         LoggerUtil.LogInfoMessage("Process Thread Started");
-        final int id = Integer.parseInt(args[0]);
         PeerInfoConfig peerInfo = PeerInfoConfig.getInstance();
         CommonConfig.initialize();
         Peer selfPeer = null;
