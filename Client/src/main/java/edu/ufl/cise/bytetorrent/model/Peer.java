@@ -138,6 +138,14 @@ public class Peer {
 		return noOfPiecesOwned.incrementAndGet();
 	}
 
+	public int getNoOfPiecesOwned() {
+		return noOfPiecesOwned.get();
+	}
+
+	public void setNoOfPiecesOwned(int noOfPiecesOwned) {
+		this.noOfPiecesOwned = new AtomicInteger(noOfPiecesOwned);
+	}
+
 	public void setDlSpeed(float dlSpeed) {
 		this.dlSpeed = dlSpeed;
 	}

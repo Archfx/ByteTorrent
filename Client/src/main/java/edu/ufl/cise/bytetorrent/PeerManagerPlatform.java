@@ -111,7 +111,7 @@ public class PeerManagerPlatform {
                                 peer.setUp(true);
                             }
                             // Sleep to not spam
-                            Thread.sleep(10000);
+                            Thread.sleep(1000);
                         }
                     } catch (UnknownHostException e) {
                         e.printStackTrace();
@@ -123,7 +123,7 @@ public class PeerManagerPlatform {
                         e.printStackTrace();
                     }
                 }
-                System.out.println("Exit choke client threads");
+                System.out.println("Exit client threads");
                 try {
                     socket.close();
                 } catch (IOException e) {
@@ -142,6 +142,7 @@ public class PeerManagerPlatform {
             }
         }
         System.out.println("Exit server");
+        System.exit(0);
     }
 
 
