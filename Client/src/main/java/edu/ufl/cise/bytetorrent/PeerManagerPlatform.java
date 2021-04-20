@@ -140,8 +140,8 @@ public class PeerManagerPlatform {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("Exit server");
         }
+        System.out.println("Exit server");
     }
 
 
