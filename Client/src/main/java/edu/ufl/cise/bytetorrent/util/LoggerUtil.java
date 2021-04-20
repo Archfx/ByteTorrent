@@ -4,12 +4,9 @@ import edu.ufl.cise.bytetorrent.model.Peer;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
-import org.apache.logging.log4j.core.appender.RollingFileAppender;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.apache.logging.log4j.core.config.builder.api.*;
 import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
-import org.apache.logging.log4j.core.layout.PatternLayout;
-
 
 import java.util.ArrayList;
 
@@ -61,22 +58,16 @@ public class LoggerUtil {
     }
 
     public static void LogMakeTcpConnection(String peerID) {
-//        date = new Date(System.currentTimeMillis());
-//        String message = "["+date + "]: ";
         String message = "Peer "+ myPeer.getPeerId()+ " makes a connection to Peer "+peerID+".";
         LogInfoMessage(message);
     }
 
     public static void LogConnectedMsg(String peerID) {
-//        date = new Date(System.currentTimeMillis());
-//        String message = "["+date + "]: ";
         String message = "Peer "+ myPeer.getPeerId()+ " is connected from Peer "+peerID+".";
         LogInfoMessage(message);
     }
 
     public static void LogChangeNeighbors(ArrayList<Peer> neighbors) {
-//        date = new Date(System.currentTimeMillis());
-//        String message = "["+date + "]: ";
         String message = "Peer "+ myPeer.getPeerId()+ " has the preferred neighbors ";
         for (Peer p : neighbors) {
             message += p.getPeerId()+",";
@@ -85,58 +76,42 @@ public class LoggerUtil {
     }
 
     public static void LogOptUnchokeNeighbor(String peerID) {
-//        date = new Date(System.currentTimeMillis());
-//        String message = "["+date + "]: ";
         String message = "Peer "+ myPeer.getPeerId()+ " has optimistically unchoked neighbor "+peerID+".";
         LogInfoMessage(message);
     }
 
     public static void LogReceivedUnchokingMsg(String peerID) {
-//        date = new Date(System.currentTimeMillis());
-//        String message = "["+date + "]: ";
         String message = "Peer "+ myPeer.getPeerId()+ " is unchoked by "+peerID+".";
         LogInfoMessage(message);
     }
 
     public static void LogReceivedChokingMsg(String peerID) {
-//        date = new Date(System.currentTimeMillis());
-//        String message = "["+date + "]: ";
         String message = "Peer "+ myPeer.getPeerId()+ " is choked by "+peerID+".";
         LogInfoMessage(message);
     }
 
     public static void LogReceivedHaveMsg(String peerID, int piece_index) {
-//        date = new Date(System.currentTimeMillis());
-//        String message = "["+date + "]: ";
         String message = "Peer "+ myPeer.getPeerId()+ " received the ‘have’ message from "+peerID+" for the piece "+piece_index+".";
         LogInfoMessage(message);
     }
 
     public static void LogReceivedInterestedMsg(String peerID) {
-//        date = new Date(System.currentTimeMillis());
-//        String message = "["+date + "]: ";
         String message = "Peer "+ myPeer.getPeerId()+ " received the ‘interested’message from "+peerID+".";
         LogInfoMessage(message);
     }
 
     public static void LogReceivedNotInterestedMsg(String peerID) {
-//        date = new Date(System.currentTimeMillis());
-//        String message = "["+date + "]: ";
         String message = "Peer "+ myPeer.getPeerId()+ " received the ‘not interested’message from "+peerID+".";
         LogInfoMessage(message);
     }
 
     public static void LogDownloadingPiece(String peerID, int piece_index, int number_of_piece) {
-//        date = new Date(System.currentTimeMillis());
-//        String message = "["+date + "]: ";
         String message = "Peer "+ myPeer.getPeerId()+ " has downloaded the piece "+piece_index+" from "+peerID+". " +
                 "Now the number of pieces it has is "+number_of_piece+".";
         LogInfoMessage(message);
     }
 
     public static void LogCompleteDownload() {
-//        date = new Date(System.currentTimeMillis());
-//        String message = "["+date + "]: ";
         String message = "Peer "+ myPeer.getPeerId()+ " as downloaded the complete file.";
         LogInfoMessage(message);
     }
