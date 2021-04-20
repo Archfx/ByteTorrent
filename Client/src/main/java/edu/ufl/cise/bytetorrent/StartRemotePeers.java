@@ -60,6 +60,7 @@ public class StartRemotePeers {
 					
 			// get current path
 			String path = System.getProperty("user.dir");
+                        System.out.println(path);
 			
 			// start clients at remote hosts
 			for (int i = 0; i < myStart.peerInfoVector.size(); i++) {
@@ -69,7 +70,7 @@ public class StartRemotePeers {
 				
 				// *********************** IMPORTANT *************************** //
 				// If your program is JAVA, use this line.
-				Runtime.getRuntime().exec("ssh " + pInfo.peerAddress + " cd " + path + "; java peerProcess " + pInfo.peerId);
+				Runtime.getRuntime().exec("ssh " + pInfo.peerAddress + " cd " + path + "; java -cp Client/target/Client-1.0-SNAPSHOT-jar-with-dependencies.jar  " + pInfo.peerId);
 				
 				// If your program is C/C++, use this line instead of the above line. 
 				//Runtime.getRuntime().exec("ssh " + pInfo.peerAddress + " cd " + path + "; ./peerProcess " + pInfo.peerId);
