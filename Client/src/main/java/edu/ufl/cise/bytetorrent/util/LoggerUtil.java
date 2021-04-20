@@ -35,6 +35,7 @@ public class LoggerUtil {
         AppenderComponentBuilder rollingAppenderBuilder = builder.newAppender("rolling", "RollingFile")
                 .addAttribute("fileName", "log_peer_"+peerID+".log")
                 .addAttribute("filePattern", "log_peer_"+peerID+".log-%d{MM-dd-yy}.log.gz")
+                .addAttribute("Append", false)
                 .add(layoutBuilder)
                 .addComponent(triggeringPolicy);
 
