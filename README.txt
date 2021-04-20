@@ -2,9 +2,18 @@
 
 ## Build and run:
 
-```mvn package```
 
-To run PeerProcess:
+Build first:
+```
+mvn package
+```
+
+To run all processes via ssh:
+```
+java -cp Client/target/Client-1.0-SNAPSHOT.jar edu.ufl.cise.bytetorrent.StartRemotePeers
+```
+
+To run individual PeerProcess:
 ```
 java -cp Client/target/Client-1.0-SNAPSHOT.jar edu.ufl.cise.bytetorrent.PeerProcess 1001
 ```
