@@ -113,7 +113,7 @@ public class LoggerUtil {
     }
 
     public static void LogCompleteDownload(Peer connectedPeer) {
-        String message = "Peer "+ connectedPeer.getPeerId()+ " as downloaded the complete file.";
+        String message = "Peer "+ connectedPeer.getPeerId()+ " has downloaded the complete file.";
         LogInfoMessage(message);
     }
 
