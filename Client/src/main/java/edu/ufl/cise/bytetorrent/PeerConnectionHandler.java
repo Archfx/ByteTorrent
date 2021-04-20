@@ -165,7 +165,7 @@ public class PeerConnectionHandler extends Thread {
                         peers.values().stream().filter(peer -> peer.getConnectionHandler() != null).forEach(peer -> peer.getConnectionHandler().sendMessage(MessageGenerator.have(piece.getIndex())));
                         if (!isMeChocked)
                             sendRequestMessage();
-                        LoggerUtil.LogDownloadingPiece(String.valueOf(connectingPeer.getPeerId()), piece.getIndex(), connectingPeer.incrementAndGetNoOfPieces());
+                        LoggerUtil.LogDownloadingPiece(String.valueOf(connectingPeer.getPeerId()), piece.getIndex(), selfPeer.incrementAndGetNoOfPieces());
                         if (FileManagementService.hasCompleteFile()) {
                             System.out.println("My self completed Downloading :" + selfPeer.getPeerId());
                             selfPeer.setHasFile(true);
