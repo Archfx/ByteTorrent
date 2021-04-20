@@ -16,16 +16,9 @@ import edu.ufl.cise.bytetorrent.util.FileUtil;
 public class FileManagementService {
 
     private static boolean[] filePiecesOwned;
-	/**
-	 * Table to keep track of requested file pieces at any instant so that redundant
-	 * requests are not made
-	 */
 	private static Hashtable<Integer, Integer> piecesNeeded = new Hashtable<Integer, Integer>();
-
-	/** Number of file pieces the file can be broken into */
 	private static final int numFilePieces = (int) Math
 			.ceil((double) CommonConfig.getFileSize() / CommonConfig.getPieceSize());
-	/** File pieces available by the peer */
 	private static int numPiecesIHave = 0;
 	private static String path = null;
 	private static String fName = CommonConfig.getFileName();
@@ -76,7 +69,6 @@ public class FileManagementService {
 		byte[] bitfield = new byte[size];
 		int counter = 0;
 		int indexI = 0;
-		// TODO Implement Professor Logic
 		while (indexI < numFilePieces) {
 			int temp;
 			if (numFilePieces > indexI + 8) {
@@ -147,6 +139,7 @@ public class FileManagementService {
 		}
 		return flag;
 	}
+
 
 
 	public static int requestPiece(byte[] neighborBitfield, byte[] bitfield, int nPID) {

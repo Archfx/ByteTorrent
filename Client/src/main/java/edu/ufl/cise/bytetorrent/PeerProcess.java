@@ -29,9 +29,12 @@ public class PeerProcess {
             }
         }
 
+        if( selfPeer == null ){
+            throw new RuntimeException( " Configuration for peer " + id + " is not found in PeerInfo.cfg" );
+        }
+
         LoggerUtil.setMyPeer(selfPeer);
         PeerManagerPlatform peerProcess = new PeerManagerPlatform(selfPeer, remotePeers);
 		peerProcess.init();
-
     }
 }

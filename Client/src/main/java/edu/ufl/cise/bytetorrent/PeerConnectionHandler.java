@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Map;
 
 /**
@@ -71,7 +72,7 @@ public class PeerConnectionHandler extends Thread {
                 Message bitFieldMessage = MessageGenerator.bitfield(FileManagementService.getBitField());
                 sendMessage(bitFieldMessage);
                 System.out.println("Sent bit field message of length" + bitFieldMessage.getMessageLength());
-                while (thisPeer.getSocket() == null){
+                while (thisPeer.getSocket() == null) {
                     Thread.sleep(1000);
                 }
                 this.thisPeerInputStream = new ObjectInputStream(thisPeer.getSocket().getInputStream());
@@ -98,90 +99,109 @@ public class PeerConnectionHandler extends Thread {
     }
 
     private void listenToMessages() {
-            while (!selfPeer.isCompletedDownloading()) {
-                Message message = null;
-                try {
-                    message = (Message) thisPeerInputStream.readObject();
-                    System.out.println("Receive message: " + message.getMessageType() + " from " + connectingPeer.getPeerId());
+        while (!selfPeer.isCompletedDownloading()) {
+            Message message = null;
+            try {
+                message = (Message) thisPeerInputStream.readObject();
+                System.out.println("Receive message: " + message.getMessageType() + " from " + connectingPeer.getPeerId());
 
-                    switch (message.getMessageType()) {
-                        case CHOKE:
-                            isMeChocked = true;
-                            LoggerUtil.LogReceivedChokingMsg(String.valueOf(connectingPeer.getPeerId()));
-                            break;
-                        case UNCHOKE:
-                            isMeChocked = false;
-                            LoggerUtil.LogReceivedUnchokingMsg(String.valueOf(connectingPeer.getPeerId()));
-                            sendRequestMessage();
-                            break;
-                        case INTERESTED:
-                            connectingPeer.setInterested(true);
-                            LoggerUtil.LogReceivedInterestedMsg(String.valueOf(connectingPeer.getPeerId()));
-                            break;
-                        case NOT_INTERESTED:
-                            connectingPeer.setInterested(false);
-                            LoggerUtil.LogReceivedNotInterestedMsg(String.valueOf(connectingPeer.getPeerId()));
-                            break;
-                        case HAVE:
-                            HavePayLoad haveIndex = (HavePayLoad) message.getPayload();
+                switch (message.getMessageType()) {
+                    case CHOKE:
+                        isMeChocked = true;
+                        LoggerUtil.LogReceivedChokingMsg(String.valueOf(connectingPeer.getPeerId()));
+                        break;
+                    case UNCHOKE:
+                        isMeChocked = false;
+                        LoggerUtil.LogReceivedUnchokingMsg(String.valueOf(connectingPeer.getPeerId()));
+                        sendRequestMessage();
+                        break;
+                    case INTERESTED:
+                        connectingPeer.setInterested(true);
+                        LoggerUtil.LogReceivedInterestedMsg(String.valueOf(connectingPeer.getPeerId()));
+                        break;
+                    case NOT_INTERESTED:
+                        connectingPeer.setInterested(false);
+                        LoggerUtil.LogReceivedNotInterestedMsg(String.valueOf(connectingPeer.getPeerId()));
+                        break;
+                    case HAVE:
+                        HavePayLoad haveIndex = (HavePayLoad) message.getPayload();
+                        if (connectingPeer.getBitField() != null) {
                             connectingPeer.setBitField(FileUtil.updateBitfield(haveIndex.getIndex(), connectingPeer.getBitField()));
-                            if (FileManagementService.getNumFilePieces() == connectingPeer.incrementAndGetNoOfPieces()){
-                                connectingPeer.setCompletedDownloading(true);
+                            if (FileManagementService.getNumFilePieces() == connectingPeer.incrementAndGetNoOfPieces()) {
+                                connectingPeer.setHasFile(true);
                                 System.out.println("Peer completed Downloading :" + connectingPeer.getPeerId());
                                 checkAllDownloaded();
                             }
                             LoggerUtil.LogReceivedHaveMsg(String.valueOf(connectingPeer.getPeerId()), haveIndex.getIndex());
-                            break;
-                        case BITFIELD:
-                            BitFieldPayLoad bitFieldPayLoad = (BitFieldPayLoad) message.getPayload();
-                            connectingPeer.setBitField(bitFieldPayLoad.getBitfield());
-                            if (!FileManagementService.compareBitfields(bitFieldPayLoad.getBitfield(), selfPeer.getBitField())) {
-                                System.out.println("Peer " + connectingPeer.getPeerId() + " have no any interesting pieces");
-                                sendMessage(MessageGenerator.notInterested());
-                            } else {
-                                System.out.println("Peer " + connectingPeer.getPeerId() + " has interesting pieces");
-                                sendMessage(MessageGenerator.interested());
-                            }
-                            break;
-                        case REQUEST:
-                            RequestPayLoad requestPayLoad = (RequestPayLoad) message.getPayload();
-                            byte[] pieceContent = FileManagementService.getFilePart(requestPayLoad.getIndex());
-                            sendMessage(MessageGenerator.piece(requestPayLoad.getIndex(), pieceContent));
-                            connectingPeer.setDlSpeed(downloadSpeed++);
-                            break;
-                        case PIECE:
-                            PiecePayLoad piece = (PiecePayLoad) message.getPayload();
-                            try {
-                                FileManagementService.store(piece.getContent(), piece.getIndex());
-                                selfPeer.setBitField(FileManagementService.getBitField());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            peers.values().stream().filter(peer -> peer.getConnectionHandler() != null).forEach(peer -> peer.getConnectionHandler().sendMessage(MessageGenerator.have(piece.getIndex())));
-                            if (!isMeChocked)
-                                sendRequestMessage();
-                            LoggerUtil.LogDownloadingPiece(String.valueOf(connectingPeer.getPeerId()), piece.getIndex(), 1);
-                            if (FileManagementService.hasCompleteFile()){
-                                checkAllDownloaded();
-                            }
-                            break;
-                    }
-
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
+                        }
+                        break;
+                    case BITFIELD:
+                        BitFieldPayLoad bitFieldPayLoad = (BitFieldPayLoad) message.getPayload();
+                        connectingPeer.setBitField(bitFieldPayLoad.getBitfield());
+                        connectingPeer.setNoOfPiecesOwned(FileUtil.bitCount(bitFieldPayLoad.getBitfield()));
+                        if (!FileManagementService.compareBitfields(bitFieldPayLoad.getBitfield(), selfPeer.getBitField())) {
+                            System.out.println("Peer " + connectingPeer.getPeerId() + " have no any interesting pieces");
+                            sendMessage(MessageGenerator.notInterested());
+                        } else {
+                            System.out.println("Peer " + connectingPeer.getPeerId() + " has interesting pieces");
+                            sendMessage(MessageGenerator.interested());
+                        }
+                        break;
+                    case REQUEST:
+                        RequestPayLoad requestPayLoad = (RequestPayLoad) message.getPayload();
+                        byte[] pieceContent = FileManagementService.getFilePart(requestPayLoad.getIndex());
+                        sendMessage(MessageGenerator.piece(requestPayLoad.getIndex(), pieceContent));
+                        connectingPeer.setDlSpeed(downloadSpeed++);
+                        break;
+                    case PIECE:
+                        PiecePayLoad piece = (PiecePayLoad) message.getPayload();
+                        try {
+                            FileManagementService.store(piece.getContent(), piece.getIndex());
+                            selfPeer.setBitField(FileManagementService.getBitField());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        peers.values().stream().filter(peer -> peer.getConnectionHandler() != null).forEach(peer -> peer.getConnectionHandler().sendMessage(MessageGenerator.have(piece.getIndex())));
+                        if (!isMeChocked)
+                            sendRequestMessage();
+                        LoggerUtil.LogDownloadingPiece(String.valueOf(connectingPeer.getPeerId()), piece.getIndex(), connectingPeer.incrementAndGetNoOfPieces());
+                        if (FileManagementService.hasCompleteFile()) {
+                            System.out.println("My self completed Downloading :" + selfPeer.getPeerId());
+                            selfPeer.setHasFile(true);
+                            checkAllDownloaded();
+                        }
+                        break;
                 }
+
+            } catch (SocketException e){
+                e.printStackTrace();
+                break;
+            }catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
             }
-            System.out.println("Exit listen messages");
+        }
+        System.out.println("Exit listen messages for " + connectingPeer.getPeerId());
+        cleanUp();
     }
 
-    private void checkAllDownloaded() {
-        if ((selfPeer.isHasFile() || FileManagementService.hasCompleteFile()) && checkAllPeersDownloaded()){
-               selfPeer.setCompletedDownloading(true);
+    private void cleanUp(){
+        try {
+            out.close();
+            thisPeerInputStream.close();
+            connection.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    private boolean checkAllPeersDownloaded(){
-        return peers.values().stream().filter(peer -> peer.isHasFile() || peer.isCompletedDownloading()).count() == peers.size();
+    private void checkAllDownloaded() {
+        if (selfPeer.isHasFile() && checkAllPeersDownloaded()) {
+            selfPeer.setCompletedDownloading(true);
+        }
+    }
+
+    private boolean checkAllPeersDownloaded() {
+        return peers.values().stream().filter(Peer::isHasFile).count() == peers.size();
     }
 
     private void sendRequestMessage() {

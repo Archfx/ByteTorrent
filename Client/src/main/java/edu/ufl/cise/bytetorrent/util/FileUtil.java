@@ -38,6 +38,22 @@ public class FileUtil {
 		return bool;
 	}
 
+	public static int bitCount(byte value) {
+		int count = 0;
+		for (int i = 0; i < byte_const; i++) {
+			if((value & 1) == 1 )
+				count= count + 1;
+			value = (byte) (value >> 1);
+		}
+		return count;
+	}
 
+	public static int bitCount(byte[] value) {
+		int count = 0;
+		for (byte i : value) {
+			count = count + bitCount(i);
+		}
+		return count;
+	}
 
 }
