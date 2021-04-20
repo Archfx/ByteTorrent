@@ -1,7 +1,14 @@
 # ByteTorrent
 
-## Build and run:
+## Group Number : 29
 
+## Group Members
+Hansika Weerasena
+Aruna Jayasena
+Daniel Volya
+Hasini Witharana
+
+## Build and run:
 
 Build first:
 ```
