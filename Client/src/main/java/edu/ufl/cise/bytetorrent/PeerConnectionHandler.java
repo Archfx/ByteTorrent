@@ -7,6 +7,7 @@ import edu.ufl.cise.bytetorrent.model.message.Handshake;
 import edu.ufl.cise.bytetorrent.model.message.Message;
 import edu.ufl.cise.bytetorrent.model.message.MessageGenerator;
 import edu.ufl.cise.bytetorrent.model.message.payload.*;
+import edu.ufl.cise.bytetorrent.util.LoggerUtil;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -51,6 +52,7 @@ public class PeerConnectionHandler extends Thread {
             }
 
             Peer thisPeer = peers.get(handshake.getID());
+            LoggerUtil.LogConnectedMsg(String.valueOf(thisPeer.getPeerId()));
             thisPeer.setConnectionHandler(this);
 
             if (peers.get(handshake.getID()) == null) {
@@ -107,16 +109,20 @@ public class PeerConnectionHandler extends Thread {
                     switch (message.getMessageType()) {
                         case CHOKE:
                             isMeChocked = true;
+                            LoggerUtil.LogReceivedChokingMsg(String.valueOf(connectingPeer.getPeerId()));
                             break;
                         case UNCHOKE:
                             isMeChocked = false;
+                            LoggerUtil.LogReceivedUnchokingMsg(String.valueOf(connectingPeer.getPeerId()));
                             sendRequestMessage();
                             break;
                         case INTERESTED:
                             connectingPeer.setInterested(true);
+                            LoggerUtil.LogReceivedInterestedMsg(String.valueOf(connectingPeer.getPeerId()));
                             break;
                         case NOT_INTERESTED:
                             connectingPeer.setInterested(false);
+                            LoggerUtil.LogReceivedNotInterestedMsg(String.valueOf(connectingPeer.getPeerId()));
                             break;
                         case HAVE:
                             HavePayLoad haveIndex = (HavePayLoad) message.getPayload();
@@ -125,6 +131,7 @@ public class PeerConnectionHandler extends Thread {
                                 System.out.println("Peer " + connectingPeer.getPeerId() + " has interesting pieces");
                                 sendMessage(MessageGenerator.interested());
                             }
+                            LoggerUtil.LogReceivedHaveMsg(String.valueOf(connectingPeer.getPeerId()), haveIndex.getIndex());
                             break;
                         case BITFIELD:
                             BitFieldPayLoad bitFieldPayLoad = (BitFieldPayLoad) message.getPayload();
@@ -154,6 +161,7 @@ public class PeerConnectionHandler extends Thread {
                             peers.values().stream().filter(Peer::isInterested).forEach(peer -> peer.getConnectionHandler().sendMessage(MessageGenerator.have(piece.getIndex())));
                             if (!isMeChocked)
                                 sendRequestMessage();
+                            LoggerUtil.LogDownloadingPiece(String.valueOf(connectingPeer.getPeerId()), piece.getIndex(), 1);
                             break;
                     }
 

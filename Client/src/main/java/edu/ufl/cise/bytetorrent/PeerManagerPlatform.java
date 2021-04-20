@@ -5,6 +5,7 @@ import edu.ufl.cise.bytetorrent.model.Peer;
 import edu.ufl.cise.bytetorrent.model.message.Handshake;
 import edu.ufl.cise.bytetorrent.service.ChokeManagementService;
 import edu.ufl.cise.bytetorrent.service.FileManagementService;
+import edu.ufl.cise.bytetorrent.util.LoggerUtil;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -30,7 +31,7 @@ public class PeerManagerPlatform {
     }
 
     public void init() {
-        System.out.println("Starting peer " + selfPeer.getPeerId());
+        LoggerUtil.LogInfoMessage("Starting peer " + selfPeer.getPeerId());
 
         new FileManagementService(selfPeer.getPeerId(), selfPeer.isHasFile());
 
@@ -46,7 +47,7 @@ public class PeerManagerPlatform {
 
         this.initServer();
         this.initClient();
-        System.out.println("Starting timers for choking || 1: " + CommonConfig.getUnchokingInterval() + "||2 :" + CommonConfig.getOptimisticUnchokingInterval());
+        LoggerUtil.LogInfoMessage("Starting timers for choking || 1: " + CommonConfig.getUnchokingInterval() + "||2 :" + CommonConfig.getOptimisticUnchokingInterval());
 
         (new Thread() {
             @Override
@@ -91,12 +92,13 @@ public class PeerManagerPlatform {
     public void initClient() {
         new Thread() {
             public void run() {
-                System.out.println("Initializing client");
+                LoggerUtil.LogInfoMessage("Initializing client");
                 while (true) {
                     try {
                         for (Peer peer : peers.values()) {
                             if (!peer.isUp()) {
                                 Socket s = new Socket(peer.getAddress(), peer.getPort());
+                                LoggerUtil.LogMakeTcpConnection(String.valueOf(peer.getPeerId()));
                                 ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
                                 out.flush();
                                 out.writeObject(new Handshake(selfPeer.getPeerId()));
@@ -131,7 +133,7 @@ public class PeerManagerPlatform {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("peer " + clientNum + " is connected!");
+//            System.out.println("peer " + clientNum + " is connected!");
             clientNum++;
         }
     }
