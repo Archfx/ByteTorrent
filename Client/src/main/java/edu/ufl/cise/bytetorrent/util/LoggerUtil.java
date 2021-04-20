@@ -73,7 +73,7 @@ public class LoggerUtil {
         for (Peer p : neighbors) {
             message += p.getPeerId()+",";
         }
-        LogInfoMessage(message);
+        LogInfoMessage(message.substring(0, message.length()-1));
     }
 
     public static void LogOptUnchokeNeighbor(String peerID) {

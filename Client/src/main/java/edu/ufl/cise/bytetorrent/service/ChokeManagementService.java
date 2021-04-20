@@ -17,7 +17,7 @@ public class ChokeManagementService {
 
 //    Peer myNode = PeerManagerPlatform.my_node;
 
-    
+    List<Peer> unchokeList = new ArrayList<Peer>();
 
     // TODO -: choking unckoking logic goes here
 
@@ -28,7 +28,6 @@ public class ChokeManagementService {
     // public List<Peer> choke (List<Peer> allPeers){
     public void choke (List<Peer> allPeers){
 
-        List<Peer> unchokeList = new ArrayList<Peer>();
         boolean isPreferredNeighborsChanged = false;
 
         int num_peer = allPeers.size();
@@ -52,8 +51,11 @@ public class ChokeManagementService {
                                     unChokedPeer.setChoked(false);
                                     unChokedPeer.getConnectionHandler().sendMessage(MessageGenerator.unChoke());
                                 }
-                                unchokeList.add(unChokedPeer);
-                                isPreferredNeighborsChanged = true;
+                                if (!unchokeList.contains(unChokedPeer)) {
+                                    unchokeList.add(unChokedPeer);
+                                    isPreferredNeighborsChanged = true;
+                                }
+
 
                             }
                             else {
@@ -79,8 +81,10 @@ public class ChokeManagementService {
                                     unChokedPeer.setChoked(false);
                                     unChokedPeer.getConnectionHandler().sendMessage(MessageGenerator.unChoke());
                                 }
-                                unchokeList.add(unChokedPeer);
-                                isPreferredNeighborsChanged = true;
+                                if (!unchokeList.contains(unChokedPeer)) {
+                                    unchokeList.add(unChokedPeer);
+                                    isPreferredNeighborsChanged = true;
+                                }
                             }
                             else {
                                 unChokedPeer.setChoked(true);
@@ -93,8 +97,8 @@ public class ChokeManagementService {
 
                 }
             if (isPreferredNeighborsChanged) {
+//                isPreferredNeighborsChanged = false;
                 LoggerUtil.LogChangeNeighbors((ArrayList<Peer>) unchokeList);
-                isPreferredNeighborsChanged = false;
             }
 
         // return unchokeList;
