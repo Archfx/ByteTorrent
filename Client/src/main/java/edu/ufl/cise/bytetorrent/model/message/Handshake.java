@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 // This class is serializable to quicly send and recieve
 public class Handshake implements Serializable {
+
     private static final long serialVersionUID = -8690744799841425414L;
     private final String head = "P2PFILESHARINGPROJ";
     private int id;
