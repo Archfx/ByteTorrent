@@ -168,9 +168,7 @@ public class FileManagementService {
 		ArrayList<Integer> temp_pieces_needed  =  new ArrayList<Integer>();
 		while (indexK < numFilePieces) {
 			if (interestingPieces[indexK] && !piecesNeeded.containsKey(indexK)) {
-//				piecesNeeded.put(indexK, indexK);
 				temp_pieces_needed.add(indexK);
-//				return indexK;
 			}
 			indexK++;
 		}
