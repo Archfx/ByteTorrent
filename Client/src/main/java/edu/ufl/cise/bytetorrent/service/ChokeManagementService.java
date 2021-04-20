@@ -13,31 +13,24 @@ import java.util.List;
 
 public class ChokeManagementService {
 
-    // private Object lockMyNeighbors;
-
-//    Peer myNode = PeerManagerPlatform.my_node;
-
     List<Peer> unchokeList = new ArrayList<Peer>();
 
-    // TODO -: choking unckoking logic goes here
-
-    //    k = prefered number of peers to unchoke
-    //    p = unchoking interval
-    //    m = optimally unchoke interval
-
-    // public List<Peer> choke (List<Peer> allPeers){
+    /**
+     *  k = prefered number of peers to unchoke
+     *  p = unchoking interval
+     *  m = optimally unchoke interval
+     * @param allPeers
+     */
     public void choke (List<Peer> allPeers){
 
         boolean isPreferredNeighborsChanged = false;
 
         int num_peer = allPeers.size();
 
-//        System.out.println(" Starting selecting k peers to send the file ");
                     synchronized (allPeers)
-            { //lock the peerlist
+            {
 
 				// Randomly selecting neighbors when download of file completed.
-                // if (myNode.isDoneDonwloading()) {
                 if (FileManagementService.hasCompleteFile()) {
 //					shuffle the list
                     Collections.shuffle(allPeers);
@@ -55,8 +48,6 @@ public class ChokeManagementService {
                                     unchokeList.add(unChokedPeer);
                                     isPreferredNeighborsChanged = true;
                                 }
-
-
                             }
                             else {
                                 unChokedPeer.setChoked(true);
@@ -64,7 +55,6 @@ public class ChokeManagementService {
                             }
                             nP++;
                         }
-
                     } 
                 }
                 else {
@@ -94,28 +84,18 @@ public class ChokeManagementService {
                         }
                         }
                     }
-
                 }
             if (isPreferredNeighborsChanged) {
-//                isPreferredNeighborsChanged = false;
                 LoggerUtil.LogChangeNeighbors((ArrayList<Peer>) unchokeList);
             }
-
-        // return unchokeList;
     }
 
 
 
-    // public List<Peer> chokeOpt (List<Peer> allPeers){
     public void chokeOpt (List<Peer> allPeers){
-
-
-        // List<Peer> optUnchokeList = new ArrayList<Peer>();
 
         int num_peer = allPeers.size();
 
-//        System.out.println(" Starting optimum peer to send the file ");
-            // synchronized (lockMyNeighbors) { //lock the object
             synchronized (allPeers) {
 
 //				shuffle the list
@@ -123,7 +103,6 @@ public class ChokeManagementService {
                 int nP = 0; // numbers of peers  to be selected selected
                 for (int i = 0; i < num_peer && nP < 1; i++) {
                     if ((allPeers.get(i)).isInterested() && (allPeers.get(i)).getSocket() != null) {
-                        // optUnchokeList.add(allPeers.get(i));
                         nP++;
                         Peer unChokedPeer = allPeers.get(i);
                         if(unChokedPeer.getChoked()){

@@ -5,41 +5,41 @@ public class FileUtil {
 
 	private FileUtil(){ }
 
-	public static int bitCount(byte value) {
+	public static int bitCount(byte bitVal) {
 		int count = 0;
 		for (int i = 0; i < byte_const; i++) {
-			if((value & 1) == 1 )
+			if((bitVal & 1) == 1 )
 				count= count + 1;
-			value = (byte) (value >> 1);
+			bitVal = (byte) (bitVal >> 1);
 		}
 		return count;
 	}
 
-	public static int bitCount(byte[] value) {
+	public static int bitCount(byte[] byteArray) {
 		int count = 0;
-		for (byte i : value) {
+		for (byte i : byteArray) {
 			count = count + bitCount(i);
 		}
 		return count;
 	}
 
-	// Update the bit_field value
-	public static byte[] updateBitfield(long index, byte[] bit_field) {
+	// Update the bitField value
+	public static byte[] updateBitfield(long index, byte[] bitField) {
 		byte u = 1;
 		int i = (int) (index / byte_const);
 		int k = (int) (index % byte_const);
 
 		u = (byte) (u << k);
-		bit_field[i] = (byte) (bit_field[i] | u);
-		return bit_field;
+		bitField[i] = (byte) (bitField[i] | u);
+		return bitField;
 	}
 
 	// Convert boolean array to byte
-	public static byte toByte(boolean[] bool_array) {
-		if (bool_array.length > byte_const)
+	public static byte toByte(boolean[] boolArray) {
+		if (boolArray.length > byte_const)
 			throw new RuntimeException("boolean array length needed to be greater than 8");
 		byte value = 0;
-		for (boolean bool : bool_array) {
+		for (boolean bool : boolArray) {
 			value = (byte) (value << 1);
 			value = (byte) (value | (bool ? 1 : 0));
 		}
@@ -47,11 +47,11 @@ public class FileUtil {
 	}
 
 	// Convert byte to bool array
-	public static boolean[] toBool(byte value) {
+	public static boolean[] toBool(byte byteVal) {
 		boolean[] bool_array = new boolean[byte_const];
 		for (int i = 0; i < byte_const; i++) {
-			bool_array[7 - i] = (value & 1) == 1;
-			value = (byte) (value >> 1);
+			bool_array[7 - i] = (byteVal & 1) == 1;
+			byteVal = (byte) (byteVal >> 1);
 		}
 		return bool_array;
 	}
