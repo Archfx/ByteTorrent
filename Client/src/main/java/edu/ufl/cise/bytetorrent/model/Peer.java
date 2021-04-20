@@ -3,6 +3,7 @@ import edu.ufl.cise.bytetorrent.PeerConnectionHandler;
 
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Peer {
 	private int peerId;
@@ -10,42 +11,32 @@ public class Peer {
 	private int port;
 	private boolean hasFile;
 	private byte[] bitField;
-	private AtomicBoolean choked = new AtomicBoolean(true);
+	private AtomicInteger noOfPiecesOwned;
+	private AtomicBoolean choked;
 	private Socket socket;
 	private boolean up;
 	private PeerConnectionHandler connectionHandler;
-
-	private float dlSpeed; //For choke unchoke
-    private Integer allPeerID; //For choke unchoke
-
-	private boolean doneDonwloading;
-
-	private boolean isInterested; //For choke unchoke
-
-
+	private float dlSpeed;
+    private Integer allPeerID;
+	private boolean isCompletedDownloading;
+	private boolean isInterested;
 
 	public Peer(int id, String address, int port, boolean hasFile) {
 		this.peerId = id;
 		this.address = address;
 		this.port = port;
 		this.hasFile = hasFile;
+		this.noOfPiecesOwned = new AtomicInteger();
+		this.choked = new AtomicBoolean(true);
 	}
 
-	public boolean isDoneDonwloading() {
-		return doneDonwloading;
+	public boolean isCompletedDownloading() {
+		return isCompletedDownloading;
 	}
 
-	public void setDoneDonwloading(boolean doneDonwloading) {
-		this.doneDonwloading = true;//doneDonwloading;
+	public void setCompletedDownloading(boolean completedDownloading) {
+		this.isCompletedDownloading = true;
 	}
-
-	public Peer(Peer peer) {
-		this.peerId = peer.getPeerId();
-		this.address = peer.getAddress();
-		this.port = peer.getPort();
-		this.hasFile = peer.isHasFile();
-	}
-
 
 	public int getPeerId() {
 		return peerId;
@@ -141,6 +132,14 @@ public class Peer {
 
 	public void setConnectionHandler(PeerConnectionHandler connectionHandler) {
 		this.connectionHandler = connectionHandler;
+	}
+
+	public int incrementAndGetNoOfPieces() {
+		return noOfPiecesOwned.incrementAndGet();
+	}
+
+	public void setDlSpeed(float dlSpeed) {
+		this.dlSpeed = dlSpeed;
 	}
 }
 
