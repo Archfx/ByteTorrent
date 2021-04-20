@@ -141,6 +141,11 @@ public class PeerManagerPlatform {
                 e.printStackTrace();
             }
         }
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.println("Exit server");
         System.exit(0);
     }

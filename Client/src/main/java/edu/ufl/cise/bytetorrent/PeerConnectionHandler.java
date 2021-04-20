@@ -90,9 +90,11 @@ public class PeerConnectionHandler extends Thread {
 
     public void sendMessage(Message msg) {
         try {
-            out.writeObject(msg);
-            out.flush();
-            System.out.println("Send message: " + msg.getMessageType() + " to " + connectingPeer.getPeerId());
+            if( msg != null){
+                out.writeObject(msg);
+                out.flush();
+                System.out.println("Send message: " + msg.getMessageType() + " to " + connectingPeer.getPeerId());
+            }
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
