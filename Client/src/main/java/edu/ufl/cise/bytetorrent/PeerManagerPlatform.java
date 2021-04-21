@@ -81,12 +81,7 @@ public class PeerManagerPlatform {
 
 
     public void initServer() {
-        (new Thread() {
-            @Override
-            public void run() {
-                startListening();
-            }
-        }).start();
+        (new Thread(() -> startListening())).start();
 
     }
 

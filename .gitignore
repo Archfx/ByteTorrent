@@ -15,7 +15,7 @@ log/
 target/
 
 #Eclipse
-.project
+*.project
 
 
 #spesific
